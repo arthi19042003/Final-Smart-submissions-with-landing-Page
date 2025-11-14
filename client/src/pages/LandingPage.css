@@ -1,0 +1,183 @@
+/* client/src/pages/LandingPage.css */
+.landing-container {
+  width: 100%;
+  padding-top: 110px; /* ✅ MODIFIED: Space for fixed navbar */
+  color: #333;
+  background-color: #fff;
+}
+
+.landing-section {
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.landing-section:last-of-type {
+  border-bottom: none;
+}
+
+.landing-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #4c1d95;
+  margin-bottom: 40px;
+}
+
+/* Intro Section */
+.intro-section {
+  background-color: #faf5ff;
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.intro-section h1 {
+  font-size: 3.5rem;
+  color: #5b21b6;
+}
+
+.intro-section p {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.intro-buttons .btn {
+  margin: 0 10px;
+  padding: 15px 30px;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.intro-buttons .btn-primary {
+  background-color: #7c3aed;
+  color: #fff;
+}
+.intro-buttons .btn-primary:hover {
+  background-color: #6d28d9;
+}
+.intro-buttons .btn-secondary {
+  background-color: #fff;
+  color: #7c3aed;
+  border: 1px solid #7c3aed;
+}
+.intro-buttons .btn-secondary:hover {
+  background-color: #f5f3ff;
+}
+
+/* How It Works */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.step-card {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.step-card h3 {
+  color: #7c3aed;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Features */
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.features-list li {
+  background: #faf5ff;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #4c1d95;
+  text-align: center;
+}
+
+/* Pricing / Sign Up */
+.pricing-section {
+  background-color: #f5f3ff;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.pricing-card {
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.pricing-card h3 {
+  font-size: 1.8rem;
+  color: #6d28d9;
+}
+.pricing-card p {
+  margin: 15px 0 25px;
+  font-size: 1rem;
+  color: #6b7280;
+  min-height: 50px;
+}
+.pricing-card .btn-primary {
+  background-color: #7c3aed;
+  color: #fff;
+  text-decoration: none;
+  width: 100%;
+}
+
+/* Contact Form */
+.contact-form {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.contact-form input,
+.contact-form textarea {
+  padding: 15px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.contact-form .btn-primary {
+  background-color: #7c3aed;
+  color: #fff;
+}
+.btn-primary {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+
+/* Footer */
+.landing-footer {
+  text-align: center;
+  padding: 30px;
+  background-color: #333;
+  color: #fff;
+}

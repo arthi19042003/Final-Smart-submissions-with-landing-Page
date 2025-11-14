@@ -1,0 +1,135 @@
+/* =========================================
+   SMART SUBMISSIONS — RECRUITER RESUME UPLOAD (FINAL)
+   ========================================= */
+
+/* @import for Poppins removed */
+
+.resume-upload-page {
+  /* font-family removed */
+  background-color: #f9fafc;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 110px 20px 60px 20px; /* ✅ FIXED */
+}
+
+/* Card */
+.resume-upload-card {
+  background: #fff;
+  width: 100%;
+  max-width: 700px;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+}
+
+/* Title */
+.resume-upload-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1.8rem;
+}
+
+/* Form */
+.resume-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resume-upload-form input[type="text"],
+.resume-upload-form input[type="email"],
+.resume-upload-form input[type="tel"],
+.resume-upload-form input[type="url"],
+.resume-upload-form input[type="number"],
+.resume-upload-form input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resume-upload-form input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  outline: none;
+}
+
+/* File section */
+.file-upload {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.file-label {
+  font-weight: 500;
+  color: #4b0082;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.file-name {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+/* Buttons */
+.resume-upload-btn {
+  width: 100%;
+  background-color: #7c3aed;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resume-upload-btn:hover {
+  background-color: #5b21b6;
+}
+
+/* Status messages */
+.error-text {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.success-text {
+  color: #16a34a;
+  font-size: 0.9rem;
+}
+
+.resume-upload-message {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .resume-upload-card {
+    padding: 28px 24px;
+  }
+
+  .resume-upload-title {
+    font-size: 1.4rem;
+  }
+}
+
+/* --- ADDED --- */
+/* Mandatory Star Style */
+.mandatory {
+  color: #dc2626; /* Red color */
+  font-weight: 700;
+  margin-left: 4px;
+}

@@ -1,0 +1,128 @@
+.jobs-container {
+  max-width: 1000px;
+  margin: 110px auto 60px auto;
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.jobs-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #5b21b6;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.alert-warning {
+  background-color: #fff7ed;
+  color: #c2410c;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #fdba74;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.alert-warning a {
+  color: #ea580c;
+  font-weight: 600;
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.job-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(91, 33, 182, 0.1);
+}
+
+.job-header {
+  margin-bottom: 15px;
+}
+
+.job-header h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.dept-tag {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.job-details p {
+  margin: 6px 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.job-desc {
+  margin-top: 12px !important;
+  font-size: 0.9rem;
+  color: #6b7280;
+  
+  /* ✅ FIX: Truncation styling */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3; /* Standard property to reduce warnings */
+  
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical; /* This comment prevents the line from being removed by build tools */
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-apply {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #7c3aed;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-apply:hover {
+  background-color: #6d28d9;
+}
+
+.btn-apply:disabled {
+  background-color: #c4b5fd;
+  cursor: not-allowed;
+}
+
+.loading, .empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-top: 40px;
+}

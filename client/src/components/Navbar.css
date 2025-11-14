@@ -1,0 +1,76 @@
+/* ✅ CHANGED: .navbar -> .custom-navbar */
+.custom-navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  padding: 20px 0;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+  /* ✅ ADDED: Ensure it's not a flex container itself */
+  display: block; 
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: -0.5px;
+  text-decoration: none; /* ✅ THIS IS THE FIX */
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 35px; /* More spacing like second design */
+}
+
+.navbar-link {
+  font-weight: 500;
+  font-size: 17px;
+  color: #111;
+  text-decoration: none;
+  padding: 5px 0;
+  position: relative;
+}
+
+/* Bottom underline on hover (minimal design style) */
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #000;
+  transition: 0.3s;
+}
+
+.navbar-link:hover::after {
+  width: 100%;
+}
+
+.navbar-btn {
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  padding: 8px 22px;
+  border-radius: 30px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.navbar-btn:hover {
+  background: #000;
+  color: #fff;
+}

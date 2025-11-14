@@ -1,0 +1,107 @@
+/* ===== Hiring Dashboard (Purple & White Theme) ===== */
+.hiring-dashboard {
+  /* ✅ MODIFIED: Increased top padding to 130px to clear navbar */
+  padding: 130px 20px 60px 20px; 
+  background-color: #faf5ff; /* soft lavender */
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+/* ===== Page Title ===== */
+.hiring-dashboard h2 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #5b21b6; 
+  margin-bottom: 40px;
+}
+
+/* ===== Text Utilities ===== */
+.text-purple {
+  color: #5b21b6 !important;
+}
+
+/* ===== Button Styles ===== */
+.purple-btn {
+  background-color: #6d28d9;
+  border: 1px solid #6d28d9;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.purple-btn:hover {
+  background-color: #5b21b6;
+  border-color: #5b21b6;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.purple-btn-sm {
+  background-color: #7c3aed;
+  border: none;
+  color: white;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.purple-outline-btn {
+  background-color: transparent;
+  border: 1px solid #6d28d9;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.purple-outline-btn:hover {
+  background-color: #f3e8ff;
+  color: #5b21b6;
+}
+
+/* ===== Key Metrics Styling ===== */
+.metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.metric-item.success {
+  background-color: #ecfdf5;
+  border-color: #d1fae5;
+  color: #065f46;
+}
+
+.metric-item strong {
+  font-size: 1.2rem;
+  color: #4c1d95;
+}
+
+/* ===== Nav Cards ===== */
+.nav-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(109, 40, 217, 0.1) !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .hiring-dashboard {
+    padding: 130px 15px 40px 15px;
+  }
+}

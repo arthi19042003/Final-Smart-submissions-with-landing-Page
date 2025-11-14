@@ -1,0 +1,67 @@
+.manager-dashboard {
+  padding: 110px 30px 30px 30px; /* ✅ MODIFIED: Increased top padding */
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box; /* ✅ ADDED */
+}
+
+h1 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 30px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.summary-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+}
+
+.summary-card.blue { background-color: #3b82f6; }
+.summary-card.orange { background-color: #f59e0b; }
+.summary-card.green { background-color: #10b981; }
+.summary-card.teal { background-color: #14b8a6; }
+.summary-card.red { background-color: #ef4444; }
+.summary-card.gray { background-color: #6b7280; }
+
+.candidate-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.candidate-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.candidate-table th,
+.candidate-table td {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  text-align: left;
+}
+
+.candidate-table th {
+  background: #f8fafc;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+}

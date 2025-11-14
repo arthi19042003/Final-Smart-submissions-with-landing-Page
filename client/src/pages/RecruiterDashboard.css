@@ -1,0 +1,108 @@
+/* =========================================
+   SMART SUBMISSIONS — RECRUITER DASHBOARD (FINAL)
+   ========================================= */
+
+
+.recruiter-dashboard-page {
+  /* FONT-FAMILY REMOVED */
+  background-color: #f9fafc;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 110px 20px 60px 20px; /* ✅ FIXED */
+}
+
+/* Main card container */
+.recruiter-dashboard-card-container {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Header */
+.recruiter-dashboard-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.recruiter-dashboard-subtitle {
+  font-size: 0.95rem;
+  color: #000;
+  margin-bottom: 30px;
+}
+
+/* Grid layout */
+.recruiter-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+/* Individual card */
+.dashboard-card {
+  background-color: #faf8ff;
+  border: 1.5px solid #efe9ff;
+  border-radius: 12px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4b0082;
+  margin-bottom: 10px;
+}
+
+.dashboard-card p {
+  font-size: 0.9rem;
+  color: #000;
+  margin-bottom: 16px;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
+}
+
+/* Button */
+.recruiter-dashboard-btn {
+  width: 100%;
+  background-color: #7c3aed;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.recruiter-dashboard-btn:hover {
+  background-color: #5b21b6;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .recruiter-dashboard-card-container {
+    padding: 28px 24px;
+  }
+
+  .dashboard-card {
+    padding: 22px;
+  }
+
+  .recruiter-dashboard-title {
+    font-size: 1.4rem;
+  }
+}

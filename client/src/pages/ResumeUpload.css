@@ -1,0 +1,112 @@
+/* Background */
+.resume-bg {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* ✅ FIX: Removed background image */
+  background-color: transparent;
+  padding-top: 110px; /* space below navbar */
+  padding-bottom: 40px; /* reduce empty bottom */
+}
+
+/* Main form container */
+.resume-container {
+  width: 75%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(7px);
+  border-radius: 22px;
+  padding: 35px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Main title */
+.resume-header {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #5b3ff6;
+  margin-bottom: 25px;
+}
+
+/* Card box */
+.resume-card {
+  background: #ffffffcc;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(91, 63, 246, 0.18);
+}
+
+/* Section headings */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #5b3ff6;
+  margin-bottom: 12px;
+}
+
+/* Input fields */
+.input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #c3bfff;
+  background: #f9f7ff;
+}
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #6c47ff;
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #5434e8;
+}
+
+/* Resume list */
+.resume-item {
+  background: #f3efff;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.resume-item.active {
+  border: 2px solid #6a5acd;
+  background: #eae6ff;
+}
+
+/* Small buttons */
+.btn-secondary {
+  background: #5b3ff6;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  margin-right: 6px;
+}
+
+.btn-danger {
+  background: #d6362a;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* Text */
+.empty { text-align:center; color:#555; }
+.success { color: green; font-size: 14px; }
+.error { color: red; font-size: 14px; }

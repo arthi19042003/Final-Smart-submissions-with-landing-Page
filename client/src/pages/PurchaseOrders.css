@@ -1,0 +1,236 @@
+/* client/src/pages/PurchaseOrders.css */
+/* ================================
+   Purchase Orders Page Styling (Purple & White Theme)
+   ================================ */
+
+.po-container {
+  max-width: 1100px;
+  margin: 110px auto 40px auto; /* ✅ MODIFIED: Increased top margin */
+  padding: 20px 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f6ff; /* soft lavender white background */
+  min-height: auto;
+}
+
+.po-container h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #4b0082; /* deep purple title */
+  text-align: center;
+}
+
+.subtitle {
+  color: #000;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* ===== ✅ NEW: Toggle Button ===== */
+.po-form-toggle {
+  text-align: right;
+  margin-bottom: 20px;
+}
+.btn-create-po {
+  background-color: #7e22ce;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-create-po:hover {
+  background-color: #6b21a8;
+}
+
+/* ===== ✅ NEW: Create PO Form ===== */
+.create-po-form {
+  background: #fdfcff;
+  border: 1px solid #c4b5fd;
+}
+.create-po-form h3 {
+  font-size: 1.2rem;
+  color: #5b21b6;
+  margin-bottom: 15px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+.form-group input {
+  padding: 10px;
+  border: 1px solid #c4b5fd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.create-po-form .error {
+  text-align: center;
+  margin-top: 15px;
+  color: #991b1b;
+}
+
+
+/* Card Wrapper */
+.po-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 14px rgba(126, 34, 206, 0.12);
+  margin-bottom: 30px;
+  overflow-x: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.po-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(126, 34, 206, 0.2);
+}
+
+.po-card h3 {
+  font-size: 1.2rem;
+  color: #5b21b6;
+  margin-bottom: 15px;
+}
+
+/* Table Styling */
+.po-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+/* ... (rest of the file is identical to the original) ... */
+.po-table th,
+.po-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.po-table th {
+  background-color: #7e22ce;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.po-table td {
+  text-align: center;
+}
+
+.po-table tbody tr:nth-child(even) {
+  background-color: #f9f9ff;
+}
+
+.po-table tbody tr:hover {
+  background-color: #f3e8ff;
+}
+
+.status {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+  min-width: 90px;
+}
+
+.status.pending {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.status.approved {
+  background-color: #e9f5ec;
+  color: #166534;
+}
+
+.status.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 6px 12px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.approve-btn {
+  background-color: #7e22ce;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #6b21a8;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(126, 34, 206, 0.25);
+}
+
+.reject-btn {
+  background-color: #f43f5e;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #e11d48;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(240, 82, 82, 0.25);
+}
+
+.no-action {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.error {
+  text-align: center;
+  padding: 15px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

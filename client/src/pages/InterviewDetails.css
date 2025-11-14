@@ -1,0 +1,254 @@
+/* =========================================================
+   INTERVIEWER DETAILS PAGE  —  Violet Theme (Dashboard Style)
+   ========================================================= */
+
+/* ===== Page Background ===== */
+.page.interviewer-bg {
+  min-height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  padding: 110px 0 60px;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Cards ===== */
+.card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.92);
+  width: 85%;
+  max-width: 1050px;
+  margin: 0 auto 35px;
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(75, 63, 255, 0.12);
+  animation: fadeUp 0.35s ease-in-out;
+}
+
+/* ===== Titles ===== */
+.form-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #5b21b6; /* ✅ UPDATED: Purple to match theme */
+  margin-bottom: 25px;
+}
+
+.section-label {
+  color: #5b21b6; /* ✅ UPDATED: Purple to match theme */
+  font-weight: 700;
+  font-size: 17px;
+  margin: 16px 0 12px;
+  padding-left: 5px;
+  border-left: 4px solid #8b5cf6; /* ✅ UPDATED: Purple accent */
+}
+
+/* ===== Grid Layout ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ===== Form Fields ===== */
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+/* ✅ NEW: Red color for mandatory stars inside labels */
+label span {
+  color: #dc2626;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+input,
+select,
+textarea {
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid #c8c2ff;
+  background: #faf9ff;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #6a5cff;
+  box-shadow: 0 0 8px rgba(110, 89, 255, 0.3);
+  outline: none;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ===== Button ===== */
+.purple-btn {
+  background: linear-gradient(90deg, #6a5cff, #947dff);
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: 0.25s ease;
+}
+
+.purple-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(110, 89, 255, 0.28);
+}
+
+/* ===== Rating Stars ===== */
+.rating-stars {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.star {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.2s;
+}
+
+.star.active {
+  color: #ffb800;
+}
+
+/* ===== Table Section ===== */
+.records-card {
+  margin-top: 40px;
+}
+
+.search-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1fr 0.6fr 1fr;
+  padding: 11px 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.table-header {
+  font-weight: 700;
+  color: #5b21b6; /* ✅ UPDATED: Purple to match theme */
+  background: rgba(240, 240, 255, 0.6);
+  border-radius: 8px;
+}
+
+.table-row:hover {
+  background: rgba(240, 240, 255, 0.4);
+}
+
+/* ===== Action Icons ===== */
+.row-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #6a5cff;
+  transition: 0.25s;
+}
+
+.icon:hover {
+  transform: scale(1.15);
+}
+
+.icon.delete {
+  color: #ff4c72;
+}
+
+/* ===== Badges ===== */
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge.pending {
+  background: #ffeb9b;
+  color: #5c4b00;
+}
+
+.badge.scheduled {
+  background: #b6dcff;
+  color: #003e79;
+}
+
+.badge.completed {
+  background: #c5ffd2;
+  color: #00581c;
+}
+
+.badge.cancelled {
+  background: #ffc2c2;
+  color: #8b0000;
+}
+
+.badge.pass {
+  background: #caffc8;
+  color: #056b00;
+}
+
+.badge.fail {
+  background: #ffd3d3;
+  color: #9e0000;
+}
+
+/* ===== Animation ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    width: 92%;
+    padding: 22px;
+  }
+
+  .table-header,
+  .table-row {
+    font-size: 12px;
+  }
+}

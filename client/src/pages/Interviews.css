@@ -1,0 +1,130 @@
+/* ================================
+   Interviews Page (Purple & White Theme)
+   ================================ */
+
+.interviews-container {
+  max-width: 1000px;
+  margin: 110px auto 50px auto; /* ✅ MODIFIED: Increased top margin */
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+  background-color: #faf5ff; /* soft lavender */
+  border-radius: 16px;
+}
+
+/* ===== Page Title ===== */
+.interviews-container h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-align: center;
+  color: #5b21b6; /* deep purple */
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #7e22ce;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+/* ===== Interview List ===== */
+.interview-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 22px;
+}
+
+/* ===== Card Styling ===== */
+.interview-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 4px 10px rgba(91, 33, 182, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1.5px solid #ede9fe;
+}
+
+.interview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(91, 33, 182, 0.15);
+}
+
+/* ===== Header Section ===== */
+.interview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.interview-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #4c1d95;
+  font-weight: 600;
+}
+
+/* ===== Role Tag ===== */
+.role {
+  background-color: #ede9fe;
+  color: #5b21b6;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ===== Interview Details ===== */
+.interview-details p {
+  margin: 5px 0;
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* ===== Mode Tags ===== */
+.mode {
+  display: inline-block;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background-color: #ffffff;
+  color: #6d28d9; /* purple text */
+  border: none;
+  box-shadow: 0 1px 2px rgba(109, 40, 217, 0.05);
+}
+
+.mode.online,
+.mode.onsite {
+  background-color: #ffffff !important;
+  color: #6d28d9 !important;
+}
+
+/* ===== Empty State ===== */
+.empty {
+  text-align: center;
+  color: #7e22ce;
+  padding: 40px 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .interviews-container {
+    padding: 30px 15px;
+  }
+
+  .interview-header h3 {
+    font-size: 1rem;
+  }
+
+  .interview-details p {
+    font-size: 0.9rem;
+  }
+
+  .interview-list {
+    grid-template-columns: 1fr;
+  }
+}
