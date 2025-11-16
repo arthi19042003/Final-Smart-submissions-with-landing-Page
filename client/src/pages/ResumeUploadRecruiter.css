@@ -31,7 +31,8 @@
   text-align: center;
   font-size: 1.6rem;
   font-weight: 600;
-  color: #111827;
+  /* ✅ CHANGED: Set to purple */
+  color: #5b21b6; 
   margin-bottom: 1.8rem;
 }
 

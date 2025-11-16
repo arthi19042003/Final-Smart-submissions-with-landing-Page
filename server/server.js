@@ -7,8 +7,26 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose"); // ✅ Added mongoose import
+const mongoose = require("mongoose");
 const connectDB = require("./config/db");
+
+// ===============================================
+// ✅ CRITICAL FIX: PRE-LOAD ALL MODELS
+// This prevents the "Missing Schema" crash when using .populate()
+// ===============================================
+require("./models/User");
+require("./models/Position");
+require("./models/Candidate");
+require("./models/Application");
+require("./models/Submission");
+require("./models/Interview");
+require("./models/Invitation");
+require("./models/Message");
+require("./models/Onboarding");
+require("./models/PurchaseOrder");
+require("./models/Resume");
+require("./models/Employer");
+// ===============================================
 
 // ===============================================
 // Initialize App
@@ -72,7 +90,7 @@ app.use("/api/resume", require("./routes/resume"));
 app.use("/api/employer", require("./routes/employerRoutes"));
 
 // ===============================================
-// Hiring Manager Routes (Integrated from New HR)
+// Hiring Manager Routes
 // ===============================================
 app.use("/api/hiring-dashboard", protect, require("./routes/hiringDashboard"));
 app.use("/api/positions", protect, require("./routes/positions"));
@@ -82,7 +100,7 @@ app.use("/api/onboarding", protect, require("./routes/onboarding"));
 app.use("/api/agencies", protect, require("./routes/agencies"));
 
 // ===============================================
-// Recruiter Routes (Protected)
+// Recruiter Routes
 // ===============================================
 app.use("/api/recruiter", protect, require("./routes/recruiter"));
 

@@ -15,7 +15,6 @@ export default function AgencyInvites() {
 
   const token = localStorage.getItem("token");
 
-  // ✅ Fetch Invites & Positions
   const fetchData = async () => {
     if (!token) {
         setLoading(false);
@@ -45,7 +44,6 @@ export default function AgencyInvites() {
     }
   };
 
-  // ✅ Send Invite
   const handleInvite = async (e) => {
     e.preventDefault();
     if (!email || !selectedPosition) return toast.error("Please provide email and select a position");
@@ -72,7 +70,6 @@ export default function AgencyInvites() {
       setEmail(""); 
       setSelectedPosition("");
       
-      // Update list with new invite (which is returned populated from backend)
       setInvites([data, ...invites]); 
     } catch (err) {
       console.error("Error sending invite:", err);
@@ -82,7 +79,6 @@ export default function AgencyInvites() {
     }
   };
 
-  // ✅ Delete Invite
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this invite?")) return;
     try {
@@ -120,11 +116,9 @@ export default function AgencyInvites() {
         
         <Card className="shadow-sm border-0 mb-4">
           <Card.Body>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h2 className="fw-bold text-dark mb-0">🤝 Manage Agency Invites</h2>
-              <Button variant="light" onClick={() => navigate(-1)} className="border">
-                ← Back
-              </Button>
+            {/* ✅ FIX: Removed flex container, emoji, and Back button */}
+            <div className="mb-4">
+              <h2 className="fw-bold text-purple mb-0">Manage Agency Invites</h2>
             </div>
 
             {/* Invite Form */}
@@ -157,7 +151,7 @@ export default function AgencyInvites() {
                   </Form.Select>
                 </Col>
                 <Col md={3}>
-                  <Button type="submit" variant="primary" className="w-100" disabled={sending}>
+                  <Button type="submit" className="purple-btn w-100" disabled={sending}>
                     {sending ? <Spinner size="sm" animation="border" /> : "📨 Send Invite"}
                   </Button>
                 </Col>
@@ -194,12 +188,13 @@ export default function AgencyInvites() {
                         </td>
                         <td className="p-3">{new Date(invite.createdAt).toLocaleDateString()}</td>
                         <td className="p-3 text-end">
+                          {/* ✅ FIX: Changed variant to className and removed emoji */}
                           <Button
-                            variant="outline-danger"
+                            className="purple-btn"
                             size="sm"
                             onClick={() => handleDelete(invite._id)}
                           >
-                            🗑️ Delete
+                            Delete
                           </Button>
                         </td>
                       </tr>

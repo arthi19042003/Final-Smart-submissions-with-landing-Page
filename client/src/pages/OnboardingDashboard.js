@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Table, Badge, Spinner } from "react-bootstrap";
+import { Container, Card, Button, Table, Badge, Spinner } from "react-bootstrap";
+import './HiringManagerDashboard.css'; // This CSS file has the .purple-btn style
 
 export default function OnboardingDashboard() {
   const [candidates, setCandidates] = useState([]);
@@ -42,93 +43,97 @@ export default function OnboardingDashboard() {
     }
   };
 
+
   if (loading)
     return (
-      <div className="text-center mt-5">
+      <div className="dashboard-wrapper text-center mt-5">
         <Spinner animation="border" variant="primary" /> Loading onboarding list...
       </div>
     );
 
   return (
-    <div className="container mt-4">
-      <Card className="shadow-sm">
-        <Card.Body>
-          <Card.Title>🚀 Onboarding Dashboard</Card.Title>
-          <Card.Text className="text-muted">
-            Track the progress of candidates after they are hired.
-          </Card.Text>
+    <div className="dashboard-wrapper">
+      <Container className="py-4">
+        <Card className="shadow-sm">
+          <Card.Body>
+            <Card.Title className="fw-bold text-purple"> Onboarding Dashboard</Card.Title>
+            <Card.Text className="text-muted">
+              Track the progress of candidates after they are hired.
+            </Card.Text>
 
-          {candidates.length === 0 ? (
-            <p className="text-muted">No candidates in onboarding yet.</p>
-          ) : (
-            <Table striped bordered hover responsive>
-              <thead className="table-light">
-                <tr>
-                  <th>Candidate</th>
-                  <th>Position</th>
-                  <th>Department</th>
-                  <th>Status</th>
-                  <th>Onboarding Progress</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {candidates.map((c) => (
-                  <tr key={c._id}>
-                    <td>
-                      <strong>{c.candidateName}</strong>
-                      <div className="text-muted small">{c.email}</div>
-                    </td>
-                    <td>{c.position}</td>
-                    <td>{c.department || "-"}</td>
-                    <td>
-                      <Badge bg="success">{c.status}</Badge>
-                    </td>
-                    <td>
-                      <Badge
-                        bg={
-                          c.onboardingStatus === "Completed"
-                            ? "success"
-                            : c.onboardingStatus === "In Progress"
-                            ? "warning"
-                            : "secondary"
-                        }
-                      >
-                        {c.onboardingStatus}
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="d-flex flex-wrap gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline-secondary"
-                          onClick={() => updateStatus(c._id, "Pending")}
-                        >
-                          Pending
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline-warning"
-                          onClick={() => updateStatus(c._id, "In Progress")}
-                        >
-                          In Progress
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline-success"
-                          onClick={() => updateStatus(c._id, "Completed")}
-                        >
-                          Completed
-                        </Button>
-                      </div>
-                    </td>
+            {candidates.length === 0 ? (
+              <p className="text-muted">No candidates in onboarding yet.</p>
+            ) : (
+              <Table striped bordered hover responsive>
+                <thead className="table-light">
+                  <tr>
+                    <th>Candidate</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Onboarding Progress</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Card.Body>
-      </Card>
+                </thead>
+                <tbody>
+                  {candidates.map((c) => (
+                    <tr key={c._id}>
+                      <td>
+                        <strong>{c.candidateName}</strong>
+                        <div className="text-muted small">{c.email}</div>
+                      </td>
+                      <td>{c.position}</td>
+                      <td>{c.department || "-"}</td>
+                      <td>
+                        <Badge bg="success">{c.status}</Badge>
+                      </td>
+                      <td>
+                        <Badge
+                          bg={
+                            c.onboardingStatus === "Completed"
+                              ? "success"
+                              : c.onboardingStatus === "In Progress"
+                              ? "warning"
+                              : "secondary"
+                          }
+                        >
+                          {c.onboardingStatus}
+                        </Badge>
+                      </td>
+                      <td>
+                        {/* ✅ FIX: Changed button styling to solid purple */}
+                        <div className="d-flex flex-wrap gap-2">
+                          <Button
+                            size="sm"
+                            className="purple-btn" // Use className
+                            onClick={() => updateStatus(c._id, "Pending")}
+                          >
+                            Pending
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="purple-btn" // Use className
+                            onClick={() => updateStatus(c._id, "In Progress")}
+                          >
+                            In Progress
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="purple-btn" // Use className
+                            onClick={() => updateStatus(c._id, "Completed")}
+                          >
+                            Completed
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </Card.Body>
+        </Card>
+      </Container>
     </div>
   );
 }

@@ -29,6 +29,11 @@
   color: #ffffff;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
+  /* ✅ NEW: Center content (icon + text) */
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 8px; /* Space between icon and text */
 }
 
 .purple-btn:hover {
@@ -104,4 +109,18 @@
   .hiring-dashboard {
     padding: 130px 15px 40px 15px;
   }
+}
+
+/* ===== ✅ FIX: Add this new class for sub-pages (Purchase Orders, Invites, etc.) ===== */
+.dashboard-wrapper {
+  /* Pushes content down below the fixed Navbar */
+  padding-top: 130px; 
+  
+  /* Basic layout styling */
+  padding-bottom: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #f0f2f5; /* Light grey background */
+  min-height: 100vh;
+  box-sizing: border-box;
 }

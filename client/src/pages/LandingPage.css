@@ -1,7 +1,7 @@
 /* client/src/pages/LandingPage.css */
 .landing-container {
   width: 100%;
-  padding-top: 110px; /* ✅ MODIFIED: Space for fixed navbar */
+  padding-top: 110px;
   color: #333;
   background-color: #fff;
 }
@@ -43,17 +43,28 @@
   margin-bottom: 30px;
 }
 
+/* ✅ FIX: Align buttons side-by-side */
+.intro-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Space between buttons */
+  flex-wrap: wrap;
+}
+
 .intro-buttons .btn {
-  margin: 0 10px;
   padding: 15px 30px;
   font-size: 1rem;
   border-radius: 8px;
   text-decoration: none;
+  width: auto !important; /* Force natural width */
+  display: inline-block;
 }
 
 .intro-buttons .btn-primary {
   background-color: #7c3aed;
   color: #fff;
+  border: 1px solid #7c3aed;
 }
 .intro-buttons .btn-primary:hover {
   background-color: #6d28d9;
@@ -161,6 +172,8 @@
   background-color: #7c3aed;
   color: #fff;
 }
+
+/* Global Button Styles (if not overridden) */
 .btn-primary {
   padding: 12px 20px;
   border-radius: 8px;
@@ -172,7 +185,6 @@
 .btn-primary:hover {
   opacity: 0.9;
 }
-
 
 /* Footer */
 .landing-footer {

@@ -40,7 +40,7 @@ export default function EmployerProfile() {
   const [editingIndex, setEditingIndex] = useState(null);
 
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [errors, setErrors] = useState({}); // ✅ ADDED: State for field errors
+  const [errors, setErrors] = useState({}); 
 
   useEffect(() => {
     // load employer profile if user exists
@@ -87,7 +87,6 @@ export default function EmployerProfile() {
 
   // helpers -----------------------------------------------------------------
   
-  // ✅ MODIFIED: Clears field-specific error on change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
@@ -137,28 +136,21 @@ export default function EmployerProfile() {
         return;
     }
 
-    // Check if we are in edit mode FOR THIS specific project
     if (editingIndex && editingIndex.project === projectIndex) {
       
-      // --- ✅ FIX: IMMUTABLE UPDATE LOGIC ---
       setForm(f => ({
         ...f,
         projects: f.projects.map((project, pIdx) => {
-          // Not the project we're editing, return it as-is
           if (pIdx !== projectIndex) {
             return project;
           }
 
-          // This IS the project. Return a new project object...
           return {
             ...project,
-            // ...with a new teamMembers array
             teamMembers: project.teamMembers.map((member, mIdx) => {
-              // Not the member we're editing, return it as-is
               if (mIdx !== editingIndex.member) {
                 return member;
               }
-              // This IS the member. Return the new data from teamInput.
               return teamInput; 
             })
           };
@@ -168,19 +160,15 @@ export default function EmployerProfile() {
 
     } else {
       
-      // --- ✅ FIX: IMMUTABLE ADD LOGIC ---
       setForm(f => ({
         ...f,
         projects: f.projects.map((project, index) => {
-          // If this isn't the project we're adding to, return it unchanged.
           if (index !== projectIndex) {
             return project;
           }
           
-          // If it *is* the project, return a *new* project object
           return {
             ...project,
-            // With a *new* teamMembers array that includes the new member
             teamMembers: [...(project.teamMembers || []), { ...teamInput }]
           };
         })
@@ -188,7 +176,6 @@ export default function EmployerProfile() {
       setMessage({ type: "success", text: "Team member added" });
     }
 
-    // Reset form after add or update
     setTeamInput(emptyTeamMember());
     setEditingIndex(null);
   };
@@ -205,17 +192,13 @@ export default function EmployerProfile() {
 
   const removeTeamMember = (projectIndex, memberIndex) => {
     setForm(f => {
-      // Create a new projects array
       const newProjects = f.projects.map((project, pIdx) => {
-        // Not the project we're editing, return as-is
         if (pIdx !== projectIndex) {
           return project;
         }
         
-        // This IS the project, return a new object
         return {
           ...project,
-          // With a new teamMembers array that filters out the removed member
           teamMembers: project.teamMembers.filter((_, mIdx) => mIdx !== memberIndex)
         };
       });
@@ -223,7 +206,6 @@ export default function EmployerProfile() {
       return { ...f, projects: newProjects };
     });
     
-    // If we were editing the member we just removed, clear the form
     if (editingIndex?.project === projectIndex && editingIndex?.member === memberIndex) {
       handleCancelEdit();
     }
@@ -231,7 +213,6 @@ export default function EmployerProfile() {
 
   // Save -------------------------------------------------------------------
   
-  // ✅ MODIFIED: This function now sets the 'errors' state
   const validateBeforeSave = () => {
     const newErrors = {};
     const required = [
@@ -416,7 +397,8 @@ export default function EmployerProfile() {
 
           <div className="row" style={{ alignItems: "center", justifyContent: "space-between" }}>
             <div className="muted">Manage your projects and team members</div>
-            <button className="btn small" onClick={addProject}>+ Add Project</button>
+            {/* ✅ FIX 1: Added "violet" class */}
+            <button className="btn small violet" onClick={addProject}>+ Add Project</button>
           </div>
 
           {form.projects.length === 0 && (
@@ -426,13 +408,13 @@ export default function EmployerProfile() {
           {form.projects.map((p, pi) => (
             <div key={pi} className="project-card">
               <div className="project-top">
-                {/* ✅✅✅ FIX: Updated title logic */}
                 <strong>
                   Project {pi + 1}
                   {p.collapsed ? `: ${p.projectName || 'Untitled'} (Team Size: ${p.teamMembers.length})` : ''}
                 </strong>
                 <div className="project-top-actions">
-                  <button className="btn tiny" onClick={() => updateProjectField(pi, "collapsed", !p.collapsed)}>{p.collapsed ? "Expand" : "Collapse"}</button>
+                  {/* ✅ FIX 2: Added "violet" class */}
+                  <button className="btn tiny violet" onClick={() => updateProjectField(pi, "collapsed", !p.collapsed)}>{p.collapsed ? "Expand" : "Collapse"}</button>
                   <button className="btn danger tiny" onClick={() => removeProject(pi)}>Remove Project</button>
                 </div>
               </div>
@@ -470,7 +452,7 @@ export default function EmployerProfile() {
                           </div>
 
                           <div className="member-actions">
-                            <button className="btn tiny" onClick={() => handleEditMember(pi, mi, m)}>Edit</button>
+                            <button className="btn tiny violet" onClick={() => handleEditMember(pi, mi, m)}>Edit</button>
                             <button className="btn danger tiny" onClick={() => removeTeamMember(pi, mi)}>Remove</button>
                           </div>
                         </div>
@@ -493,7 +475,6 @@ export default function EmployerProfile() {
                           <button className="btn violet" onClick={() => handleAddOrUpdateMember(pi)}>
                             {editingIndex && editingIndex.project === pi ? 'Update Team Member' : '+ Add Team Member'}
                           </button>
-                          {/* ✅ FIX: Show Cancel only when editing */}
                           {editingIndex && editingIndex.project === pi && (
                             <button className="btn small" onClick={handleCancelEdit}>Cancel</button>
                           )}

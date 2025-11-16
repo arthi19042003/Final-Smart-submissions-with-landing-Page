@@ -114,7 +114,7 @@ export default function ApplicationsDashboard() {
     // ✅ Added more paddingTop and minHeight
     <div className="container mt-4" style={{ paddingTop: "120px", minHeight: "100vh" }}>
       <Toaster position="top-right" />
-      <h2 className="mb-4" style={{ color: "#5b21b6", fontWeight: "700" }}>📬 Candidate Applications</h2>
+      <h2 className="mb-4" style={{ color: "#5b21b6", fontWeight: "700" }}> Candidate Applications</h2>
 
       {applications.length === 0 ? (
         <p className="text-muted">No applications found.</p>

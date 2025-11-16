@@ -10,14 +10,14 @@ const ApplicationSchema = new Schema({
   resumeUrl: String,
   status: {
     type: String,
-    // ✅ FIX: Added "Under Review" to the allowed list
     enum: ["Applied", "Screening", "Under Review", "Interview", "Offer", "Hired", "Rejected"],
     default: "Applied",
   },
   interviews: [{
     date: Date,
     time: String,
-    type: String,
+    // ✅ FIX: Explicitly define 'type' as a field to avoid Mongoose keyword conflict
+    type: { type: String }, 
     notes: String,
     status: { type: String, default: "Scheduled" }
   }],

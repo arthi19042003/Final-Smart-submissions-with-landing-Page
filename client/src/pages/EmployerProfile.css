@@ -30,7 +30,7 @@
 /* Title */
 .emp-title {
   text-align: center;
-  color: #4b3ffd;
+  color: #5b21b6; /* ✅ CHANGED: Purple */
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -85,7 +85,7 @@
 .emp-page .card-header {
   font-weight: 700;
   font-size: 18px;
-  color: #4b3ffd;
+  color: #5b21b6; /* ✅ CHANGED: Purple */
   margin-bottom: 18px;
   display: flex;
   align-items: center;

@@ -1,3 +1,4 @@
+// server/routes/interviewRoutes.js
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -23,7 +24,6 @@ const notifyHiringManager = async (data) => {
     console.log("🔔 Notification requested for:", data.jobPosition);
 
     // 2. Find the Position to identify the Hiring Manager (Creator)
-    // Note: This relies on the 'jobPosition' text matching a Position 'title' exactly.
     const position = await Position.findOne({ title: data.jobPosition });
     
     if (!position || !position.createdBy) {
@@ -90,12 +90,35 @@ router.post("/", upload.single("resume"), async (req, res) => {
   }
 });
 
-// ✅ Get all interviews
+// ✅ Get interviews (Filtered: Candidates see only their own)
 router.get("/", async (req, res) => {
   try {
-    const interviews = await Interview.find().sort({ createdAt: -1 });
+    // req.user is populated by the auth middleware in server.js
+    const user = req.user; 
+    let query = {};
+
+    // If the user is a Candidate, filter by their name
+    if (user && user.role === "candidate") {
+      const profile = user.profile || {};
+      const firstName = profile.firstName || "";
+      const lastName = profile.lastName || "";
+
+      // Filter where candidateFirstName matches user's first name (case-insensitive)
+      // We use RegExp to be safe against minor casing differences
+      if (firstName) {
+        query.candidateFirstName = { $regex: new RegExp(`^${firstName}$`, "i") };
+      }
+      
+      // If last name exists, match that too
+      if (lastName) {
+        query.candidateLastName = { $regex: new RegExp(`^${lastName}$`, "i") };
+      }
+    }
+
+    const interviews = await Interview.find(query).sort({ createdAt: -1 });
     res.json(interviews);
   } catch (err) {
+    console.error("Error fetching interviews:", err);
     res.status(500).json({ error: err.message });
   }
 });

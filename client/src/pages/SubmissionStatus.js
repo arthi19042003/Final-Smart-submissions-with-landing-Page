@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./SubmissionStatus.css";
-// ✅ FIX: Removed unused 'Spinner' and 'Alert' from react-bootstrap
 import api from "../api/axios";
 
 const filterFields = {
-  submissionId: "Submission ID",
+  // submissionId: "Submission ID", // This is less user-friendly
   candidateName: "Candidate Name",
   email: "Email",
   phone: "Phone",
@@ -32,16 +31,22 @@ const SubmissionStatus = () => {
         Object.entries(filters).filter(([_, v]) => v.trim() !== "")
       );
 
-      // Fetch from /submissions endpoint
+      // ✅ Calls the GET / route in submissions.js
       const res = await api.get("/submissions", { params: activeFilters });
 
       const sorted = res.data.sort((a, b) => {
-        // Sort by createdAt
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
 
       setSubmissions(sorted);
-      setMessage(res.data.length === 0 ? "ℹ️ No submissions found." : "");
+      if (res.data.length === 0) {
+        // Updated message to be more helpful
+        if (Object.keys(activeFilters).length > 0) {
+          setMessage("ℹ️ No submissions found matching your filters.");
+        } else {
+          setMessage("ℹ️ You have not submitted any candidates yet.");
+        }
+      }
     } catch (error) {
       console.error("Error fetching submissions:", error);
       setMessage("❌ Failed to load submissions.");
@@ -64,19 +69,53 @@ const SubmissionStatus = () => {
     fetchSubmissions();
   };
 
-  const handleView = async (id) => {
-    // Note: This logic needs to be updated to point to the correct resume download route
-    alert("View function needs to be re-wired.");
+  // View Resume
+  const handleView = async (candidateId) => {
+    if (!candidateId) return alert("Candidate information missing.");
+    try {
+      const response = await api.get(`/candidates/resume/${candidateId}`, {
+        responseType: 'blob'
+      });
+      const fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+      window.open(fileURL, '_blank');
+    } catch (error) {
+      console.error("View error:", error);
+      alert("Unable to view resume. File might be missing or invalid format.");
+    }
   };
 
-  const handleDownload = async (id, filename) => {
-    // Note: This logic needs to be updated to point to the correct resume download route
-    alert("Download function needs to be re-wired.");
+  // Download Resume
+  const handleDownload = async (candidateId, filename) => {
+    if (!candidateId) return alert("Candidate information missing.");
+    try {
+      const response = await api.get(`/candidates/resume/${candidateId}`, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename || 'resume.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Download error:", err);
+      alert("Failed to download resume.");
+    }
   };
 
+  // Delete Submission
   const handleDelete = async (id) => {
-    // Note: This logic needs to be updated to point to the /api/submissions/:id endpoint
-    alert("Delete function needs to be re-wired.");
+    if (!window.confirm("Are you sure you want to delete this submission?")) return;
+
+    try {
+      await api.delete(`/submissions/${id}`);
+      setSubmissions((prev) => prev.filter((s) => s._id !== id));
+      setMessage(""); 
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Failed to delete submission.");
+    }
   };
 
   return (
@@ -101,16 +140,14 @@ const SubmissionStatus = () => {
           </button>
         </form>
 
-        {/* ✅ FIX: Replaced <Spinner> with a simple div using your existing CSS class */}
         {loading && (
           <div className="submission-status-loading">
             Loading Submissions...
           </div>
         )}
 
-        {/* ✅ FIX: Replaced <Alert> with a div using global .error/.success classes from App.css */}
         {message && (
-          <div className={message.startsWith("❌") ? "error" : "success"}>
+          <div className={message.startsWith("❌") ? "error" : "success"} style={{textAlign: "center", marginBottom: "15px"}}>
             {message}
           </div>
         )}
@@ -121,8 +158,9 @@ const SubmissionStatus = () => {
               <thead>
                 <tr>
                   <th>Candidate</th>
-                  <th>Company</th>
-                  <th>Hiring Manager</th>
+                  {/* ✅ Changed columns to show Position */}
+                  <th>Position</th>
+                  <th>Company / HM</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -130,28 +168,38 @@ const SubmissionStatus = () => {
               <tbody>
                 {submissions.map((s) => (
                   <tr key={s._id}>
-                    <td>{s.candidate?.firstName} {s.candidate?.lastName}</td>
-                    <td>{s.candidate?.company}</td>
-                    <td>{s.candidate?.hiringManager}</td>
+                    <td>
+                      {/* ✅ Added candidate name/email */}
+                      <div style={{fontWeight: 'bold'}}>{s.candidate?.firstName} {s.candidate?.lastName}</div>
+                      <div style={{fontSize: '0.85rem', color: '#666'}}>{s.candidate?.email}</div>
+                    </td>
+                    {/* ✅ Display position title */}
+                    <td>{s.position?.title || "N/A"}</td> 
+                    <td>
+                      {/* ✅ Display company/hm from candidate */}
+                      <div>{s.candidate?.company}</div>
+                      <div style={{fontSize: '0.8rem', color: '#888'}}>{s.candidate?.hiringManager}</div>
+                    </td>
                     <td>
                       <span
                         className={`status-badge ${
-                          s.status?.toLowerCase() || ""
+                          // ✅ Use the Submission status, not Candidate status
+                          s.status?.toLowerCase() || "submitted"
                         }`}
                       >
-                        {s.status || "Unknown"}
+                        {s.status || "submitted"}
                       </span>
                     </td>
                     <td className="submission-status-actions">
                       <button
                         className="submission-status-view"
-                        onClick={() => handleView(s._id)}
+                        onClick={() => handleView(s.candidate?._id)}
                       >
                         View
                       </button>
                       <button
                         className="submission-status-download"
-                        onClick={() => handleDownload(s._id, s.fileName)}
+                        onClick={() => handleDownload(s.candidate?._id, s.candidate?.resumeOriginalName)}
                       >
                         Download
                       </button>

@@ -1,4 +1,3 @@
-// client/src/pages/InterviewDetails.js
 import React, { useEffect, useState } from "react";
 import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../api/axios";
@@ -32,11 +31,9 @@ function InterviewDetails() {
   const fetchInterviews = async () => {
     try {
       const { data } = await api.get("/interviews");
-      // Ensure data is an array to prevent crashes
       setInterviews(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching interviews:", err);
-      // Fallback to empty array on error
       setInterviews([]);
     }
   };
@@ -84,12 +81,14 @@ function InterviewDetails() {
     setTimeout(() => setMessage(""), 2500);
   };
 
-  // ✅ SAFETY FIX: Handle invalid dates gracefully
   const handleEdit = (item) => {
     let formattedDate = "";
     if (item.date) {
       try {
-        formattedDate = new Date(item.date).toISOString().split("T")[0];
+        // FIX: Convert to 'YYYY-MM-DDTHH:mm' for datetime-local input
+        const d = new Date(item.date);
+        const offset = d.getTimezoneOffset() * 60000; 
+        formattedDate = new Date(d.getTime() - offset).toISOString().slice(0, 16);
       } catch (e) {
         console.warn("Invalid date found for interview:", item._id);
       }
@@ -118,11 +117,9 @@ function InterviewDetails() {
     setTimeout(() => setMessage(""), 2000);
   };
 
-  // ✅ SAFETY FIX: Prevent crash if fields are undefined/null
   const filteredData = interviews.filter((it) => {
     const searchValue = search.trim().toLowerCase();
     
-    // Use default empty strings if data is missing
     const fName = it.candidateFirstName || "";
     const lName = it.candidateLastName || "";
     const pos = it.jobPosition || "";
@@ -137,13 +134,11 @@ function InterviewDetails() {
   });
 
   return (
-    // 🔴 FIXED: Removed 'fade' class to ensure page is visible
     <div className="page interviewer-bg">
       <div className="card form-card">
-        <h2 className="form-title">{editingId ? "Update Interview" : "Interviewer Details"}</h2>
+        <h2 className="form-title">{editingId ? "Update Interview" : "Schedule Interview"}</h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Section: Candidate Info */}
           <h3 className="section-label">Candidate Information</h3>
           <div className="grid-2">
             <div className="form-field">
@@ -157,7 +152,6 @@ function InterviewDetails() {
             </div>
           </div>
 
-          {/* Section: Interview Details */}
           <h3 className="section-label">Interview Details</h3>
           <div className="grid-2">
             <div className="form-field">
@@ -166,8 +160,14 @@ function InterviewDetails() {
             </div>
 
             <div className="form-field">
-              <label>Interview Date <span>*</span></label>
-              <input type="date" name="date" value={form.date} onChange={handleChange} required />
+              <label>Interview Date & Time <span>*</span></label>
+              <input 
+                type="datetime-local" 
+                name="date" 
+                value={form.date} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
 
             <div className="form-field">
@@ -185,7 +185,6 @@ function InterviewDetails() {
             </div>
           </div>
 
-          {/* Section: Evaluation */}
           <h3 className="section-label">Evaluation</h3>
           <div className="grid-2">
             <div className="form-field">
@@ -208,7 +207,6 @@ function InterviewDetails() {
             </div>
           </div>
 
-          {/* Rating */}
           <label>Rating</label>
           <div className="rating-stars">
             {stars.map((s) => (
@@ -257,7 +255,6 @@ function InterviewDetails() {
         </form>
       </div>
 
-      {/* History table */}
       <div className="card records-card">
         <h3 className="section-label">Interview Records</h3>
 
@@ -274,7 +271,7 @@ function InterviewDetails() {
 
         <div className="table-header">
           <span>Candidate</span>
-          <span>Date</span>
+          <span>Date & Time</span>
           <span>Position</span>
           <span>Status</span>
           <span>Result</span>
@@ -287,19 +284,20 @@ function InterviewDetails() {
         ) : (
           filteredData.map((it) => (
             <div className="table-row" key={it._id}>
-              {/* ✅ Safe Field Access */}
               <span>{it.candidateFirstName || ""} {it.candidateLastName || ""}</span>
               
-              {/* ✅ Safe Date Rendering */}
               <span>
-                {it.date && !isNaN(new Date(it.date)) 
-                  ? new Date(it.date).toLocaleDateString() 
-                  : "N/A"}
+                {it.date ? new Date(it.date).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'}) : "N/A"}
               </span>
               
               <span>{it.jobPosition || "N/A"}</span>
-              <span className={`badge ${it.status?.toLowerCase()}`}>{it.status || "Pending"}</span>
-              <span className={`badge ${it.result?.toLowerCase()}`}>{it.result || "Pending"}</span>
+              
+              {/* Status Badge */}
+              <span><span className={`badge ${it.status?.toLowerCase()}`}>{it.status || "Pending"}</span></span>
+              
+              {/* Result Badge */}
+              <span><span className={`badge ${it.result?.toLowerCase()}`}>{it.result || "Pending"}</span></span>
+              
               <span>⭐ {Number(it.rating || 0)}</span>
 
               <div className="row-actions">

@@ -1,12 +1,9 @@
-// [File: arthi19042003/with-landing-page/With-landing-page-0f24402f43f461a8bca04af752e98da1034a70d5/client/src/pages/ResumeUploadRecruiter.js]
 import React, { useState, useEffect } from "react";
 import "./ResumeUploadRecruiter.css";
-// ✅ FIX 1: Correct the api import
 import api from "../api/axios";
 import { useNavigate } from 'react-router-dom';
 
 const ResumeUploadRecruiter = () => {
-  // ✅ FIX 2: Updated form state to match the backend model
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -20,13 +17,10 @@ const ResumeUploadRecruiter = () => {
     linkedinProfile: "",
     positionId: "",
     hiringManagerId: "",
-    // Note: The 'company' and 'hiringManager' text fields are saved on the candidate
-    // but the ID fields are used for submission. We'll keep them.
     company: "",
     hiringManager: "",
   });
 
-  // ✅ NEW: State for dropdowns
   const [positions, setPositions] = useState([]);
   const [managers, setManagers] = useState([]);
 
@@ -36,16 +30,14 @@ const ResumeUploadRecruiter = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // ✅ NEW: Fetch data for dropdowns
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [posRes, mgrRes] = await Promise.all([
-          api.get('/positions'),
+          api.get('/positions/open'), // ✅ CHANGED: Fetch ALL open positions, not just ones created by user
           api.get('/recruiter/managers')
         ]);
         setPositions(posRes.data || []);
-        // Filter for only HMs in this dropdown
         setManagers(mgrRes.data.filter(u => u.role === 'hiringManager') || []);
       } catch (error) {
         setMessage({ type: 'error', text: 'Could not load positions or managers.' });
@@ -54,7 +46,6 @@ const ResumeUploadRecruiter = () => {
     fetchData();
   }, []);
 
-  // --- Handle input changes ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -66,7 +57,6 @@ const ResumeUploadRecruiter = () => {
     if (errors.file) setErrors((prev) => ({ ...prev, file: "" }));
   };
   
-  // --- Validation ---
   const validateForm = () => {
     const newErrors = {};
     if (!form.firstName) newErrors.firstName = "First name is required";
@@ -84,7 +74,6 @@ const ResumeUploadRecruiter = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // --- Handle submit ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -97,23 +86,20 @@ const ResumeUploadRecruiter = () => {
     setLoading(true);
     try {
       const fd = new FormData();
-      // Append all form data
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       fd.append("resume", file);
 
-      // ✅ FIX 3: Post to the correct recruiter submission route
       await api.post("/recruiter/submit", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       setMessage("✅ Resume submitted successfully!");
-      setForm(form); // Clear the form
+      setForm(form); 
       setFile(null);
-      // Clear file input
       document.getElementById("resume").value = null;
       
       setTimeout(() => {
-        navigate('/recruiter/submission-status'); // Go to status page
+        navigate('/recruiter/submission-status'); 
       }, 1500);
 
     } catch (err) {
@@ -129,7 +115,6 @@ const ResumeUploadRecruiter = () => {
         <h2 className="resume-upload-title">Submit Candidate Resume</h2>
 
         <form onSubmit={handleSubmit} className="resume-upload-form" noValidate>
-          {/* ✅ FIX 4: Updated form fields to match backend */}
           <div className="form-group">
             <label htmlFor="firstName">First Name<span className="mandatory">*</span></label>
             <input id="firstName" type="text" name="firstName" placeholder="Enter candidate's first name" value={form.firstName} onChange={handleChange} className={errors.firstName ? "error" : ""} />
@@ -197,7 +182,6 @@ const ResumeUploadRecruiter = () => {
             <input id="hiringManager" type="text" name="hiringManager" placeholder="Enter hiring manager name" value={form.hiringManager} onChange={handleChange} />
           </div>
 
-          {/* --- ✅ NEW: Dropdowns --- */}
           <div className="form-group">
             <label>Select Position <span className="mandatory">*</span></label>
             <select name="positionId" value={form.positionId} onChange={handleChange} required className={errors.positionId ? "error" : ""}>
@@ -221,7 +205,6 @@ const ResumeUploadRecruiter = () => {
             </select>
             {errors.hiringManagerId && <span className="error-text">{errors.hiringManagerId}</span>}
           </div>
-          {/* --- End of Dropdowns --- */}
 
           <div className="form-group file-upload">
             <label className="file-label" htmlFor="resume">

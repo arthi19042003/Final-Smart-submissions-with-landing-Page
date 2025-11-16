@@ -20,6 +20,7 @@ import {
   Badge,
   Alert,
 } from "react-bootstrap";
+import { FaPlus } from "react-icons/fa"; // ✅ Import the Plus icon
 import './HiringManagerDashboard.css';
 
 export default function HiringManagerDashboard() {
@@ -127,7 +128,7 @@ export default function HiringManagerDashboard() {
             Failed to load dashboard data. Please try refreshing.
           </Alert>
           <Button onClick={fetchDashboard} className="purple-btn">
-            🔄 Retry
+             Retry
           </Button>
         </Container>
       </div>
@@ -145,11 +146,8 @@ export default function HiringManagerDashboard() {
     <div className="hiring-dashboard">
       <Container fluid="lg">
         {/* HEADER */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex justify-content-center align-items-center mb-4">
           <h2 className="fw-bold" style={{ color: "#4c1d95" }}>Hiring Manager Dashboard</h2>
-          <Badge bg="light" text="dark" className="p-2 fs-6 shadow-sm border">
-            Welcome Back 👋
-          </Badge>
         </div>
 
         {/* ROW 1: Chart + Metrics (Aligned Height) */}
@@ -159,7 +157,7 @@ export default function HiringManagerDashboard() {
             <Card className="shadow-sm h-100 border-0">
               <Card.Body className="d-flex flex-column">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <Card.Title className="text-purple fw-bold mb-0">📊 Hiring Progress</Card.Title>
+                  <Card.Title className="text-purple fw-bold mb-0"> Hiring Progress</Card.Title>
                   <Button
                     onClick={fetchDashboard}
                     disabled={refreshing}
@@ -167,7 +165,7 @@ export default function HiringManagerDashboard() {
                     variant="outline-primary"
                     style={{ borderColor: "#6d28d9", color: "#6d28d9" }}
                   >
-                    {refreshing ? "Refreshing..." : "🔄 Refresh"}
+                    {refreshing ? "Refreshing..." : "Refresh"}
                   </Button>
                 </div>
                 <div style={{ width: '100%', height: 300, flexGrow: 1 }}>
@@ -189,22 +187,22 @@ export default function HiringManagerDashboard() {
           <Col md={5} lg={4}>
             <Card className="shadow-sm h-100 border-0">
               <Card.Body className="d-flex flex-column justify-content-center">
-                <Card.Title className="text-center text-purple fw-bold mb-4">📈 Key Metrics</Card.Title>
+                <Card.Title className="text-center text-purple fw-bold mb-4"> Key Metrics</Card.Title>
                 <div className="metrics-list">
                   <div className="metric-item">
-                    <span>📄 Total Submissions:</span>
+                    <span> Total Submissions:</span>
                     <strong className="text-dark">{data.totalSubmissions}</strong>
                   </div>
                   <div className="metric-item">
-                    <span>📅 Interviews:</span>
+                    <span> Interviews:</span>
                     <strong className="text-primary">{data.interviewsScheduled}</strong>
                   </div>
                   <div className="metric-item">
-                    <span>💼 Offers Made:</span>
+                    <span> Offers Made:</span>
                     <strong className="text-info">{data.offersMade}</strong>
                   </div>
                   <div className="metric-item success">
-                    <span>🎯 Hired:</span>
+                    <span> Hired:</span>
                     <strong className="text-success">{data.hired}</strong>
                   </div>
                 </div>
@@ -219,8 +217,9 @@ export default function HiringManagerDashboard() {
             <Card className="shadow-sm border-0">
               <Card.Body>
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <Card.Title className="text-purple fw-bold mb-0">💼 Manage Positions</Card.Title>
-                  <Button className="purple-outline-btn" size="sm" onClick={() => navigate("/hiring-manager/open-positions")}>
+                  <Card.Title className="text-purple fw-bold mb-0"> Manage Positions</Card.Title>
+                  {/* ✅ CHANGED: Use 'purple-btn' for solid background */}
+                  <Button className="purple-btn" size="sm" onClick={() => navigate("/hiring-manager/open-positions")}>
                     View All Positions →
                   </Button>
                 </div>
@@ -262,7 +261,7 @@ export default function HiringManagerDashboard() {
                         value={newPosition.requiredSkills}
                         onChange={(e) => setNewPosition({ ...newPosition, requiredSkills: e.target.value })}
                       />
-                    </Col> {/* ✅ FIX: This </Col> tag was mistyped as </Player> */}
+                    </Col>
                     <Col md={1}>
                       <Form.Label>Openings</Form.Label>
                       <Form.Control
@@ -274,7 +273,7 @@ export default function HiringManagerDashboard() {
                     </Col>
                     <Col md={1}>
                       <Button type="submit" className="purple-btn w-100">
-                        ➕
+                        <FaPlus />
                       </Button>
                     </Col>
                   </Row>
@@ -287,12 +286,12 @@ export default function HiringManagerDashboard() {
         {/* ROW 3: Navigation Cards */}
         <Row className="g-4">
           {[
-            { title: "📬 Applications", text: "Review apps & schedule interviews.", path: "/hiring-manager/applications", btn: "View Apps" },
-            { title: "🗓️ Interviews", text: "Manage timeslots & feedback.", path: "/hiring-manager/schedule", btn: "Manage" },
-            { title: "🧾 POs", text: "Track purchase orders.", path: "/hiring-manager/purchase-orders", btn: "View POs" },
-            { title: "💌 Inbox", text: "Messages from candidates.", path: "/hiring-manager/inbox", btn: "Open Inbox" },
-            { title: "🚀 Onboarding", text: "Track hired candidate progress.", path: "/hiring-manager/onboarding", btn: "Track" },
-            { title: "🤝 Agencies", text: "Invite recruiters.", path: "/hiring-manager/agencies", btn: "Invite" },
+            { title: " Applications", text: "Review apps & schedule interviews.", path: "/hiring-manager/applications", btn: "View Apps" },
+            { title: " Interviews", text: "Manage timeslots & feedback.", path: "/hiring-manager/schedule", btn: "Manage" },
+            { title: " POs", text: "Track purchase orders.", path: "/hiring-manager/purchase-orders", btn: "View POs" },
+            { title: " Inbox", text: "Messages from candidates.", path: "/hiring-manager/inbox", btn: "Open Inbox" },
+            { title: " Onboarding", text: "Track hired candidate progress.", path: "/hiring-manager/onboarding", btn: "Track" },
+            { title: " Agencies", text: "Invite recruiters.", path: "/hiring-manager/agencies", btn: "Invite" },
           ].map((item, idx) => (
             <Col md={4} key={idx}>
               <Card className="shadow-sm h-100 border-0 nav-card">
