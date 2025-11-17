@@ -1,11 +1,9 @@
-// client/src/pages/Positions.js
 import React, { useEffect, useState, useMemo } from "react";
-import { Link } from 'react-router-dom'; // ✅ NEW: Import Link
+import { Link } from 'react-router-dom'; 
 import api from '../api/axios';
 import "./Positions.css";
 
 const Positions = () => {
-  // ... (all existing state and functions remain the same)
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +37,6 @@ const Positions = () => {
       if (filters.skills) params.append('skills', filters.skills);
 
       try {
-        // ✅ UPDATED: Use the /positions route, not /hiringManager/positions
         const response = await api.get("/positions", { params }); 
         setPositions(response.data);
       } catch (err) {
@@ -100,7 +97,6 @@ const Positions = () => {
       {!loading && !error && positions.length > 0 && (
         <div className="positions-grid">
           {positions.map((pos) => (
-            // ✅ UPDATED: Wrap card in a Link to the new details page
             <Link 
               key={pos._id}
               to={`/hiring-manager/position/${pos._id}`} 

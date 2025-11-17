@@ -1,4 +1,3 @@
-// server/routes/onboarding.js
 const express = require("express");
 const router = express.Router();
 const Application = require("../models/Application");
@@ -6,19 +5,15 @@ const Submission = require("../models/Submission");
 const Candidate = require("../models/Candidate");
 const protect = require("../middleware/auth");
 
-// ✅ GET Hired Candidates (Unified View)
 router.get("/", protect, async (req, res) => {
   try {
-    // ---------------------------------------------------------
-    // 1. Fetch Hired Direct Applications
-    // ---------------------------------------------------------
+
     const appsRaw = await Application.find({ status: "Hired" })
-      .populate("jobId", "title department") // Populate Position to get Department
-      .populate("createdBy", "profile email") // Populate User to get Name fallback
+      .populate("jobId", "title department") 
+      .populate("createdBy", "profile email") 
       .lean();
 
     const apps = appsRaw.map((app) => {
-      // Try to get name from App -> User Profile -> User Email
       let name = app.candidateName;
       if (!name && app.createdBy?.profile) {
         name = `${app.createdBy.profile.firstName} ${app.createdBy.profile.lastName}`;
@@ -31,8 +26,8 @@ router.get("/", protect, async (req, res) => {
         _id: app._id,
         candidateName: name,
         email: app.email || app.createdBy?.email,
-        position: app.position, // Use stored position title
-        department: app.jobId?.department || "-", // Get department from populated Position
+        position: app.position, 
+        department: app.jobId?.department || "-", 
         status: app.status,
         appliedAt: app.appliedAt,
         onboardingStatus: app.onboardingStatus || "Pending",
@@ -40,13 +35,10 @@ router.get("/", protect, async (req, res) => {
       };
     });
 
-    // ---------------------------------------------------------
-    // 2. Fetch Hired Recruiter Submissions
-    // ---------------------------------------------------------
     const submissionsRaw = await Submission.find()
       .populate({
         path: "candidate",
-        match: { status: "Hired" }, // Only Hired candidates
+        match: { status: "Hired" }, 
       })
       .populate("position", "title department")
       .lean();
@@ -56,7 +48,7 @@ router.get("/", protect, async (req, res) => {
         if (!sub.candidate || !sub.position) return null;
 
         return {
-          _id: sub.candidate._id, // Use Candidate ID for updates
+          _id: sub.candidate._id, 
           candidateName: `${sub.candidate.firstName} ${sub.candidate.lastName}`,
           email: sub.candidate.email,
           position: sub.position.title,
@@ -68,10 +60,6 @@ router.get("/", protect, async (req, res) => {
         };
       })
       .filter((item) => item !== null);
-
-    // ---------------------------------------------------------
-    // 3. Merge & Sort
-    // ---------------------------------------------------------
     const unifiedList = [...apps, ...submissions].sort(
       (a, b) => new Date(b.appliedAt) - new Date(a.appliedAt)
     );
@@ -83,19 +71,16 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-// ✅ PUT Update Status (Same as before)
 router.put("/:id/status", protect, async (req, res) => {
   try {
     const { onboardingStatus } = req.body;
 
-    // Try Application first
     let updated = await Application.findByIdAndUpdate(
       req.params.id,
       { onboardingStatus },
       { new: true }
     );
 
-    // If not found, try Candidate
     if (!updated) {
       updated = await Candidate.findByIdAndUpdate(
         req.params.id,

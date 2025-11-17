@@ -2,7 +2,6 @@ const express = require("express");
 const Candidate = require("../models/Candidate");
 const router = express.Router();
 
-// === Dashboard Summary ===
 router.get("/summary", async (req, res, next) => {
   try {
     const total = await Candidate.countDocuments();
@@ -16,7 +15,6 @@ router.get("/summary", async (req, res, next) => {
   }
 });
 
-// === Submissions List ===
 router.get("/submissions", async (req, res, next) => {
   try {
     const data = await Candidate.find().sort({ createdAt: -1 }).limit(20);

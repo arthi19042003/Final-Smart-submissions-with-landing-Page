@@ -16,7 +16,7 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({}); 
   
   const { register, logout } = useAuth(); 
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const Register = () => {
     if (errors[name]) setErrors(p => ({ ...p, [name]: null }));
   };
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!formData.firstName) newErrors.firstName = "First Name is required";
@@ -52,7 +51,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return; 
 
     setLoading(true);
     

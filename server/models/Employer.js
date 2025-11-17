@@ -1,4 +1,3 @@
-// backend/models/Employer.js
 const mongoose = require("mongoose");
 
 const EmployerSchema = new mongoose.Schema({

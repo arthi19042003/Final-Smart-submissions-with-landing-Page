@@ -1,21 +1,16 @@
-/* ================================
-   Inbox Page (Purple & White Theme)
-   ================================ */
-
 .inbox-container {
   max-width: 1000px;
-  margin: 110px auto 60px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 60px auto; 
   padding: 40px 50px;
   font-family: "Inter", sans-serif;
-  background-color: #faf5ff; /* soft lavender background */
+  background-color: #faf5ff; 
   min-height: 100vh;
 }
 
-/* ===== Title & Subtitle ===== */
 .inbox-container h2 {
   font-size: 30px;
   font-weight: 700;
-  color: #5b21b6; /* deep purple */
+  color: #5b21b6; 
   text-align: center;
   margin-bottom: 10px;
 }
@@ -27,7 +22,6 @@
   font-size: 16px;
 }
 
-/* ===== Empty State ===== */
 .empty {
   color: #7c3aed;
   text-align: center;
@@ -35,21 +29,19 @@
   font-weight: 500;
 }
 
-/* ===== Message List ===== */
 .message-list {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-/* ===== Message Cards ===== */
 .message-card {
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(91, 33, 182, 0.08);
   padding: 20px 24px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1.5px solid #ede9fe; /* soft purple border */
+  border: 1.5px solid #ede9fe; 
 }
 
 .message-card:hover {
@@ -57,13 +49,11 @@
   box-shadow: 0 6px 14px rgba(91, 33, 182, 0.12);
 }
 
-/* ===== Unread Highlight ===== */
 .message-card.unread {
-  background-color: #f5f3ff; /* light purple tint */
+  background-color: #f5f3ff; 
   border-left: 5px solid #8b5cf6;
 }
 
-/* ===== Message Header ===== */
 .message-header {
   display: flex;
   justify-content: space-between;
@@ -83,7 +73,6 @@
   color: #6b7280;
 }
 
-/* ===== Sender & Text ===== */
 .message-sender {
   font-weight: 500;
   color: #5b21b6;
@@ -97,7 +86,6 @@
   line-height: 1.5;
 }
 
-/* ===== Status Tags ===== */
 .status-tag {
   display: inline-block;
   padding: 3px 8px;
@@ -110,7 +98,6 @@
   box-shadow: 0 1px 2px rgba(109, 40, 217, 0.08);
 }
 
-/* Differentiate read/unread subtly */
 .status-read {
   opacity: 0.8;
 }
@@ -120,7 +107,6 @@
   color: #5b21b6;
 }
 
-/* ===== Loading State ===== */
 .loading {
   text-align: center;
   padding: 30px;
@@ -128,12 +114,10 @@
   font-weight: 500;
 }
 
-/* ===== Clickable Effect ===== */
 .message-card.clickable {
   cursor: pointer;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .inbox-container {
     padding: 20px;

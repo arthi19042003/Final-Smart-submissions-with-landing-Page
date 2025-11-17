@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import api from "../api/axios"; // ✅ Use api instance
+import api from "../api/axios"; 
 import "../styles/Login.css"; 
 
 export default function EmployerLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ Added loading state
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [loading, setLoading] = useState(false); 
+  const [errors, setErrors] = useState({}); 
   
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -17,7 +17,6 @@ export default function EmployerLogin() {
   const location = useLocation();
   const message = location.state?.message;
   
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
@@ -29,11 +28,11 @@ export default function EmployerLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(""); 
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return; 
     
-    setLoading(true); // ✅ Set loading
+    setLoading(true); 
     try {
-      const res = await api.post("/auth/login", { // ✅ Use api instance
+      const res = await api.post("/auth/login", { 
         email,
         password,
         role: "employer",
@@ -47,7 +46,7 @@ export default function EmployerLogin() {
       setError(err.response?.data?.message || "Login failed. Check credentials.");
       console.error(err);
     } finally {
-      setLoading(false); // ✅ Unset loading
+      setLoading(false); 
     }
   };
 
@@ -75,7 +74,7 @@ export default function EmployerLogin() {
               }} 
               placeholder="Email" 
               required 
-              className={errors.email ? "error" : ""} // ✅ Apply error class
+              className={errors.email ? "error" : ""} 
             />
           </div>
           <div className="form-group">
@@ -89,7 +88,7 @@ export default function EmployerLogin() {
               }} 
               placeholder="Password" 
               required 
-              className={errors.password ? "error" : ""} // ✅ Apply error class
+              className={errors.password ? "error" : ""} 
             />
           </div>
           

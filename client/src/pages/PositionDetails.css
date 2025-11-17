@@ -1,7 +1,6 @@
-/* client/src/pages/PositionDetails.css */
 .pos-details-container {
   max-width: 1000px;
-  margin: 110px auto 60px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 60px auto; 
   padding: 40px 50px;
   font-family: "Inter", sans-serif;
   background-color: #faf5ff;
@@ -111,7 +110,7 @@
   border: 1px solid #c4b5fd;
   border-radius: 8px;
   font-size: 1rem;
-  box-sizing: border-box; /* Fix padding issues */
+  box-sizing: border-box; 
 }
 
 .btn-primary {

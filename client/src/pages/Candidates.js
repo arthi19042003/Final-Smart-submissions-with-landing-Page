@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // 1. Make sure useNavigate and Link are imported
+import { useNavigate, Link } from 'react-router-dom'; 
 import axios from 'axios';
-import './Candidates.css'; // Assuming you have a CSS file
+import './Candidates.css'; 
 
 const Candidates = () => {
-  // Use state to hold all form data in one object
   const [formData, setFormData] = useState({
-    firstName: 'Ram', // Pre-filled from your screenshot
-    lastName: 'R',   // Pre-filled from your screenshot
-    email: 'ram@gmail.com', // Pre-filled from your screenshot
-    phone: '1234567890',  // Pre-filled from your screenshot
-    city: 'Chennai',    // Pre-filled from your screenshot
-    state: 'Tamilnadu', // Pre-filled from your screenshot
+    firstName: '', 
+    lastName: '',   
+    email: '', 
+    phone: '',  
+    city: '',    
+    state: '', 
     password: '',
     confirmPassword: '',
   });
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // 2. Initialize the navigate function
+  const navigate = useNavigate(); 
 
-  // A single handler to update our state object
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -30,18 +28,16 @@ const Candidates = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null); 
 
-    // 3. Client-side password check
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
-      return; // Stop the submission
+      return; 
     }
 
     setLoading(true);
 
     try {
-      // 4. Create a data object to send (without confirmPassword)
       const dataToSubmit = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -52,22 +48,15 @@ const Candidates = () => {
         password: formData.password,
       };
       
-      // 5. Send the registration request to your backend
-      await axios.post('/api/auth/register', dataToSubmit); // Make sure this URL is correct
-      
-      // --- THIS IS THE KEY CHANGE ---
-      // 6. (REMOVED) We DO NOT log the user in (e.g., no localStorage.setItem)
-      
+      await axios.post('/api/auth/register', dataToSubmit); 
+            
       setLoading(false);
 
-      // 7. (CHANGED) We redirect to the /login page with a success message
       navigate('/login', {
         state: { message: 'Registration successful! Please log in.' },
       });
-      // -----------------------------
 
     } catch (err) {
-      // 8. Handle errors from the backend (like "User already exists")
       setLoading(false);
       setError(err.response && err.response.data.message
         ? err.response.data.message
@@ -76,7 +65,6 @@ const Candidates = () => {
     }
   };
 
-  // Helper for rendering form fields
   const renderInput = (name, label, type = 'text') => (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -96,7 +84,6 @@ const Candidates = () => {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Candidate Register</h2>
 
-        {/* This structure assumes your CSS handles the 2-column layout */}
         <div className="form-row">
           {renderInput('firstName', 'First Name')}
           {renderInput('lastName', 'Last Name')}

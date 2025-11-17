@@ -1,6 +1,5 @@
-// client/src/pages/Interviews.js
 import React, { useState, useEffect } from "react";
-import api from '../api/axios'; // Import the configured axios instance
+import api from '../api/axios'; 
 import "./Interviews.css";
 
 const Interviews = () => {
@@ -27,7 +26,6 @@ const Interviews = () => {
     fetchInterviews();
   }, []);
 
-  // --- Helper function to format date ---
   const formatDate = (dateString) => {
      if (!dateString) return 'N/A';
      try {
@@ -37,7 +35,6 @@ const Interviews = () => {
      } catch (e) { return 'Invalid Date'; }
   };
 
-  // --- Helper function to format time ---
   const formatTime = (dateString) => {
      if (!dateString) return '';
      try {
@@ -47,7 +44,6 @@ const Interviews = () => {
      } catch (e) { return ''; }
   };
 
-   // --- Helper function to get mode class ---
    const getModeClass = (mode) => {
      if (!mode) return 'online'; 
      const lowerMode = mode.toLowerCase();

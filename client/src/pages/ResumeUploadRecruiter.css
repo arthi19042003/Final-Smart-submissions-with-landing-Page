@@ -1,20 +1,12 @@
-/* =========================================
-   SMART SUBMISSIONS — RECRUITER RESUME UPLOAD (FINAL)
-   ========================================= */
-
-/* @import for Poppins removed */
-
 .resume-upload-page {
-  /* font-family removed */
   background-color: #f9fafc;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 110px 20px 60px 20px; /* ✅ FIXED */
+  padding: 110px 20px 60px 20px; 
 }
 
-/* Card */
 .resume-upload-card {
   background: #fff;
   width: 100%;
@@ -26,17 +18,14 @@
   box-sizing: border-box;
 }
 
-/* Title */
 .resume-upload-title {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 600;
-  /* ✅ CHANGED: Set to purple */
   color: #5b21b6; 
   margin-bottom: 1.8rem;
 }
 
-/* Form */
 .resume-upload-form {
   display: flex;
   flex-direction: column;
@@ -64,7 +53,6 @@
   outline: none;
 }
 
-/* File section */
 .file-upload {
   text-align: center;
   margin-top: 1rem;
@@ -83,7 +71,6 @@
   margin-top: 4px;
 }
 
-/* Buttons */
 .resume-upload-btn {
   width: 100%;
   background-color: #7c3aed;
@@ -100,7 +87,6 @@
   background-color: #5b21b6;
 }
 
-/* Status messages */
 .error-text {
   color: #dc2626;
   font-size: 0.85rem;
@@ -116,7 +102,6 @@
   margin-bottom: 1rem;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .resume-upload-card {
     padding: 28px 24px;
@@ -127,10 +112,8 @@
   }
 }
 
-/* --- ADDED --- */
-/* Mandatory Star Style */
 .mandatory {
-  color: #dc2626; /* Red color */
+  color: #dc2626; 
   font-weight: 700;
   margin-left: 4px;
 }

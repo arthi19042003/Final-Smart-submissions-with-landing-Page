@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({}); 
 
   const navigate = useNavigate();
   const { login } = useAuth(); 
@@ -16,7 +16,6 @@ const Login = () => {
   const location = useLocation();
   const message = location.state?.message;
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
@@ -28,7 +27,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return; 
 
     setLoading(true);
 
@@ -72,7 +71,7 @@ const Login = () => {
                 if (errors.email) setErrors(p => ({...p, email: null}));
               }}
               required
-              className={errors.email ? "error" : ""} // ✅ Apply error class
+              className={errors.email ? "error" : ""} 
             />
           </div>
 
@@ -87,7 +86,7 @@ const Login = () => {
                 if (errors.password) setErrors(p => ({...p, password: null}));
               }}
               required
-              className={errors.password ? "error" : ""} // ✅ Apply error class
+              className={errors.password ? "error" : ""} 
             />
           </div>
 

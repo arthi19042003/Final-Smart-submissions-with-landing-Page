@@ -3,12 +3,8 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const User = require("../models/User");
 
-// =========================
-// Get user profile
-// =========================
 router.get("/", auth, async (req, res) => {
   try {
-    // req.userId comes from the fixed auth middleware
     const user = await User.findById(req.userId).select("-password"); 
     if (!user) {
         return res.status(404).json({ success: false, message: "User not found" });
@@ -20,9 +16,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Update profile (for any role)
-// =========================
 router.put("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -30,17 +23,13 @@ router.put("/", auth, async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Merge new profile data with existing profile data
     const updatedProfile = {
       ...user.profile.toObject(), 
       ...req.body 
     };
 
     user.profile = updatedProfile;
-    
-    // ✅ FIX: Do NOT set user.password = undefined here. 
-    // It causes validation errors on save().
-    
+        
     await user.save(); 
     
     const updatedUser = await User.findById(req.userId).select("-password"); 
@@ -56,9 +45,6 @@ router.put("/", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Add experience (Candidate)
-// =========================
 router.post("/experience", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -74,9 +60,6 @@ router.post("/experience", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Update experience by ID (Candidate)
-// =========================
 router.put("/experience/:id", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -94,9 +77,6 @@ router.put("/experience/:id", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Delete experience by ID (Candidate)
-// =========================
 router.delete("/experience/:id", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -111,9 +91,6 @@ router.delete("/experience/:id", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Add education (Candidate)
-// =========================
 router.post("/education", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -129,9 +106,6 @@ router.post("/education", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Update education by ID (Candidate)
-// =========================
 router.put("/education/:id", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -149,9 +123,6 @@ router.put("/education/:id", auth, async (req, res) => {
   }
 });
 
-// =========================
-// Delete education by ID (Candidate)
-// =========================
 router.delete("/education/:id", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);

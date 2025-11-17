@@ -85,7 +85,6 @@ function InterviewDetails() {
     let formattedDate = "";
     if (item.date) {
       try {
-        // FIX: Convert to 'YYYY-MM-DDTHH:mm' for datetime-local input
         const d = new Date(item.date);
         const offset = d.getTimezoneOffset() * 60000; 
         formattedDate = new Date(d.getTime() - offset).toISOString().slice(0, 16);

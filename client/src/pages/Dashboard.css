@@ -1,25 +1,21 @@
-/* Add space below navbar */
 .dashboard-container {
-  margin-top: 110px; /* ✅ MODIFIED: Increased top margin */
+  margin-top: 110px; 
   padding: 20px;
   text-align: center;
 }
 
-/* Title */
 .dashboard-title {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 5px;
 }
 
-/* Subtitle */
 .dashboard-subtitle {
   font-size: 15px;
   color: #6b6b6b;
   margin-bottom: 30px;
 }
 
-/* Center content & spacing */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
@@ -28,7 +24,6 @@
   margin: auto;
 }
 
-/* Card design */
 .dashboard-card {
   background: #fff;
   padding: 25px;
@@ -36,7 +31,6 @@
   box-shadow: 0px 3px 12px rgba(0,0,0,0.08);
 }
 
-/* Buttons */
 .purple-btn {
   background: linear-gradient(to right, #6c2bd9, #9333ea);
   color: #fff;

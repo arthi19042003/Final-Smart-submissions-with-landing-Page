@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 const PositionSchema = new Schema({
   title: { type: String, required: true },
   department: String,
-  project: String, // ✅ ADDED: To store Project field
-  organization: String, // ✅ ADDED: To store Organization field
+  project: String, 
+  organization: String, 
   description: String,
   requiredSkills: [String],
   location: String,

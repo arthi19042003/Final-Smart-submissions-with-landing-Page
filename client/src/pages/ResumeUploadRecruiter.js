@@ -34,7 +34,7 @@ const ResumeUploadRecruiter = () => {
     const fetchData = async () => {
       try {
         const [posRes, mgrRes] = await Promise.all([
-          api.get('/positions/open'), // ✅ CHANGED: Fetch ALL open positions, not just ones created by user
+          api.get('/positions/open'), 
           api.get('/recruiter/managers')
         ]);
         setPositions(posRes.data || []);

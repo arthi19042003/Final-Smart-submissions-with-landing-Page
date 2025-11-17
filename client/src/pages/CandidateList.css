@@ -1,9 +1,6 @@
-/* client/src/pages/CandidateList.css */
-
-/* Using styles from Candidates.css as a base */
 .candidates-container {
   max-width: 1200px;
-  margin: 110px auto 60px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 60px auto; 
   padding: 40px 50px;
   font-family: var(--font-family-main, "Inter", sans-serif);
   background-color: var(--color-bg-soft, #faf5ff);
@@ -26,7 +23,6 @@
   font-size: 16px;
 }
 
-/* New Filter Bar */
 .filter-bar {
   margin-bottom: 25px;
 }
@@ -101,7 +97,6 @@
 }
 
 .btn {
-  /* ... (existing btn styles) ... */
   border: none;
   border-radius: 8px;
   padding: 6px 12px;
@@ -112,7 +107,6 @@
   white-space: nowrap;
 }
 
-/* ✅ NEW: Style for the view/resume button */
 .btn.view {
   background-color: #fff;
   color: #5b21b6;
@@ -140,7 +134,6 @@
   white-space: nowrap;
 }
 
-/* ✅ NEW: Style for the view/resume button */
 .btn.view {
   background-color: #fff;
   color: #5b21b6;

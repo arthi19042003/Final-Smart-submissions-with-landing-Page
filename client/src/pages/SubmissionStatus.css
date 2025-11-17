@@ -1,13 +1,10 @@
-/* @import for Poppins removed */
-
 .submission-status-page {
-  /* font-family removed */
   background-color: #f9fafc;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 110px 20px 60px 20px; /* ✅ FIXED */
+  padding: 110px 20px 60px 20px; 
 }
 
 .submission-status-card {
@@ -24,7 +21,7 @@
   text-align: center;
   font-size: 1.6rem;
   font-weight: 600;
-  color: #5b21b6; /* ✅ CHANGED: Purple to match theme */
+  color: #5b21b6; 
   margin-bottom: 1.8rem;
 }
 

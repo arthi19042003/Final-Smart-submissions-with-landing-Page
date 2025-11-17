@@ -1,29 +1,22 @@
-// server/routes/interviewRoutes.js
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const Interview = require("../models/Interview");
-// ✅ Import these models to enable notifications
 const Message = require("../models/Message");
 const Position = require("../models/Position");
 const User = require("../models/User");
 
-// ✅ File upload config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
 const upload = multer({ storage });
 
-// --- Helper Function to Notify Manager ---
 const notifyHiringManager = async (data) => {
-  // 1. Check if notification is requested (handle boolean or string 'true')
   if (data.notifyManager !== "true" && data.notifyManager !== true) return;
 
   try {
     console.log("🔔 Notification requested for:", data.jobPosition);
-
-    // 2. Find the Position to identify the Hiring Manager (Creator)
     const position = await Position.findOne({ title: data.jobPosition });
     
     if (!position || !position.createdBy) {
@@ -31,14 +24,12 @@ const notifyHiringManager = async (data) => {
       return;
     }
 
-    // 3. Find the Manager's email
     const manager = await User.findById(position.createdBy);
     if (!manager || !manager.email) {
       console.warn("⚠️ Hiring Manager user not found.");
       return;
     }
 
-    // 4. Construct the Message
     const subject = `Interview Update: ${data.candidateFirstName} ${data.candidateLastName}`;
     const messageBody = `
       Interview Status Update
@@ -54,7 +45,6 @@ const notifyHiringManager = async (data) => {
       Feedback: ${data.feedback || "No feedback provided."}
     `;
 
-    // 5. Save Message to Database (Inbox)
     await Message.create({
       to: manager.email,       
       from: "System",          
@@ -71,7 +61,6 @@ const notifyHiringManager = async (data) => {
   }
 };
 
-// ✅ Create interview
 router.post("/", upload.single("resume"), async (req, res) => {
   try {
     const data = req.body;
@@ -79,8 +68,6 @@ router.post("/", upload.single("resume"), async (req, res) => {
 
     const interview = new Interview(data);
     await interview.save();
-
-    // ✅ Trigger Notification
     await notifyHiringManager(data);
 
     res.status(201).json(interview);
@@ -90,26 +77,20 @@ router.post("/", upload.single("resume"), async (req, res) => {
   }
 });
 
-// ✅ Get interviews (Filtered: Candidates see only their own)
 router.get("/", async (req, res) => {
   try {
-    // req.user is populated by the auth middleware in server.js
     const user = req.user; 
     let query = {};
 
-    // If the user is a Candidate, filter by their name
     if (user && user.role === "candidate") {
       const profile = user.profile || {};
       const firstName = profile.firstName || "";
       const lastName = profile.lastName || "";
 
-      // Filter where candidateFirstName matches user's first name (case-insensitive)
-      // We use RegExp to be safe against minor casing differences
       if (firstName) {
         query.candidateFirstName = { $regex: new RegExp(`^${firstName}$`, "i") };
       }
       
-      // If last name exists, match that too
       if (lastName) {
         query.candidateLastName = { $regex: new RegExp(`^${lastName}$`, "i") };
       }
@@ -123,7 +104,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Update interview
 router.put("/:id", upload.single("resume"), async (req, res) => {
   try {
     const data = req.body;
@@ -131,7 +111,6 @@ router.put("/:id", upload.single("resume"), async (req, res) => {
 
     const updated = await Interview.findByIdAndUpdate(req.params.id, data, { new: true });
     
-    // ✅ Trigger Notification on Update
     await notifyHiringManager(data);
 
     res.json(updated);
@@ -141,7 +120,6 @@ router.put("/:id", upload.single("resume"), async (req, res) => {
   }
 });
 
-// ✅ Delete interview
 router.delete("/:id", async (req, res) => {
   try {
     await Interview.findByIdAndDelete(req.params.id);

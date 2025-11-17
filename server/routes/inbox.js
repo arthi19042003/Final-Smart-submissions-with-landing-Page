@@ -1,14 +1,11 @@
-// server/routes/inbox.js
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
-const User = require("../models/User"); // ✅ Import User model
+const User = require("../models/User"); 
+const protect = require("../middleware/auth");
 
-// ✅ Get messages for the logged-in user
-router.get("/", async (req, res) => {
+router.get("/", protect, async (req, res) => {
   try {
-    // ✅ FIX: Fetch the user from the database using the ID from the token
-    // The token payload (req.user) only contains userId, not the email.
     const user = await User.findById(req.userId);
 
     if (!user) {
@@ -16,10 +13,16 @@ router.get("/", async (req, res) => {
     }
 
     const email = user.email;
-    console.log("📬 Fetching inbox messages for:", email);
+    
+    let query = { to: email };
 
-    // Find messages where 'to' matches the user's email
-    const messages = await Message.find({ to: email }).sort({ createdAt: -1 });
+    const isManager = user.role === 'employer' || user.role === 'hiringManager';
+    
+    if (isManager) {
+        query = { $or: [{ to: email }, { to: "System" }] };
+    }
+
+    const messages = await Message.find(query).sort({ createdAt: -1 });
     res.json(messages);
   } catch (err) {
     console.error("Inbox fetch error:", err.message);
@@ -27,4 +30,28 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+router.put("/:id/status", protect, async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!["read", "unread"].includes(status)) {
+        return res.status(400).json({ message: "Invalid status value" });
+    }
+    
+    const updatedMessage = await Message.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    res.json({ message: "Status updated", updatedMessage });
+  } catch (err) {
+    console.error("Error updating message status:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+module.exports = router; 

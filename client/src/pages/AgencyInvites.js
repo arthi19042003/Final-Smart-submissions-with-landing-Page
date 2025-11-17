@@ -97,7 +97,6 @@ export default function AgencyInvites() {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line
   }, [token]);
 
   if (loading)
@@ -152,7 +151,7 @@ export default function AgencyInvites() {
                 </Col>
                 <Col md={3}>
                   <Button type="submit" className="purple-btn w-100" disabled={sending}>
-                    {sending ? <Spinner size="sm" animation="border" /> : "📨 Send Invite"}
+                    {sending ? <Spinner size="sm" animation="border" /> : "Send Invite"}
                   </Button>
                 </Col>
               </Row>

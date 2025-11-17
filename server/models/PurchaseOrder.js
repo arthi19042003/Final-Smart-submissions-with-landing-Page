@@ -1,9 +1,8 @@
-// server/models/PurchaseOrder.js
 const mongoose = require("mongoose");
 
 const PurchaseOrderSchema = new mongoose.Schema(
   {
-    poNumber: { type: String, required: true, unique: true }, // We use poNumber now
+    poNumber: { type: String, required: true, unique: true }, 
     candidateName: { type: String, required: true },
     positionTitle: { type: String, required: true },
     department: { type: String },

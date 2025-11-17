@@ -9,7 +9,7 @@ export default function HiringManagerRegister() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({}); 
   
   const navigate = useNavigate();
   const { register, logout } = useAuth(); 
@@ -20,7 +20,6 @@ export default function HiringManagerRegister() {
     if (errors[name]) setErrors(p => ({ ...p, [name]: null }));
   };
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!form.firstName) newErrors.firstName = "First Name is required";
@@ -44,7 +43,7 @@ export default function HiringManagerRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return; 
     
     setLoading(true);
     

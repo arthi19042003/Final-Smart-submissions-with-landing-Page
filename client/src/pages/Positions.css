@@ -1,22 +1,16 @@
-/* client/src/pages/Positions.css */
-/* ================================
-   Positions Page (Purple & White Theme)
-   ================================ */
-
 .positions-container {
   max-width: 1100px;
-  margin: 110px auto 60px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 60px auto; 
   padding: 40px 50px;
   font-family: "Inter", sans-serif;
-  background-color: #faf5ff; /* soft lavender background */
+  background-color: #faf5ff; 
   min-height: 100vh;
 }
 
-/* ===== Title & Subtitle ===== */
 .positions-container h2 {
   font-size: 30px;
   font-weight: 700;
-  color: #5b21b6; /* deep purple */
+  color: #5b21b6; 
   text-align: center;
   margin-bottom: 10px;
 }
@@ -28,7 +22,6 @@
   font-size: 16px;
 }
 
-/* ===== ✅ NEW: Filter Grid ===== */
 .filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -54,7 +47,6 @@
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
-/* ===== Empty State ===== */
 .empty, .error {
   color: #7c3aed;
   text-align: center;
@@ -65,21 +57,19 @@
   color: #b91c1c;
 }
 
-/* ===== Grid Layout ===== */
 .positions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 25px;
 }
 
-/* ... (rest of the file is identical to the original) ... */
 .position-card {
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(91, 33, 182, 0.08);
   padding: 22px 26px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1.5px solid #ede9fe; /* soft purple border */
+  border: 1.5px solid #ede9fe; 
 }
 
 .position-card:hover {
@@ -88,11 +78,11 @@
 }
 
 .position-card.open {
-  border-left: 5px solid #8b5cf6; /* purple highlight */
+  border-left: 5px solid #8b5cf6; 
 }
 
 .position-card.closed {
-  border-left: 5px solid #c4b5fd; /* lighter purple */
+  border-left: 5px solid #c4b5fd; 
   opacity: 0.8;
 }
 
@@ -107,7 +97,7 @@
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #4c1d95; /* deep violet */
+  color: #4c1d95; 
 }
 
 .status-tag {

@@ -1,4 +1,3 @@
-// client/src/pages/Dashboard.js
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -6,7 +5,6 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  // ✅ FIX: Changed 'userType' to 'role' to match your user object
   const userType = (user?.role || "candidate").toLowerCase(); 
 
   return (
@@ -18,7 +16,7 @@ const Dashboard = () => {
           ? "Manage positions, candidates, and hiring operations"
           : userType === "employer"
           ? "Manage your company, team, and interviews"
-          : userType === "recruiter" // ✅ Added recruiter
+          : userType === "recruiter" 
           ? "Manage your profile and candidate submissions"
           : "Manage your profile, resume, and interviews"}
       </p>
@@ -73,17 +71,6 @@ const Dashboard = () => {
                 <button className="purple-btn">View Profile</button>
               </Link>
             </div>
-
-            {/* ❌ REMOVED: This card was linking to the Hiring Manager's schedule */}
-            {/*
-            <div className="dashboard-card">
-              <h3>Interview Management</h3>
-              <p>Schedule and review candidate interviews</p>
-              <Link to="/hiring-manager/schedule">
-                <button className="purple-btn">Manage Interviews</button>
-              </Link>
-            </div>
-            */}
           </>
         )}
         

@@ -1,8 +1,7 @@
-// client/src/pages/CreatePosition.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-import './Profile.css'; // Reuse profile styling for the form
+import './Profile.css';
 
 const CreatePosition = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,6 @@ const CreatePosition = () => {
     organization: '',
     skills: '',
     description: '',
-    // ✅ FIX: Changed 'open' to 'Open' (Capitalized) to match backend Schema
     status: 'Open', 
   });
   const [loading, setLoading] = useState(false);
@@ -32,7 +30,6 @@ const CreatePosition = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      // Ensure skills are sent as an array
       const skillsArray = formData.skills 
         ? formData.skills.split(',').map(s => s.trim()).filter(s => s) 
         : [];

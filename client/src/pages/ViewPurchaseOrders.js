@@ -55,7 +55,6 @@ export default function ViewPurchaseOrders() {
 
   useEffect(() => {
     fetchPOs();
-    // eslint-disable-next-line
   }, [token]);
 
 

@@ -16,7 +16,6 @@ const ApplicationSchema = new Schema({
   interviews: [{
     date: Date,
     time: String,
-    // ✅ FIX: Explicitly define 'type' as a field to avoid Mongoose keyword conflict
     type: { type: String }, 
     notes: String,
     status: { type: String, default: "Scheduled" }

@@ -1,14 +1,8 @@
-// server/routes/po.js
 const express = require("express");
 const router = express.Router();
 const PurchaseOrder = require("../models/PurchaseOrder");
-const auth = require("../middleware/auth"); // Import auth middleware
+const auth = require("../middleware/auth"); 
 
-// ===============================
-// @route   POST /api/po
-// @desc    Create a new purchase order
-// @access  Protected
-// ===============================
 router.post("/", auth, async (req, res) => {
   try {
     const { poId, vendor, amount, date } = req.body;
@@ -17,7 +11,6 @@ router.post("/", auth, async (req, res) => {
       return res.status(400).json({ message: "PO ID, Vendor, Amount, and Date are required." });
     }
     
-    // Check if PO ID already exists
     const existingPO = await PurchaseOrder.findOne({ poId });
     if (existingPO) {
       return res.status(400).json({ message: "Purchase Order ID already exists." });
@@ -28,7 +21,7 @@ router.post("/", auth, async (req, res) => {
       vendor,
       amount,
       date,
-      status: "Pending", // Default status on creation
+      status: "Pending", 
     });
 
     await newOrder.save();
@@ -40,15 +33,9 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-
-// ===============================
-// @route   GET /api/po
-// @desc    Get all purchase orders
-// @access  Protected
-// ===============================
 router.get("/", auth, async (req, res) => {
   try {
-    const orders = await PurchaseOrder.find().sort({ createdAt: -1 }); // Sort newest first
+    const orders = await PurchaseOrder.find().sort({ createdAt: -1 }); 
     res.json(orders);
   } catch (error) {
     console.error("❌ Error fetching purchase orders:", error.message);
@@ -56,11 +43,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// ===============================
-// @route   PUT /api/po/:id/status
-// @desc    Update purchase order status (approve or reject)
-// @access  Protected
-// ===============================
 router.put("/:id/status", auth, async (req, res) => {
   try {
     const { status } = req.body;

@@ -84,16 +84,11 @@
 .job-desc {
   margin-top: 12px !important;
   font-size: 0.9rem;
-  color: #6b7280;
-  
-  /* ✅ FIX: Truncation styling */
+  color: #6b7280; 
   display: -webkit-box;
   -webkit-line-clamp: 3;
-  line-clamp: 3; /* Standard property to reduce warnings */
-  
-  /* autoprefixer: ignore next */
-  -webkit-box-orient: vertical; /* This comment prevents the line from being removed by build tools */
-  
+  line-clamp: 3; 
+  -webkit-box-orient: vertical; 
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -6,44 +6,36 @@ import "./EmployerProfile.css";
 const emptyTeamMember = () => ({ firstName: "", lastName: "", email: "", phone: "", role: "" });
 
 export default function EmployerProfile() {
-  const { user } = useAuth(); // must be set (PrivateRoute)
+  const { user } = useAuth(); 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
-    // company + hiring manager
     companyName: "",
     hiringManagerFirstName: "",
     hiringManagerLastName: "",
     hiringManagerPhone: "",
-    // organization
     organization: "",
     department: "",
     costCenter: "",
     preferredCommunicationMode: "Email",
-    // company info
     address: "",
     companyWebsite: "",
     companyPhone: "",
     companyAddress: "",
     companyLocation: "",
-    // dynamic lists
-    projectSponsors: [], // array of strings
-    projects: [], // each project { projectName, teamSize (now unused), teamMembers: [ {firstName,..} ] }
+    projectSponsors: [],
+    projects: [], 
   });
 
-  // UI helpers for add form inputs
   const [sponsorInput, setSponsorInput] = useState("");
   const [teamInput, setTeamInput] = useState(emptyTeamMember());
-  
-  // State to track which member is being edited
-  // Format: { project: projectIndex, member: memberIndex }
+
   const [editingIndex, setEditingIndex] = useState(null);
 
   const [message, setMessage] = useState({ type: "", text: "" });
   const [errors, setErrors] = useState({}); 
 
   useEffect(() => {
-    // load employer profile if user exists
     async function load() {
       if (!user) {
         setLoading(false);
@@ -55,7 +47,6 @@ export default function EmployerProfile() {
         const payload = data;
         
         if (payload) {
-          // Normalize minimal shape
           setForm(prev => ({
             ...prev,
             companyName: payload.companyName || prev.companyName,
@@ -82,19 +73,15 @@ export default function EmployerProfile() {
       }
     }
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-
-  // helpers -----------------------------------------------------------------
   
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
-    if (message.type === "error") setMessage({ type: "", text: "" }); // Clear general error
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: null })); // Clear field error
+    if (mesage.type === "error") setMessage({ type: "", text: "" }); 
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: null })); 
   };
 
-  // Sponsors ----------------------------------------------------------------
   const addSponsor = () => {
     const v = sponsorInput.trim();
     if (!v) return setMessage({ type: "error", text: "Sponsor name cannot be empty" });
@@ -110,7 +97,6 @@ export default function EmployerProfile() {
     setForm(f => ({ ...f, projectSponsors: f.projectSponsors.filter((_, idx) => idx !== i) }));
   };
 
-  // Projects & Team Members ------------------------------------------------
   const addProject = () => {
     setForm(f => ({
       ...f,
@@ -128,7 +114,6 @@ export default function EmployerProfile() {
     });
   };
 
-  // Combined Add/Update Member function
   const handleAddOrUpdateMember = (projectIndex) => {
     const name = teamInput.firstName.trim();
     if (!name) {
@@ -211,7 +196,6 @@ export default function EmployerProfile() {
     }
   };
 
-  // Save -------------------------------------------------------------------
   
   const validateBeforeSave = () => {
     const newErrors = {};
@@ -235,11 +219,11 @@ export default function EmployerProfile() {
        setMessage({ type: "error", text: "Please fill all required fields (marked *)" });
     }
     
-    return !hasError; // Return true if valid, false if errors
+    return !hasError; 
   };
 
   const saveProfile = async () => {
-    setMessage({ type: "", text: "" }); // Clear previous messages
+    setMessage({ type: "", text: "" }); 
     if (!validateBeforeSave()) return;
     setSaving(true);
     
@@ -263,7 +247,6 @@ export default function EmployerProfile() {
   };
 
 
-  // Render -----------------------------------------------------------------
   if (loading) return <div className="emp-loading">Loading...</div>;
 
   return (

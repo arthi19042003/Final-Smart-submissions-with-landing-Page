@@ -1,8 +1,7 @@
-// server/config/db.js
 const mongoose = require("mongoose");
 
 let retryCount = 0;
-const MAX_RETRIES = 5; // Prevent infinite retry loops
+const MAX_RETRIES = 5; 
 
 const connectDB = async () => {
   try {
@@ -15,16 +14,15 @@ const connectDB = async () => {
     const conn = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000, // 10s timeout for initial connection
+      serverSelectionTimeoutMS: 10000, 
     });
 
     console.log(`✅ MongoDB Connected Successfully`);
     console.log(`🌍 Host: ${conn.connection.host}`);
     console.log(`📦 Database: ${conn.connection.name}`);
 
-    retryCount = 0; // reset on successful connection
+    retryCount = 0; 
 
-    // Optional event listeners
     mongoose.connection.on("disconnected", () => {
       console.warn("⚠️ MongoDB Disconnected. Attempting reconnection...");
     });

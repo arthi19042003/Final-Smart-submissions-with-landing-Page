@@ -1,16 +1,13 @@
-/* Background */
 .resume-bg {
   min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
-  /* ✅ FIX: Removed background image */
   background-color: transparent;
-  padding-top: 110px; /* space below navbar */
-  padding-bottom: 40px; /* reduce empty bottom */
+  padding-top: 110px; 
+  padding-bottom: 40px; 
 }
 
-/* Main form container */
 .resume-container {
   width: 75%;
   max-width: 900px;
@@ -21,7 +18,6 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Main title */
 .resume-header {
   text-align: center;
   font-size: 28px;
@@ -30,7 +26,6 @@
   margin-bottom: 25px;
 }
 
-/* Card box */
 .resume-card {
   background: #ffffffcc;
   border-radius: 18px;
@@ -39,7 +34,6 @@
   border: 1px solid rgba(91, 63, 246, 0.18);
 }
 
-/* Section headings */
 .section-title {
   font-size: 18px;
   font-weight: 600;
@@ -47,7 +41,6 @@
   margin-bottom: 12px;
 }
 
-/* Input fields */
 .input {
   width: 100%;
   padding: 12px;
@@ -57,7 +50,6 @@
   background: #f9f7ff;
 }
 
-/* Buttons */
 .btn-primary {
   width: 100%;
   padding: 12px;
@@ -73,7 +65,6 @@
   background: #5434e8;
 }
 
-/* Resume list */
 .resume-item {
   background: #f3efff;
   padding: 12px;
@@ -88,7 +79,6 @@
   background: #eae6ff;
 }
 
-/* Small buttons */
 .btn-secondary {
   background: #5b3ff6;
   color: white;
@@ -106,7 +96,6 @@
   border: none;
 }
 
-/* Text */
 .empty { text-align:center; color:#555; }
 .success { color: green; font-size: 14px; }
 .error { color: red; font-size: 14px; }

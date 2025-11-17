@@ -2,11 +2,8 @@ const Resume = require('../models/Resume');
 const Position = require('../models/Position');
 const mongoose = require('mongoose');
 
-// GET /api/hiring-manager/overview
 const getOverview = async (req, res) => {
   try {
-    // if auth used: const managerId = req.user._id;
-    // For now list global counts; you can filter by req.user.company or hiringManager
     const openPositions = await Position.countDocuments({ status: 'Open' });
     const resumesReceived = await Resume.countDocuments();
     const interviewsScheduled = await Resume.countDocuments({ status: { $in: ['Phone Screen Scheduled','Onsite Scheduled'] } });
@@ -19,10 +16,8 @@ const getOverview = async (req, res) => {
   }
 };
 
-// GET /api/hiring-manager/resumes
 const getResumes = async (req, res) => {
   try {
-    // Allow query params: ?status=Under%20Review or ?agency=TechRecruit
     const { status, agency, position } = req.query;
     const filter = {};
     if (status) filter.status = status;
@@ -30,7 +25,6 @@ const getResumes = async (req, res) => {
     if (position && mongoose.Types.ObjectId.isValid(position)) filter.position = position;
 
     const resumes = await Resume.find(filter).sort({ appliedAt: -1 }).limit(200).lean();
-    // Map position title
     res.json(resumes);
   } catch (err) {
     console.error(err);
@@ -38,7 +32,6 @@ const getResumes = async (req, res) => {
   }
 };
 
-// GET /api/hiring-manager/resumes/:id
 const getResumeById = async (req, res) => {
   try {
     const resume = await Resume.findById(req.params.id).lean();
@@ -49,8 +42,6 @@ const getResumeById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-// POST /api/hiring-manager/resumes/:id/action  { action: 'shortlist'|'reject'|'schedule', note }
 const resumeAction = async (req, res) => {
   try {
     const { action, note, scheduleAt } = req.body;

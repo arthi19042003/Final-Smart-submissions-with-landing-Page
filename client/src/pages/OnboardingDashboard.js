@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Card, Button, Table, Badge, Spinner } from "react-bootstrap";
-import './HiringManagerDashboard.css'; // This CSS file has the .purple-btn style
+import './HiringManagerDashboard.css'; 
 
 export default function OnboardingDashboard() {
   const [candidates, setCandidates] = useState([]);
@@ -105,21 +105,21 @@ export default function OnboardingDashboard() {
                         <div className="d-flex flex-wrap gap-2">
                           <Button
                             size="sm"
-                            className="purple-btn" // Use className
+                            className="purple-btn" 
                             onClick={() => updateStatus(c._id, "Pending")}
                           >
                             Pending
                           </Button>
                           <Button
                             size="sm"
-                            className="purple-btn" // Use className
+                            className="purple-btn" 
                             onClick={() => updateStatus(c._id, "In Progress")}
                           >
                             In Progress
                           </Button>
                           <Button
                             size="sm"
-                            className="purple-btn" // Use className
+                            className="purple-btn" 
                             onClick={() => updateStatus(c._id, "Completed")}
                           >
                             Completed

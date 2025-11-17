@@ -15,11 +15,11 @@ const submissionSchema = new mongoose.Schema(
     submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "submittedBy is required"], // ✅ required field
+      required: [true, "submittedBy is required"], 
     },
     status: {
       type: String,
-      enum: ["submitted", "reviewed", "interviewed", "hired", "rejected"], // ✅ allowed values
+      enum: ["submitted", "reviewed", "interviewed", "hired", "rejected"], 
       default: "submitted",
     },
     notes: {

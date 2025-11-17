@@ -3,7 +3,6 @@ const router = express.Router();
 const Position = require("../models/Position");
 const protect = require("../middleware/auth"); 
 
-// ✅ NEW ROUTE: Get all OPEN positions (For candidates to view)
 router.get("/open", protect, async (req, res) => {
   try {
     const positions = await Position.find({ status: 'Open' }).sort({ createdAt: -1 });
@@ -14,7 +13,6 @@ router.get("/open", protect, async (req, res) => {
   }
 });
 
-// ✅ GET positions (Created by the logged-in manager)
 router.get("/", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -26,7 +24,6 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-// ✅ POST Position
 router.post("/", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -45,7 +42,6 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
-// ✅ PUT Position
 router.put("/:id", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -68,14 +64,12 @@ router.put("/:id", protect, async (req, res) => {
   }
 });
 
-// ✅ DELETE Position
 router.delete("/:id", protect, async (req, res) => {
   try {
     const userId = req.userId;
     const deleted = await Position.findOneAndDelete({ _id: req.params.id, createdBy: userId });
     if (!deleted) return res.status(404).json({ message: "Position not found" });
     
-    // ✅ FIX: Added curly braces {} to make it a valid object
     res.json({ message: "Position deleted" }); 
   } catch (err) {
     console.error("Error deleting position:", err);

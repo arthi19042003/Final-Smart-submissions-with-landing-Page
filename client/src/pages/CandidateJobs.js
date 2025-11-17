@@ -15,21 +15,18 @@ const CandidateJobs = () => {
       try {
         setLoading(true);
         
-        // ✅ FIX: Added individual .catch() blocks to each promise.
-        // This prevents one failed request from breaking the entire page.
         const [jobsRes, resumeRes, submissionsRes] = await Promise.all([
           api.get("/positions/open").catch(err => {
             console.error("Failed to fetch jobs:", err);
             toast.error("Failed to load available jobs.");
-            return { data: [] }; // Return empty array on failure
+            return { data: [] }; 
           }),
           api.get("/resume/active").catch(() => {
-            // This is an expected failure if no resume is active.
             return { data: null };
           }),
           api.get("/submissions/my-submissions").catch(err => {
             console.error("Failed to fetch submissions:", err);
-            return { data: [] }; // Return empty array on failure
+            return { data: [] }; 
           })
         ]);
 
@@ -40,7 +37,6 @@ const CandidateJobs = () => {
         setAppliedJobIds(appliedIds);
 
       } catch (err) {
-        // This is a fallback for unexpected errors
         console.error("Error loading page data:", err);
         toast.error("An unexpected error occurred.");
       } finally {
@@ -59,16 +55,14 @@ const CandidateJobs = () => {
 
     try {
       setApplyingId(job._id);
-      // Submit application
       await api.post("/submissions", {
         jobId: job._id,
         positionTitle: job.title,
-        resumeUrl: resume.filePath, // Sending the file path of the active resume
+        resumeUrl: resume.filePath, 
       });
 
       toast.success(`Successfully applied for ${job.title}!`);
       
-      // Update state to show "Applied"
       setAppliedJobIds(prev => new Set(prev).add(job._id));
 
     } catch (err) {
@@ -87,7 +81,6 @@ const CandidateJobs = () => {
       <h2>Available Positions</h2>
       <p className="subtitle">Browse and apply for open roles</p>
 
-      {/* This warning is likely correct. Go to the /resume page and click "Set Active" on your resume. */}
       {!resume && (
         <div className="alert-warning">
           ⚠️ You need an active resume to apply. <a href="/resume">Upload one here</a>.

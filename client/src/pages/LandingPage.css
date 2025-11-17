@@ -1,4 +1,3 @@
-/* client/src/pages/LandingPage.css */
 .landing-container {
   width: 100%;
   padding-top: 110px;
@@ -24,7 +23,6 @@
   margin-bottom: 40px;
 }
 
-/* Intro Section */
 .intro-section {
   background-color: #faf5ff;
   text-align: center;
@@ -43,12 +41,11 @@
   margin-bottom: 30px;
 }
 
-/* ✅ FIX: Align buttons side-by-side */
 .intro-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* Space between buttons */
+  gap: 20px; 
   flex-wrap: wrap;
 }
 
@@ -57,7 +54,7 @@
   font-size: 1rem;
   border-radius: 8px;
   text-decoration: none;
-  width: auto !important; /* Force natural width */
+  width: auto !important; 
   display: inline-block;
 }
 
@@ -78,7 +75,6 @@
   background-color: #f5f3ff;
 }
 
-/* How It Works */
 .how-it-works-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -98,7 +94,6 @@
   margin-bottom: 10px;
 }
 
-/* Features */
 .features-list {
   list-style: none;
   padding: 0;
@@ -119,7 +114,6 @@
   text-align: center;
 }
 
-/* Pricing / Sign Up */
 .pricing-section {
   background-color: #f5f3ff;
 }
@@ -153,7 +147,6 @@
   width: 100%;
 }
 
-/* Contact Form */
 .contact-form {
   max-width: 700px;
   margin: 0 auto;
@@ -173,7 +166,6 @@
   color: #fff;
 }
 
-/* Global Button Styles (if not overridden) */
 .btn-primary {
   padding: 12px 20px;
   border-radius: 8px;
@@ -186,7 +178,6 @@
   opacity: 0.9;
 }
 
-/* Footer */
 .landing-footer {
   text-align: center;
   padding: 30px;

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Interview = require("../models/Interview");
 
-// --- Summary stats for dashboard ---
 router.get("/summary", async (req, res) => {
   try {
     const totalInterviews = await Interview.countDocuments();
@@ -25,7 +24,6 @@ router.get("/summary", async (req, res) => {
   }
 });
 
-// --- All candidates (for manager view) ---
 router.get("/candidates", async (req, res) => {
   try {
     const interviews = await Interview.find().sort({ date: -1 });

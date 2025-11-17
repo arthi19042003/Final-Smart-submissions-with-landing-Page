@@ -6,7 +6,6 @@ const fs = require('fs');
 const auth = require('../middleware/auth');
 const Resume = require('../models/Resume');
 
-// Configure multer for file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = 'uploads/resumes';
@@ -35,11 +34,10 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 }, 
   fileFilter: fileFilter
 });
 
-// Upload resume
 router.post('/upload', auth, upload.single('resume'), async (req, res) => {
   try {
     if (!req.file) {
@@ -48,13 +46,11 @@ router.post('/upload', auth, upload.single('resume'), async (req, res) => {
 
     const { title } = req.body;
 
-    // Deactivate all previous resumes for this user
     await Resume.updateMany(
       { user: req.userId },
       { isActive: false }
     );
 
-    // Create new resume record
     const resume = new Resume({
       user: req.userId,
       title: title || 'My Resume',
@@ -82,7 +78,6 @@ router.post('/upload', auth, upload.single('resume'), async (req, res) => {
   }
 });
 
-// Get all resumes for user
 router.get('/', auth, async (req, res) => {
   try {
     const resumes = await Resume.find({ user: req.userId }).sort({ uploadedAt: -1 });
@@ -93,7 +88,6 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Get active resume
 router.get('/active', auth, async (req, res) => {
   try {
     const resume = await Resume.findOne({ user: req.userId, isActive: true });
@@ -107,7 +101,6 @@ router.get('/active', auth, async (req, res) => {
   }
 });
 
-// Set active resume
 router.put('/active/:id', auth, async (req, res) => {
   try {
     const resume = await Resume.findOne({ _id: req.params.id, user: req.userId });
@@ -116,10 +109,8 @@ router.put('/active/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Resume not found' });
     }
 
-    // Deactivate all resumes
     await Resume.updateMany({ user: req.userId }, { isActive: false });
 
-    // Activate selected resume
     resume.isActive = true;
     await resume.save();
 
@@ -130,7 +121,6 @@ router.put('/active/:id', auth, async (req, res) => {
   }
 });
 
-// Delete resume
 router.delete('/:id', auth, async (req, res) => {
   try {
     const resume = await Resume.findOne({ _id: req.params.id, user: req.userId });
@@ -139,12 +129,10 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Resume not found' });
     }
 
-    // Delete file from filesystem
     if (fs.existsSync(resume.filePath)) {
       fs.unlinkSync(resume.filePath);
     }
 
-    // Delete from database
     await Resume.deleteOne({ _id: req.params.id });
 
     res.json({ message: 'Resume deleted successfully' });
@@ -154,7 +142,6 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// Download resume
 router.get('/download/:id', auth, async (req, res) => {
   try {
     const resume = await Resume.findOne({ _id: req.params.id, user: req.userId });

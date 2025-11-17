@@ -1,14 +1,11 @@
-/* ===== Hiring Dashboard (Purple & White Theme) ===== */
 .hiring-dashboard {
-  /* ✅ MODIFIED: Increased top padding to 130px to clear navbar */
   padding: 130px 20px 60px 20px; 
-  background-color: #faf5ff; /* soft lavender */
+  background-color: #faf5ff; 
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
 }
 
-/* ===== Page Title ===== */
 .hiring-dashboard h2 {
   text-align: center;
   font-size: 30px;
@@ -17,23 +14,20 @@
   margin-bottom: 40px;
 }
 
-/* ===== Text Utilities ===== */
 .text-purple {
   color: #5b21b6 !important;
 }
 
-/* ===== Button Styles ===== */
 .purple-btn {
   background-color: #6d28d9;
   border: 1px solid #6d28d9;
   color: #ffffff;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
-  /* ✅ NEW: Center content (icon + text) */
   display: flex;
   align-items: center;
   justify-content: center; 
-  gap: 8px; /* Space between icon and text */
+  gap: 8px; 
 }
 
 .purple-btn:hover {
@@ -64,7 +58,6 @@
   color: #5b21b6;
 }
 
-/* ===== Key Metrics Styling ===== */
 .metrics-list {
   display: flex;
   flex-direction: column;
@@ -94,7 +87,6 @@
   color: #4c1d95;
 }
 
-/* ===== Nav Cards ===== */
 .nav-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -104,23 +96,18 @@
   box-shadow: 0 10px 20px rgba(109, 40, 217, 0.1) !important;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .hiring-dashboard {
     padding: 130px 15px 40px 15px;
   }
 }
 
-/* ===== ✅ FIX: Add this new class for sub-pages (Purchase Orders, Invites, etc.) ===== */
 .dashboard-wrapper {
-  /* Pushes content down below the fixed Navbar */
   padding-top: 130px; 
-  
-  /* Basic layout styling */
   padding-bottom: 60px;
   padding-left: 20px;
   padding-right: 20px;
-  background-color: #f0f2f5; /* Light grey background */
+  background-color: #f0f2f5; 
   min-height: 100vh;
   box-sizing: border-box;
 }

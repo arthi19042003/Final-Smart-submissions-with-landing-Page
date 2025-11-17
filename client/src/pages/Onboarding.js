@@ -1,6 +1,5 @@
-// client/src/pages/Onboarding.js
 import React, { useState, useEffect } from "react";
-import api from "../api/axios"; // Import configured axios
+import api from "../api/axios"; 
 import "./Onboarding.css";
 
 const Onboarding = () => {
@@ -13,12 +12,12 @@ const Onboarding = () => {
       setLoading(true);
       setError('');
       try {
-        const response = await api.get("/onboarding"); // Fetch from API
+        const response = await api.get("/onboarding"); 
         setOnboardingList(response.data);
       } catch (err) {
         console.error("Error fetching onboarding data:", err);
         setError("Failed to load onboarding data. Please try again later.");
-        setOnboardingList([]); // Clear data on error
+        setOnboardingList([]); 
       } finally {
         setLoading(false);
       }
@@ -26,7 +25,6 @@ const Onboarding = () => {
     fetchOnboardingData();
   }, []);
 
-  // --- Helper function to format date ---
   const formatDate = (dateString) => {
      if (!dateString) return 'N/A';
      try {
@@ -36,15 +34,14 @@ const Onboarding = () => {
      } catch (e) { return 'Invalid Date'; }
   };
 
-   // --- Helper function to get status class ---
   const getStatusClass = (status) => {
-    if (!status) return 'initiated'; // Default class
+    if (!status) return 'initiated'; 
     const lowerStatus = status.toLowerCase();
-    if (lowerStatus.includes("progress")) return 'progress'; // Example, adjust as needed
+    if (lowerStatus.includes("progress")) return 'progress'; 
     if (lowerStatus.includes("completed")) return 'completed';
-    if (lowerStatus.includes("pending")) return 'pending'; // Example
+    if (lowerStatus.includes("pending")) return 'pending'; 
     if (lowerStatus.includes("initiated")) return 'initiated';
-    return 'initiated'; // Default fallback
+    return 'initiated'; 
   };
 
   if (loading) {
@@ -67,7 +64,6 @@ const Onboarding = () => {
       ) : (
         <div className="onboarding-grid">
           {onboardingList.map((entry) => (
-            // Use _id from MongoDB as key
             <div key={entry._id} className="onboarding-card">
               <div className="card-header">
                 {/* Use populated candidate name */}
@@ -80,11 +76,6 @@ const Onboarding = () => {
               {/* Use fields from Onboarding model */}
               <p><strong>Start Date:</strong> {formatDate(entry.startDate)}</p>
               <p><strong>Documents Completed:</strong> {entry.documentsCompleted ? 'Yes' : 'No'}</p>
-              {/* Removed Mentor, Department, Tasks, Notes as they aren't in the final Onboarding model */}
-              {/* <p><strong>Department:</strong> {entry.department || 'N/A'}</p> */}
-              {/* <p><strong>Mentor:</strong> {entry.mentor || 'Not Assigned'}</p> */}
-              {/* {entry.notes && <p><strong>Notes:</strong> {entry.notes}</p>} */}
-              {/* Task rendering removed as it's not in the final model */}
             </div>
           ))}
         </div>

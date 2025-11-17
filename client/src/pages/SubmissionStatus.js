@@ -3,7 +3,6 @@ import "./SubmissionStatus.css";
 import api from "../api/axios";
 
 const filterFields = {
-  // submissionId: "Submission ID", // This is less user-friendly
   candidateName: "Candidate Name",
   email: "Email",
   phone: "Phone",
@@ -31,7 +30,6 @@ const SubmissionStatus = () => {
         Object.entries(filters).filter(([_, v]) => v.trim() !== "")
       );
 
-      // ✅ Calls the GET / route in submissions.js
       const res = await api.get("/submissions", { params: activeFilters });
 
       const sorted = res.data.sort((a, b) => {
@@ -40,7 +38,6 @@ const SubmissionStatus = () => {
 
       setSubmissions(sorted);
       if (res.data.length === 0) {
-        // Updated message to be more helpful
         if (Object.keys(activeFilters).length > 0) {
           setMessage("ℹ️ No submissions found matching your filters.");
         } else {
@@ -57,7 +54,6 @@ const SubmissionStatus = () => {
 
   useEffect(() => {
     fetchSubmissions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (e) => {
@@ -69,7 +65,6 @@ const SubmissionStatus = () => {
     fetchSubmissions();
   };
 
-  // View Resume
   const handleView = async (candidateId) => {
     if (!candidateId) return alert("Candidate information missing.");
     try {
@@ -84,7 +79,6 @@ const SubmissionStatus = () => {
     }
   };
 
-  // Download Resume
   const handleDownload = async (candidateId, filename) => {
     if (!candidateId) return alert("Candidate information missing.");
     try {
@@ -104,7 +98,6 @@ const SubmissionStatus = () => {
     }
   };
 
-  // Delete Submission
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this submission?")) return;
 
@@ -183,7 +176,6 @@ const SubmissionStatus = () => {
                     <td>
                       <span
                         className={`status-badge ${
-                          // ✅ Use the Submission status, not Candidate status
                           s.status?.toLowerCase() || "submitted"
                         }`}
                       >

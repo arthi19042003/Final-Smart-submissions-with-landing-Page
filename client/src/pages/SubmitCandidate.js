@@ -1,8 +1,7 @@
-// client/src/pages/SubmitCandidate.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-import './Profile.css'; // Reuse profile styling
+import './Profile.css'; 
 
 const SubmitCandidate = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +19,6 @@ const SubmitCandidate = () => {
     hiringManagerId: '',
   });
   
-  // ✅ NEW: State for resume file
   const [resumeFile, setResumeFile] = useState(null);
 
   const [positions, setPositions] = useState([]);
@@ -37,7 +35,6 @@ const SubmitCandidate = () => {
           api.get('/recruiter/managers')
         ]);
         setPositions(posRes.data || []);
-        // ✅ NEW: Filter for only HMs in this dropdown
         setManagers(mgrRes.data.filter(u => u.role === 'hiringManager') || []);
       } catch (error) {
         setMessage({ type: 'error', text: 'Could not load positions or managers.' });
@@ -53,7 +50,6 @@ const SubmitCandidate = () => {
     });
   };
 
-  // ✅ NEW: Handler for file input
   const handleFileChange = (e) => {
     setResumeFile(e.target.files[0]);
   };
@@ -69,14 +65,12 @@ const SubmitCandidate = () => {
         return;
     }
     
-    // ✅ NEW: Check for resume file
     if (!resumeFile) {
         setMessage({ type: 'error', text: 'Please select a resume file to upload.' });
         setLoading(false);
         return;
     }
 
-    // ✅ NEW: Use FormData to send file + data
     const submissionData = new FormData();
     Object.keys(formData).forEach(key => {
       submissionData.append(key, formData[key]);
@@ -84,7 +78,6 @@ const SubmitCandidate = () => {
     submissionData.append('resume', resumeFile);
 
     try {
-      // ✅ UPDATED: Send FormData
       await api.post('/recruiter/submit', submissionData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
@@ -113,9 +106,6 @@ const SubmitCandidate = () => {
         <form onSubmit={handleSubmit}>
           <div className="card">
             <h2>Candidate Information</h2>
-            {/* ... (all existing form fields for name, email, phone, etc.) ... */}
-            
-            {/* ✅ NEW: Add resume file input */}
             <div className="form-group">
               <label>Resume *</label>
               <input 

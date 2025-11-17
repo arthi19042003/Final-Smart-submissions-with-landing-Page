@@ -46,7 +46,6 @@ const RecruiterProfile = () => {
       const updated = prev.majorskillsarea.includes(value)
         ? prev.majorskillsarea.filter((skill) => skill !== value)
         : [...prev.majorskillsarea, value];
-      // Also clear the error if it exists
       if (errors.majorskillsarea) setErrors((prevErrors) => ({ ...prevErrors, majorskillsarea: "" }));
       return { ...prev, majorskillsarea: updated };
     });
@@ -56,7 +55,6 @@ const RecruiterProfile = () => {
     const updated = [...data.ratecards];
     updated[index][field] = value;
     setData((prev) => ({ ...prev, ratecards: updated }));
-    // Clear error for this specific ratecard index
     if (errors[`ratecard_${index}`]) setErrors((prevErrors) => ({ ...prevErrors, [`ratecard_${index}`]: "" }));
   };
 

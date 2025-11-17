@@ -1,26 +1,23 @@
-/* ✅ Centering Wrapper for Auth Pages */
 .auth-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  flex-grow: 1; /* Take up remaining vertical space */
-  padding: 110px 20px 20px 20px; /* ✅ MODIFIED: Added 110px top padding */
-  min-height: 90vh; /* Ensure it takes height */
-  box-sizing: border-box; /* ✅ ADDED: Ensures padding is included in height */
+  flex-grow: 1; 
+  padding: 110px 20px 20px 20px; 
+  min-height: 90vh;
+  box-sizing: border-box;
 }
 
-/* ✅ Card Box (Preserved your style) */
 .auth-card {
-  width: 520px; /* ⬅️ Bigger card */
+  width: 520px;
   background: rgba(255, 255, 255, 0.97);
-  padding: 50px; /* ⬅️ More spacing inside */
+  padding: 50px; 
   border-radius: 22px;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
   animation: fadeUp 0.4s ease-out;
 }
 
-/* ✅ Title (Preserved your style) */
 .auth-card h2 {
   text-align: center;
   color: #5b2eca;
@@ -29,7 +26,6 @@
   font-weight: 700;
 }
 
-/* Inputs + Labels */
 .form-group {
   margin-bottom: 18px;
   display: flex;
@@ -42,7 +38,7 @@ label {
 }
 
 .mandatory {
-  color: #dc2626; /* Red color */
+  color: #dc2626; 
   font-weight: 700;
   margin-left: 4px;
 }
@@ -61,20 +57,16 @@ input:focus {
   outline: none;
 }
 
-/* --- ✅ NEW: ERROR STYLES FOR INPUTS --- */
 input.error {
-  border-color: #dc2626 !important; /* Red border */
-  background-color: #fee2e2 !important; /* Light red background */
+  border-color: #dc2626 !important;
+  background-color: #fee2e2 !important;
 }
 
 input.error:focus {
   border-color: #dc2626 !important;
   box-shadow: 0 0 6px rgba(220, 38, 38, 0.3) !important;
 }
-/* --- END NEW STYLES --- */
 
-
-/* ✅ Button (Preserved your style) */
 button {
   width: 100%;
   padding: 14px;
@@ -93,7 +85,6 @@ button:hover {
   opacity: 0.9;
 }
 
-/* Error Text */
 .error {
   color: red;
   font-size: 14px;
@@ -101,14 +92,12 @@ button:hover {
   text-align: center;
 }
 
-/* Footer link text */
 p {
   margin-top: 15px;
   text-align: center;
   font-size: 15px;
 }
 
-/* ✅ Smooth entry animation */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -120,10 +109,9 @@ p {
   }
 }
 
-/* ✅ Responsive Fix */
 @media (max-width: 900px) {
   .auth-page-container {
-    padding: 110px 20px 20px 20px; /* ✅ MODIFIED: Kept top padding */
+    padding: 110px 20px 20px 20px;
   }
 
   .auth-card {

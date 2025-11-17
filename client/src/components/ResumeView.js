@@ -1,4 +1,3 @@
-// client/src/components/ResumeView.js
 import React, { useState } from 'react';
 
 export default function ResumeView({ resume, onAction }) {
@@ -9,9 +8,8 @@ export default function ResumeView({ resume, onAction }) {
   }
 
   const handleAction = (action) => {
-    if (!onAction) return; // If no action handler provided, do nothing
+    if (!onAction) return; 
 
-    // ✅ ADDED: Confirmation dialogs for Hire and Reject actions
     if (action === 'hire') {
       if (!window.confirm(`Are you sure you want to HIRE ${resume.name}?`)) return;
     }
@@ -160,7 +158,6 @@ export default function ResumeView({ resume, onAction }) {
   );
 }
 
-// ✅ Reusable button style helper
 function btnStyle(color) {
   return {
     backgroundColor: color,

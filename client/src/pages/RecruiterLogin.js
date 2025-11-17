@@ -9,7 +9,7 @@ export default function RecruiterLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({}); 
   
   const navigate = useNavigate();
   const { setUser } = useAuth(); 
@@ -17,7 +17,6 @@ export default function RecruiterLogin() {
   const location = useLocation();
   const message = location.state?.message;
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
@@ -29,7 +28,7 @@ export default function RecruiterLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return;
     
     setLoading(true);
     try {
@@ -75,7 +74,7 @@ export default function RecruiterLogin() {
               }}
               placeholder="Email"
               required
-              className={errors.email ? "error" : ""} // ✅ Apply error class
+              className={errors.email ? "error" : ""} 
             />
           </div>
           <div className="form-group">
@@ -89,7 +88,7 @@ export default function RecruiterLogin() {
               }}
               placeholder="Password"
               required
-              className={errors.password ? "error" : ""} // ✅ Apply error class
+              className={errors.password ? "error" : ""} 
             />
           </div>
 

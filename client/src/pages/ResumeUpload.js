@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// ✅ Keep using your configured api instance
 import api from '../api/axios'; 
 import './ResumeUpload.css';
 
@@ -16,7 +15,6 @@ const ResumeUpload = () => {
 
   const fetchResumes = async () => {
     try {
-      // ✅ Ensure token is attached if api interceptor fails
       const token = localStorage.getItem('token');
       const config = {
         headers: { Authorization: `Bearer ${token}` }
@@ -33,7 +31,6 @@ const ResumeUpload = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Frontend validation
     const allowedExtensions = ['pdf', 'doc', 'docx'];
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
@@ -67,11 +64,10 @@ const ResumeUpload = () => {
     try {
       const token = localStorage.getItem('token');
       
-      // ✅ FIX: Explicitly set multipart/form-data header
       await api.post('/resume/upload', formData, {
         headers: { 
             'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}` // Ensure token is sent
+            'Authorization': `Bearer ${token}` 
         }
       });
 
@@ -80,7 +76,6 @@ const ResumeUpload = () => {
       setTitle('');
       fetchResumes();
       
-      // Clear the file input
       const fileInput = document.getElementById('resume-file');
       if (fileInput) fileInput.value = "";
 
@@ -88,7 +83,6 @@ const ResumeUpload = () => {
       console.error("Upload error:", error);
       
       if (error.response) {
-        // Server responded with a status code
         if (error.response.status === 401) {
             setMessage({ type: 'error', text: 'Session expired. Please log in.' });
         } else if (error.response.status === 400) {

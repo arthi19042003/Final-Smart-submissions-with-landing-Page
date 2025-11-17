@@ -17,7 +17,7 @@ const RecruiterRegister = () => {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({});
   
   const { register, logout } = useAuth();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const RecruiterRegister = () => {
     if (errors[name]) setErrors(p => ({ ...p, [name]: null }));
   };
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!formData.accessCode) newErrors.accessCode = "Access Code is required";
@@ -53,7 +52,7 @@ const RecruiterRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return;
 
     setLoading(true);
 

@@ -15,7 +15,7 @@ const CandidateSchema = new mongoose.Schema({
       "Under Review",
       "Phone Screen Scheduled",
       "Shortlisted",
-      "Interview", // ✅ ADDED "Interview" status
+      "Interview", 
       "Rejected",
       "Onsite Scheduled",
       "Hired",
@@ -24,7 +24,6 @@ const CandidateSchema = new mongoose.Schema({
   },
   createdAt: { type: Date, default: Date.now },
 
-  // --- Recruiter Fields ---
   rate: { type: String, default: '' },
   currentLocation: { type: String, default: '' },
   availability: { type: String, default: '' }, 
@@ -40,7 +39,6 @@ const CandidateSchema = new mongoose.Schema({
   resumePath: { type: String, default: '' },
   resumeOriginalName: { type: String, default: '' },
 
-  // ✅ ADDED: To track simple interview date from dashboard
   interviewDate: { type: Date },
 
   onboardingStatus: { 

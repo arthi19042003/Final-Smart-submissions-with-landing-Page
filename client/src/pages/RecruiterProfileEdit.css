@@ -1,22 +1,12 @@
-/* =========================================
-   SMART SUBMISSIONS — RECRUITER PROFILE EDIT
-   ========================================= */
-
-/* @import for font removed */
-
 .recruiter-profile-edit-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   background-color: #f9fafc;
   min-height: 100vh;
-  padding: 110px 20px 60px 20px; /* ✅ FIXED */
-  /* font-family removed */
+  padding: 110px 20px 60px 20px; 
 }
 
-/* --------------------------
-   Profile Container
---------------------------- */
 .recruiter-profile-edit-container {
   width: 100%;
   max-width: 850px;
@@ -36,9 +26,6 @@
   margin-bottom: 25px;
 }
 
-/* --------------------------
-   Form Layout
---------------------------- */
 .recruiter-profile-edit-form {
   display: flex;
   flex-direction: column;
@@ -56,9 +43,6 @@
   margin-bottom: 6px;
 }
 
-/* --------------------------
-   Input Styling
---------------------------- */
 .form-group input {
   padding: 10px 12px;
   border-radius: 8px;
@@ -74,9 +58,6 @@
   box-shadow: 0 0 4px rgba(109, 40, 217, 0.25);
 }
 
-/* --------------------------
-   Dropdown (Select)
---------------------------- */
 .recruiter-rate-card-row select,
 .form-group select {
   padding: 10px 12px;
@@ -104,16 +85,12 @@
   outline: none;
 }
 
-/* Ensure dropdown shows above all */
 select option {
   background-color: #fff;
   color: #333;
   padding: 8px;
 }
 
-/* --------------------------
-   Rate Card Rows
---------------------------- */
 .recruiter-rate-card-row {
   display: flex;
   justify-content: space-between;
@@ -141,9 +118,6 @@ select option {
   outline: none;
 }
 
-/* --------------------------
-   Skill Checkboxes
---------------------------- */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -171,9 +145,6 @@ select option {
   background-color: #f3e8ff;
 }
 
-/* --------------------------
-   Buttons
---------------------------- */
 .recruiter-profile-edit-btn {
   margin-top: 10px;
   padding: 10px 20px;
@@ -202,7 +173,6 @@ select option {
   background-color: #d1d5db;
 }
 
-/* Remove button in ratecards */
 .ratecard-entry .remove-btn {
   background-color: #e11d48;
   color: #fff;
@@ -217,9 +187,6 @@ select option {
   background-color: #be123c;
 }
 
-/* --------------------------
-   Messages
---------------------------- */
 .success-message {
   color: #4b0082;
   font-weight: 600;
@@ -233,9 +200,6 @@ select option {
   margin-top: 4px;
 }
 
-/* --------------------------
-   Responsive
---------------------------- */
 @media (max-width: 768px) {
   .recruiter-profile-edit-container {
     padding: 25px;

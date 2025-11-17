@@ -1,14 +1,9 @@
-/* client/src/pages/PurchaseOrders.css */
-/* ================================
-   Purchase Orders Page Styling (Purple & White Theme)
-   ================================ */
-
 .po-container {
   max-width: 1100px;
-  margin: 110px auto 40px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 40px auto; 
   padding: 20px 30px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f6ff; /* soft lavender white background */
+  background-color: #f8f6ff; 
   min-height: auto;
 }
 
@@ -16,7 +11,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 8px;
-  color: #4b0082; /* deep purple title */
+  color: #4b0082; 
   text-align: center;
 }
 
@@ -26,7 +21,6 @@
   margin-bottom: 25px;
 }
 
-/* ===== ✅ NEW: Toggle Button ===== */
 .po-form-toggle {
   text-align: right;
   margin-bottom: 20px;
@@ -46,7 +40,6 @@
   background-color: #6b21a8;
 }
 
-/* ===== ✅ NEW: Create PO Form ===== */
 .create-po-form {
   background: #fdfcff;
   border: 1px solid #c4b5fd;
@@ -83,8 +76,6 @@
   color: #991b1b;
 }
 
-
-/* Card Wrapper */
 .po-card {
   background: #ffffff;
   border-radius: 16px;
@@ -106,14 +97,12 @@
   margin-bottom: 15px;
 }
 
-/* Table Styling */
 .po-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-/* ... (rest of the file is identical to the original) ... */
 .po-table th,
 .po-table td {
   text-align: left;

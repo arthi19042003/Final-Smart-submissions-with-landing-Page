@@ -1,10 +1,8 @@
-// client/src/pages/Profile.js
 import React, { useState, useEffect } from "react";
-import api from "../api/axios"; // ✅ Use configured axios
+import api from "../api/axios"; 
 import { useAuth } from "../context/AuthContext";
 import "./Profile.css";
 
-// Reusable component for Experience/Education items
 const ProfileItem = ({ item, onRemove, onUpdate, type }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(item);
@@ -96,7 +94,6 @@ const Profile = () => {
   const [showEduForm, setShowEduForm] = useState(false);
 
   useEffect(() => {
-    // ✅ FIX: Safety check using optional chaining to prevent crash
     if (user?.profile) {
       setFormData({
         firstName: user.profile.firstName || "",
@@ -191,9 +188,7 @@ const Profile = () => {
     }
   };
 
-  // --- Experience Handlers ---
   const handleAddExperience = async () => {
-    // ✅ FIX: Ensure user exists before allowing adding
     if (!user) {
         alert("User data loading. Please wait.");
         return;
@@ -221,9 +216,7 @@ const Profile = () => {
     } catch (err) { console.error(err); }
   };
 
-  // --- Education Handlers ---
    const handleAddEducation = async () => {
-    // ✅ FIX: Ensure user exists
     if (!user) {
         alert("User data loading. Please wait.");
         return;
@@ -251,7 +244,6 @@ const Profile = () => {
     } catch (err) { console.error(err); }
   };
 
-  // ✅ FIX: Render loading state if user is not loaded yet
   if (!user) {
     return (
         <div className="profile-page-bg">

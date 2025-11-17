@@ -1,5 +1,3 @@
-// [File: arthi19042003/with-landing-page/With-landing-page-0f24402f43f461a8bca04af752e98da1034a70d5/server/models/User.js]
-// server/models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -22,7 +20,6 @@ const UserSchema = new mongoose.Schema({
     default: 'candidate'
   },
   profile: {
-    // --- Candidate Fields ---
     firstName: { type: String, default: '' },
     lastName: { type: String, default: '' },
     phone: { type: String, default: '' },
@@ -49,11 +46,10 @@ const UserSchema = new mongoose.Schema({
       current: Boolean
     }],
     
-    // --- Employer / Hiring Manager Fields ---
     companyName: { type: String, default: '' },
-    hiringManagerFirstName: { type: String, default: '' }, // For Employer
-    hiringManagerLastName: { type: String, default: '' },  // For Employer
-    hiringManagerPhone: { type: String, default: '' },   // For Employer
+    hiringManagerFirstName: { type: String, default: '' }, 
+    hiringManagerLastName: { type: String, default: '' },  
+    hiringManagerPhone: { type: String, default: '' },   
     companyWebsite: { type: String, default: '' },
     companyPhone: { type: String, default: '' },
     companyAddress: { type: String, default: '' },
@@ -75,29 +71,23 @@ const UserSchema = new mongoose.Schema({
       }]
     }],
 
-    // --- Recruiter Fields (FIXED) ---
     agencyName: { type: String, default: '' },
     
-    // ✅ FIX: Changed from 'majorSkills' to 'majorskillsarea'
     majorskillsarea: [{ type: String }], 
     
-    // ✅ ADDED: This field was missing from the schema
     resumeskills: { type: String, default: '' }, 
 
     partnerships: [{ type: String }],
     companyCertifications: [{ type: String }],
     dunsNumber: { type: String, default: '' },
     
-    // ✅ FIX: Changed from 'employeeCount' to 'numberofemployees'
     numberofemployees: { type: String, default: '' }, 
     
-    // ✅ FIX: Changed 'rateCard' (String) to 'ratecards' (Array of Objects)
     ratecards: [{ 
       role: String, 
       lpa: String 
     }],
     
-    // ✅ ADDED: This field was missing from the schema but used in the form
     location: { type: String, default: '' },
   },
   createdAt: {
@@ -106,7 +96,6 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-// Hash password before saving
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
@@ -116,7 +105,6 @@ UserSchema.pre('save', async function(next) {
   next();
 });
 
-// Method to compare passwords
 UserSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

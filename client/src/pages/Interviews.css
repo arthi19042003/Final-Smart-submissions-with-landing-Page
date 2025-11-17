@@ -1,22 +1,17 @@
-/* ================================
-   Interviews Page (Purple & White Theme)
-   ================================ */
-
 .interviews-container {
   max-width: 1000px;
-  margin: 110px auto 50px auto; /* ✅ MODIFIED: Increased top margin */
+  margin: 110px auto 50px auto; 
   padding: 40px 20px;
   font-family: 'Inter', sans-serif;
-  background-color: #faf5ff; /* soft lavender */
+  background-color: #faf5ff; 
   border-radius: 16px;
 }
 
-/* ===== Page Title ===== */
 .interviews-container h2 {
   font-size: 1.9rem;
   font-weight: 700;
   text-align: center;
-  color: #5b21b6; /* deep purple */
+  color: #5b21b6; 
   margin-bottom: 8px;
 }
 
@@ -27,14 +22,12 @@
   font-size: 1rem;
 }
 
-/* ===== Interview List ===== */
 .interview-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 22px;
 }
 
-/* ===== Card Styling ===== */
 .interview-card {
   background: #ffffff;
   border-radius: 14px;
@@ -49,7 +42,6 @@
   box-shadow: 0 6px 14px rgba(91, 33, 182, 0.15);
 }
 
-/* ===== Header Section ===== */
 .interview-header {
   display: flex;
   justify-content: space-between;
@@ -64,7 +56,6 @@
   font-weight: 600;
 }
 
-/* ===== Role Tag ===== */
 .role {
   background-color: #ede9fe;
   color: #5b21b6;
@@ -74,7 +65,6 @@
   font-weight: 600;
 }
 
-/* ===== Interview Details ===== */
 .interview-details p {
   margin: 5px 0;
   color: #374151;
@@ -82,7 +72,6 @@
   line-height: 1.4;
 }
 
-/* ===== Mode Tags ===== */
 .mode {
   display: inline-block;
   font-weight: 600;
@@ -90,7 +79,7 @@
   border-radius: 8px;
   font-size: 0.8rem;
   background-color: #ffffff;
-  color: #6d28d9; /* purple text */
+  color: #6d28d9; 
   border: none;
   box-shadow: 0 1px 2px rgba(109, 40, 217, 0.05);
 }
@@ -101,7 +90,6 @@
   color: #6d28d9 !important;
 }
 
-/* ===== Empty State ===== */
 .empty {
   text-align: center;
   color: #7e22ce;
@@ -110,7 +98,6 @@
   font-weight: 500;
 }
 
-/* ===== Responsive Design ===== */
 @media (max-width: 768px) {
   .interviews-container {
     padding: 30px 15px;

@@ -1,8 +1,7 @@
-// client/src/pages/CandidateHistory.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
-import './CandidateHistory.css'; // We will create this
+import './CandidateHistory.css'; 
 
 const CandidateHistory = () => {
   const { id } = useParams();

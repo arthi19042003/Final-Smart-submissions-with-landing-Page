@@ -15,8 +15,7 @@ export default function ApplicationsDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState(null);
   
-  // Modals state
-  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false); 
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   
   const [interviewDate, setInterviewDate] = useState("");
@@ -24,11 +23,10 @@ export default function ApplicationsDashboard() {
   
   const token = localStorage.getItem("token"); 
 
-  // ✅ Reusable style for Purple Buttons
   const purpleBtnStyle = {
-    backgroundColor: "#6d28d9", // Purple
+    backgroundColor: "#6d28d9", 
     borderColor: "#6d28d9",
-    color: "#fff", // White text
+    color: "#fff", 
     width: "100%",
     marginBottom: "5px",
     fontWeight: "500"
@@ -53,17 +51,15 @@ export default function ApplicationsDashboard() {
 
   useEffect(() => {
     fetchApplications();
-    // eslint-disable-next-line
   }, [token]);
 
-  // ✅ Generic Status Update Function (Used for Review, Hire, Reject)
   const updateStatus = async (id, action, payload = {}) => {
     if (!token) return;
     try {
       const res = await api.put(`/applications/${id}/${action}`, payload);
       if (res.status === 200) {
         toast.success(`Application ${action} successful`);
-        fetchApplications(); // Refresh list to show new status
+        fetchApplications(); 
       }
     } catch (err) {
       console.error(`Error performing ${action}:`, err);
@@ -71,26 +67,16 @@ export default function ApplicationsDashboard() {
     }
   };
 
-  // ✅ Fetch History & Show Modal
   const handleViewHistory = async (email) => {
     if (!token) return;
     try {
       const res = await api.get(`/applications/history/${email}`);
       setHistory(res.data);
-      setShowHistoryModal(true); // Open modal after data is loaded
+      setShowHistoryModal(true); 
     } catch (err) {
       console.error("Error fetching history:", err);
       toast.error("Failed to load history.");
     }
-  };
-
-  const handleSchedule = async () => {
-    if (!interviewDate) return toast.error("Select a date first!");
-    if (!selectedApp) return;
-
-    await updateStatus(selectedApp._id, "schedule", { interviewDate });
-    setInterviewDate("");
-    setShowScheduleModal(false);
   };
 
   const handleViewResume = (resumePath) => {
@@ -111,7 +97,6 @@ export default function ApplicationsDashboard() {
     );
 
   return (
-    // ✅ Added more paddingTop and minHeight
     <div className="container mt-4" style={{ paddingTop: "120px", minHeight: "100vh" }}>
       <Toaster position="top-right" />
       <h2 className="mb-4" style={{ color: "#5b21b6", fontWeight: "700" }}> Candidate Applications</h2>
@@ -133,7 +118,6 @@ export default function ApplicationsDashboard() {
             {applications.map((app) => (
               <tr key={app._id}>
                 <td>
-                  {/* ✅ Added fallback for missing name */}
                   <strong>{app.candidateName || "Name Unavailable"}</strong>
                   <div className="text-muted small">{app.email}</div>
                 </td>
@@ -161,14 +145,14 @@ export default function ApplicationsDashboard() {
                     : "-"}
                 </td>
                 <td>
-                  {/* ✅ Changed to flex-column for stacked buttons */}
+                  {/* Changed to flex-column for stacked buttons */}
                   <div className="d-flex flex-column">
                     <Button
                       size="sm"
                       style={purpleBtnStyle}
                       onClick={() => handleViewResume(app.resumeUrl)}
                     >
-                      📄 Resume
+                      Resume
                     </Button>
                     
                     {app.status === "Applied" && (
@@ -180,22 +164,11 @@ export default function ApplicationsDashboard() {
                         Review
                       </Button>
                     )}
-
-                    <Button
-                      size="sm"
-                      style={purpleBtnStyle}
-                      onClick={() => {
-                        setSelectedApp(app);
-                        setShowScheduleModal(true);
-                      }}
-                    >
-                      Schedule
-                    </Button>
                     
                     {app.status !== "Rejected" && app.status !== "Hired" && (
                        <Button
                         size="sm"
-                        style={{...purpleBtnStyle, backgroundColor: "#7c3aed"}} // Lighter purple for variety
+                        style={{...purpleBtnStyle, backgroundColor: "#7c3aed"}} 
                         onClick={() => {
                           if (window.confirm("Are you sure you want to reject this candidate?")) {
                             updateStatus(app._id, "reject");
@@ -244,10 +217,9 @@ export default function ApplicationsDashboard() {
         </Table>
       )}
 
-      {/* Interview Scheduler Modal */}
       <Modal show={showScheduleModal} onHide={() => setShowScheduleModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>🗓️ Schedule Interview</Modal.Title>
+          <Modal.Title>Schedule Interview</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
@@ -263,13 +235,13 @@ export default function ApplicationsDashboard() {
           <Button variant="secondary" onClick={() => setShowScheduleModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSchedule}>
+          <Button variant="primary" onClick={() => {/* handleSchedule */}}>
             Confirm
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* ✅ Candidate History Modal (Fixed) */}
+      {/* Candidate History Modal */}
       <Modal
         show={showHistoryModal}
         onHide={() => setShowHistoryModal(false)}
@@ -277,7 +249,7 @@ export default function ApplicationsDashboard() {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>🗂️ Candidate Application History</Modal.Title>
+          <Modal.Title>Candidate Application History</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {history.length === 0 ? (

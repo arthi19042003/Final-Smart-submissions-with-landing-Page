@@ -1,4 +1,3 @@
-// client/src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -6,10 +5,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
-// ==================== Core Pages ====================
 import LandingPage from "./pages/LandingPage"; 
 
-// ==================== Auth Pages ====================
 import Login from "./pages/Login";
 import EmployerLogin from "./pages/EmployerLogin";
 import HiringManagerLogin from "./pages/HiringManagerLogin";
@@ -20,19 +17,16 @@ import EmployerRegister from "./pages/EmployerRegister";
 import HiringManagerRegister from "./pages/HiringManagerRegister";
 import RecruiterRegister from "./pages/RecruiterRegister"; 
 
-// ==================== Candidate Pages ====================
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ResumeUpload from "./pages/ResumeUpload";
 import CandidateInterviewList from "./pages/Interviews"; 
-import CandidateJobs from "./pages/CandidateJobs"; // ✅ IMPORT NEW PAGE
+import CandidateJobs from "./pages/CandidateJobs"; 
 
-// ==================== Employer Pages ====================
 import EmployerDashboard from "./pages/Dashboard"; 
 import EmployerProfile from "./pages/EmployerProfile";
 import CreatePosition from "./pages/CreatePosition"; 
 
-// ==================== Recruiter Pages ====================
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import RecruiterProfile from "./pages/RecruiterProfile"; 
 import RecruiterProfileEdit from "./pages/RecruiterProfileEdit";
@@ -40,13 +34,11 @@ import RecruiterProfileView from "./pages/RecruiterProfileView";
 import ResumeUploadRecruiter from "./pages/ResumeUploadRecruiter"; 
 import SubmissionStatus from "./pages/SubmissionStatus";
 
-// ==================== Hiring Manager Pages (NEW & UPDATED) ====================
 import HiringManagerDashboard from "./pages/HiringManagerDashboard"; 
 import Inbox from "./pages/Inbox";
 import OpenPositions from "./pages/OpenPositions"; 
 import CandidateListPage from "./pages/CandidateList";
 import InterviewManagementPage from "./pages/InterviewDetails"; 
-// New imports from Final HR integration
 import ApplicationsDashboard from "./pages/ApplicationsDashboard";
 import OnboardingDashboard from "./pages/OnboardingDashboard";
 import ViewPurchaseOrders from "./pages/ViewPurchaseOrders";
@@ -57,7 +49,6 @@ import PositionDetails from "./pages/PositionDetails";
 import CandidateHistory from "./pages/CandidateHistory";
 
 
-// ==================== Role-Based Dashboard Redirect ====================
 function RoleBasedDashboard() {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" />;
@@ -68,10 +59,9 @@ function RoleBasedDashboard() {
   if (role === "recruiter") return <Navigate to="/recruiter/dashboard" />;
   if (role === "hiringmanager") return <Navigate to="/hiring-manager/dashboard" />;
   
-  return <Dashboard />; // candidate default
+  return <Dashboard />; 
 }
 
-// ==================== Main App ====================
 function App() {
   return (
     <AuthProvider>

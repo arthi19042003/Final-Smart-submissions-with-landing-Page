@@ -1,4 +1,3 @@
-// client/src/pages/CandidateList.js
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import api from "../api/axios";
@@ -40,17 +39,15 @@ const CandidateList = () => {
     }
   };
 
-  // ✅ Handle Resume Download
   const handleResumeDownload = async (candidateId, fileName) => {
     try {
       const response = await api.get(`/candidates/resume/${candidateId}`, {
-        responseType: 'blob', // Important for file downloads
+        responseType: 'blob', 
       });
-      // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', fileName || 'resume.pdf'); // Use original name
+      link.setAttribute('download', fileName || 'resume.pdf'); 
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -149,7 +146,7 @@ const CandidateList = () => {
                     {c.status !== "Hired" && c.status !== "Rejected" && (
                       <button 
                         className="btn"
-                        style={{ backgroundColor: "#16a34a", color: "#fff" }} // Green style
+                        style={{ backgroundColor: "#16a34a", color: "#fff" }} 
                         onClick={() => {
                           if (window.confirm(`Are you sure you want to HIRE ${c.firstName} ${c.lastName}?`)) {
                             handleStatusChange(c._id, "Hired");

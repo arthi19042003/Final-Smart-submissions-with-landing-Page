@@ -1,15 +1,12 @@
-// server/routes/candidates.js
 const express = require("express");
 const router = express.Router();
 const Candidate = require("../models/Candidate");
 const Submission = require("../models/Submission");
 const Interview = require("../models/Interview");
-// ✅ NEW: Import path and fs
 const path = require('path');
 const fs = require('fs');
-const auth = require("../middleware/auth"); // ✅ NEW: Add auth
+const auth = require("../middleware/auth"); 
 
-// === Get all candidates ===
 router.get("/", auth, async (req, res) => {
   try {
     const candidates = await Candidate.find().sort({ createdAt: -1 });
@@ -20,7 +17,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// === ✅ NEW: Get full details for one candidate ===
 router.get("/:id/details", auth, async (req, res) => {
   try {
     const candidate = await Candidate.findById(req.params.id);
@@ -43,7 +39,6 @@ router.get("/:id/details", auth, async (req, res) => {
   }
 });
 
-// === ✅ NEW: Download resume for a recruiter-submitted candidate ===
 router.get("/resume/:id", auth, async (req, res) => {
   try {
     const candidate = await Candidate.findById(req.params.id);
@@ -65,7 +60,6 @@ router.get("/resume/:id", auth, async (req, res) => {
 });
 
 
-// === Update candidate status (Shortlist / Reject) ===
 router.put("/:id/status", auth, async (req, res) => {
   try {
     const { status } = req.body;

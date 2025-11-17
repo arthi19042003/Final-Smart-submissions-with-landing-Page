@@ -1,8 +1,7 @@
-// client/src/pages/PositionDetails.js
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/axios';
-import './PositionDetails.css'; // We will create this
+import './PositionDetails.css'; 
 
 const PositionDetails = () => {
   const { id } = useParams();
@@ -10,12 +9,10 @@ const PositionDetails = () => {
   const [error, setError] = useState('');
   const [data, setData] = useState(null);
 
-  // State for new invite
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
   const [inviteSuccess, setInviteSuccess] = useState('');
   
-  // State for new SOW
   const [sowFile, setSowFile] = useState(null);
   const [sowError, setSowError] = useState('');
   const [sowSuccess, setSowSuccess] = useState('');
@@ -50,7 +47,7 @@ const PositionDetails = () => {
       await api.post(`/positions/${id}/invite`, { email: inviteEmail });
       setInviteSuccess(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
-      fetchData(); // Refresh data
+      fetchData(); 
     } catch (err) {
       setInviteError(err.response?.data?.message || 'Failed to send invite.');
     }
@@ -74,8 +71,8 @@ const PositionDetails = () => {
       });
       setSowSuccess(`SOW "${sowFile.name}" uploaded successfully.`);
       setSowFile(null);
-      e.target.reset(); // Clear the file input
-      fetchData(); // Refresh data
+      e.target.reset(); 
+      fetchData(); 
     } catch (err) {
       setSowError(err.response?.data?.message || 'Failed to upload SOW.');
     }

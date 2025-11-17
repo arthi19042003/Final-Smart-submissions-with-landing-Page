@@ -85,7 +85,6 @@ const RecruiterProfileView = () => {
   );
 };
 
-// ✅ Helper subcomponent for readability
 const ProfileField = ({ label, value }) => (
   <div className="form-group">
     <label>{label}:</label>

@@ -1,34 +1,28 @@
-// server/routes/submissions.js
 const express = require("express");
 const router = express.Router();
 const Application = require("../models/Application");
 const Submission = require("../models/Submission");
 const protect = require("../middleware/auth");
 
-// ✅ GET - All submissions for the logged-in recruiter (WITH FILTERING)
 router.get("/", protect, async (req, res) => {
   try {
     const userId = req.userId; 
     const { candidateName, email, phone, hiringManager, company, submissionId } = req.query;
 
-    // 1. Build the base query
     let query = { submittedBy: userId };
 
     if (submissionId) {
       query._id = submissionId;
     }
 
-    // 2. Fetch submissions and populate linked data
     let submissions = await Submission.find(query)
-      .populate("candidate") // Get full candidate details
-      .populate("position")  // Get full position details
+      .populate("candidate") 
+      .populate("position")  
       .sort({ createdAt: -1 })
-      .lean(); // Use .lean() for faster filtering
+      .lean(); 
 
-    // 3. Apply in-memory filtering for populated data
     if (candidateName || email || phone || hiringManager || company) {
       submissions = submissions.filter((sub) => {
-        // If candidate was deleted, filter it out
         if (!sub.candidate) return false; 
         
         const c = sub.candidate;
@@ -59,7 +53,6 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-// ✅ POST - Handle Candidate Application (Direct Apply)
 router.post("/", protect, async (req, res) => {
   try {
     const { jobId, positionTitle, resumeUrl } = req.body;
@@ -91,7 +84,6 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
-// ✅ GET - Candidate's own applications
 router.get("/my-submissions", protect, async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
@@ -102,7 +94,6 @@ router.get("/my-submissions", protect, async (req, res) => {
   }
 });
 
-// ✅ DELETE - Delete a submission
 router.delete("/:id", protect, async (req, res) => {
   try {
     const submission = await Submission.findOneAndDelete({

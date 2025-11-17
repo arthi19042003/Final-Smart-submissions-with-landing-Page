@@ -1,4 +1,3 @@
-/* ✅ CHANGED: .navbar -> .custom-navbar */
 .custom-navbar {
   width: 100%;
   position: fixed;
@@ -7,7 +6,6 @@
   padding: 20px 0;
   background: #ffffff;
   border-bottom: 1px solid #eee;
-  /* ✅ ADDED: Ensure it's not a flex container itself */
   display: block; 
 }
 
@@ -25,13 +23,13 @@
   font-weight: 700;
   color: #000;
   letter-spacing: -0.5px;
-  text-decoration: none; /* ✅ THIS IS THE FIX */
+  text-decoration: none; 
 }
 
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 35px; /* More spacing like second design */
+  gap: 35px; 
 }
 
 .navbar-link {
@@ -43,7 +41,6 @@
   position: relative;
 }
 
-/* Bottom underline on hover (minimal design style) */
 .navbar-link::after {
   content: "";
   position: absolute;

@@ -1,17 +1,11 @@
-/* ---------- Global App Layout ---------- */
 .App {
   min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Allow navbar and content to stack */
-  /* ✅ REMOVED centering properties to allow pages to fill screen */
+  flex-direction: column; 
   background-attachment: fixed;
   font-family: "Segoe UI", sans-serif;
 }
 
-/* ❌ REMOVED .auth-container styles to avoid conflict with .auth-card */
-
-
-/* ---------- Alerts (Moved from App.css) ---------- */
 .success,
 .error {
   padding: 12px;
@@ -34,7 +28,6 @@
   text-align: center;
 }
 
-/* ---------- Animation ---------- */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

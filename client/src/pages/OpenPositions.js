@@ -8,10 +8,8 @@ export default function OpenPositions() {
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({ title: "", location: "", openings: 1, requiredSkills: "" });
 
-  // ✅ FIX: Get token directly from localStorage
   const token = localStorage.getItem("token");
 
-  // ✅ Fetch all positions
   const fetchPositions = async () => {
     if (!token) {
       setLoading(false);
@@ -27,7 +25,6 @@ export default function OpenPositions() {
       setPositions(data);
     } catch (err) {
       console.error("Error fetching positions:", err);
-      // toast.error("Failed to load positions");
     } finally {
       setLoading(false);
     }
@@ -35,10 +32,8 @@ export default function OpenPositions() {
 
   useEffect(() => {
     fetchPositions();
-    // eslint-disable-next-line
   }, [token]);
 
-  // ✅ Handle Edit Click
   const handleEdit = (position) => {
     setEditingId(position._id);
     setEditData({
@@ -51,7 +46,6 @@ export default function OpenPositions() {
     });
   };
 
-  // ✅ Handle Save
   const handleSave = async (id) => {
     if (!token) return;
     try {
@@ -75,7 +69,6 @@ export default function OpenPositions() {
     }
   };
 
-  // ✅ Handle Close Position
   const handleClose = async (id) => {
     if (!token) return;
     try {
@@ -96,7 +89,6 @@ export default function OpenPositions() {
     }
   };
 
-  // ✅ Handle Delete
   const handleDelete = async (id) => {
     if (!token) return;
     if (!window.confirm("Are you sure you want to delete this position?")) return;
@@ -120,138 +112,167 @@ export default function OpenPositions() {
     </div>
   );
 
+  if (positions.length === 0 && !loading) return (
+    <Container className="py-4" style={{ marginTop: "100px" }}>
+      <Card className="shadow-sm border-0">
+        <Card.Body>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2 className="fw-bold text-dark mb-0">Open Positions</h2>
+                <Badge bg="primary" className="fs-6">Total: 0</Badge>
+            </div>
+            <div className="text-center py-5 text-muted">
+                <h5>No positions found.</h5>
+                <p>Create a new position from your Dashboard to see it here.</p>
+            </div>
+        </Card.Body>
+      </Card>
+    </Container>
+  );
+
   return (
-    // ✅ Added marginTop to fix Navbar overlap
     <Container className="py-4" style={{ marginTop: "100px" }}>
       <Toaster position="top-right" />
       
       <Card className="shadow-sm border-0">
         <Card.Body>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="fw-bold text-dark mb-0">📂 Open Positions</h2>
+            <h2 className="fw-bold text-dark mb-0">Open Positions</h2>
             <Badge bg="primary" className="fs-6">Total: {positions.length}</Badge>
           </div>
 
-          {positions.length === 0 ? (
-            <div className="text-center py-5 text-muted">
-              <h5>No positions found.</h5>
-              <p>Create a new position from your Dashboard to see it here.</p>
-            </div>
-          ) : (
-            <div className="table-responsive">
-              <Table hover className="align-middle">
-                <thead className="bg-light table-light">
-                  <tr>
-                    <th className="p-3">Title</th>
-                    <th className="p-3">Location</th>
-                    <th className="p-3">Required Skills</th>
-                    <th className="p-3">Openings</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3 text-end">Actions</th>
+          <div className="table-responsive">
+            <Table hover className="align-middle">
+              <thead className="bg-light table-light">
+                <tr>
+                  <th className="p-3">Title</th>
+                  <th className="p-3">Location</th>
+                  <th className="p-3">Required Skills</th>
+                  <th className="p-3">Openings</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((pos) => (
+                  <tr key={pos._id}>
+                    {/* Title */}
+                    <td className="p-3">
+                      {editingId === pos._id ? (
+                        <Form.Control
+                          type="text"
+                          value={editData.title}
+                          onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                        />
+                      ) : (
+                        <span className="fw-semibold">{pos.title}</span>
+                      )}
+                    </td>
+
+                    {/* Location */}
+                    <td className="p-3">
+                      {editingId === pos._id ? (
+                        <Form.Control
+                          type="text"
+                          value={editData.location}
+                          onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                        />
+                      ) : (
+                        <span className="text-muted">{pos.location}</span>
+                      )}
+                    </td>
+
+                    {/* Skills */}
+                    <td className="p-3">
+                      {editingId === pos._id ? (
+                        <Form.Control
+                          type="text"
+                          value={editData.requiredSkills}
+                          onChange={(e) => setEditData({ ...editData, requiredSkills: e.target.value })}
+                        />
+                      ) : (
+                        <small className="text-muted">
+                          {Array.isArray(pos.requiredSkills) 
+                            ? pos.requiredSkills.join(", ") 
+                            : pos.requiredSkills}
+                        </small>
+                      )}
+                    </td>
+
+                    {/* Openings */}
+                    <td className="p-3">
+                      {editingId === pos._id ? (
+                        <Form.Control
+                          type="number"
+                          style={{ width: "80px" }}
+                          value={editData.openings}
+                          onChange={(e) => setEditData({ ...editData, openings: parseInt(e.target.value) })}
+                        />
+                      ) : (
+                        pos.openings
+                      )}
+                    </td>
+
+                    {/* Status */}
+                    <td className="p-3">
+                      <Badge bg={pos.status === 'Open' ? 'success' : 'secondary'}>
+                        {pos.status}
+                      </Badge>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="p-3 text-end">
+                      <div className="d-flex gap-2 justify-content-end">
+                        {editingId === pos._id ? (
+                          <>
+                            <Button 
+                              size="sm" 
+                              onClick={() => handleSave(pos._id)}
+                              style={{ backgroundColor: '#5b21b6', borderColor: '#5b21b6', color: 'white', fontWeight: 'bold' }}
+                            >
+                              Save
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              onClick={() => setEditingId(null)}
+                              style={{ backgroundColor: '#6b7280', borderColor: '#6b7280', color: 'white', fontWeight: 'bold' }}
+                            >
+                              Cancel
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button 
+                              size="sm" 
+                              onClick={() => handleEdit(pos)}
+                              style={{ backgroundColor: '#5b21b6', borderColor: '#5b21b6', color: 'white', fontWeight: 'bold' }}
+                            >
+                              Edit
+                            </Button>
+                            {pos.status === "Open" && (
+                              <Button 
+                                size="sm" 
+                                onClick={() => handleClose(pos._id)}
+                                style={{ backgroundColor: '#7c3aed', borderColor: '#7c3aed', color: 'white', fontWeight: 'bold' }}
+                              >
+                                Close
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              onClick={() => handleDelete(pos._id)}
+                              style={{ backgroundColor: '#dc3545', borderColor: '#dc3545', color: 'white', fontWeight: 'bold' }}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {positions.map((pos) => (
-                    <tr key={pos._id}>
-                      {/* Title */}
-                      <td className="p-3">
-                        {editingId === pos._id ? (
-                          <Form.Control
-                            type="text"
-                            value={editData.title}
-                            onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                          />
-                        ) : (
-                          <span className="fw-semibold">{pos.title}</span>
-                        )}
-                      </td>
-
-                      {/* Location */}
-                      <td className="p-3">
-                        {editingId === pos._id ? (
-                          <Form.Control
-                            type="text"
-                            value={editData.location}
-                            onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                          />
-                        ) : (
-                          <span className="text-muted">{pos.location}</span>
-                        )}
-                      </td>
-
-                      {/* Skills */}
-                      <td className="p-3">
-                        {editingId === pos._id ? (
-                          <Form.Control
-                            type="text"
-                            value={editData.requiredSkills}
-                            onChange={(e) => setEditData({ ...editData, requiredSkills: e.target.value })}
-                          />
-                        ) : (
-                          <small className="text-muted">
-                            {Array.isArray(pos.requiredSkills) 
-                              ? pos.requiredSkills.join(", ") 
-                              : pos.requiredSkills}
-                          </small>
-                        )}
-                      </td>
-
-                      {/* Openings */}
-                      <td className="p-3">
-                        {editingId === pos._id ? (
-                          <Form.Control
-                            type="number"
-                            style={{ width: "80px" }}
-                            value={editData.openings}
-                            onChange={(e) => setEditData({ ...editData, openings: e.target.value })}
-                          />
-                        ) : (
-                          pos.openings
-                        )}
-                      </td>
-
-                      {/* Status */}
-                      <td className="p-3">
-                        <Badge bg={pos.status === 'Open' ? 'success' : 'secondary'}>
-                          {pos.status}
-                        </Badge>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="p-3 text-end">
-                        <div className="d-flex gap-2 justify-content-end">
-                          {editingId === pos._id ? (
-                            <>
-                              <Button variant="success" size="sm" onClick={() => handleSave(pos._id)}>
-                                💾 Save
-                              </Button>
-                              <Button variant="secondary" size="sm" onClick={() => setEditingId(null)}>
-                                ❌ Cancel
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <Button variant="outline-primary" size="sm" onClick={() => handleEdit(pos)}>
-                                ✏️ Edit
-                              </Button>
-                              {pos.status === "Open" && (
-                                <Button variant="outline-warning" size="sm" onClick={() => handleClose(pos._id)}>
-                                  🔒 Close
-                                </Button>
-                              )}
-                              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(pos._id)}>
-                                🗑️ Delete
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          )}
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </Card.Body>
       </Card>
     </Container>

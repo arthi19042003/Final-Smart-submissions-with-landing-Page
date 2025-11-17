@@ -1,4 +1,3 @@
-// client/src/components/Navbar.js
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
@@ -14,11 +13,9 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  // Ensure role is always lowercase and defaults to 'candidate' if no user
   const role = (user?.role || 'candidate').toLowerCase();
 
   return (
-    // ✅ CHANGED: className="custom-navbar" to avoid Bootstrap conflict
     <nav className="custom-navbar">
       <div className="navbar-container">
         <HashLink smooth to={user ? '/dashboard' : '/#top'} className="navbar-logo">

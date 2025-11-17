@@ -10,13 +10,10 @@ const {
   deleteTeamMember,
 } = require("../controllers/employerController");
 
-// ✅ Get current employer profile
 router.get("/", auth, getEmployerProfile);
 
-// ✅ Create or update employer profile
 router.post("/", auth, createOrUpdateEmployer);
 
-// ✅ Add team member
 router.post(
   "/team",
   auth,
@@ -34,10 +31,8 @@ router.post(
   addTeamMember
 );
 
-// ✅ Update team member
 router.put("/team/:memberId", auth, updateTeamMember);
 
-// ✅ Delete team member
 router.delete("/team/:memberId", auth, deleteTeamMember);
 
 module.exports = router;

@@ -25,7 +25,6 @@ const RecruiterProfileEdit = () => {
     "Java/Javascript Engineers",
   ];
 
-  // ✅ Fetch recruiter profile
   useEffect(() => {
     const loadProfile = async () => {
       try {
@@ -65,13 +64,11 @@ const RecruiterProfileEdit = () => {
     loadProfile();
   }, [recruiter, getRecruiterProfile]);
 
-  // ✅ Handle text inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Handle checkbox skills
   const handleCheckboxChange = (value) => {
     setProfile((prev) => {
       const updated = prev.majorskillsarea.includes(value)
@@ -81,7 +78,6 @@ const RecruiterProfileEdit = () => {
     });
   };
 
-  // ✅ Ratecard modifications
   const handleRatecardChange = (index, field, value) => {
     const updated = [...profile.ratecards];
     updated[index][field] = value;
@@ -101,7 +97,6 @@ const RecruiterProfileEdit = () => {
     setProfile((prev) => ({ ...prev, ratecards: updated }));
   };
 
-  // ✅ Save updated profile
   const handleSave = async (e) => {
     e.preventDefault();
     if (!profile) return;

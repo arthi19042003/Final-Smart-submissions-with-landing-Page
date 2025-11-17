@@ -1,8 +1,8 @@
 .manager-dashboard {
-  padding: 110px 30px 30px 30px; /* ✅ MODIFIED: Increased top padding */
+  padding: 110px 30px 30px 30px; 
   max-width: 1200px;
   margin: 0 auto;
-  box-sizing: border-box; /* ✅ ADDED */
+  box-sizing: border-box; 
 }
 
 h1 {

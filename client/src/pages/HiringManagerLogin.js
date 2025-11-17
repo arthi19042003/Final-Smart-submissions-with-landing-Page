@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom"; 
 import { useAuth } from "../context/AuthContext";
-import api from "../api/axios"; // ✅ Use api instance
+import api from "../api/axios";
 import "../styles/Login.css"; 
 
 export default function HiringManagerLogin() {
@@ -9,7 +9,7 @@ export default function HiringManagerLogin() {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // ✅ For field validation
+  const [errors, setErrors] = useState({}); 
   
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -17,7 +17,6 @@ export default function HiringManagerLogin() {
   const location = useLocation();
   const message = location.state?.message;
 
-  // ✅ Validation function
   const validate = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
@@ -29,11 +28,11 @@ export default function HiringManagerLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
-    if (!validate()) return; // ✅ Run validation
+    if (!validate()) return; 
     
     setLoading(true);
     try {
-      const res = await api.post("/auth/login", { // ✅ Use api instance
+      const res = await api.post("/auth/login", { 
         email, 
         password, 
         role: "hiringManager" 
@@ -73,7 +72,7 @@ export default function HiringManagerLogin() {
               }} 
               placeholder="Email" 
               required 
-              className={errors.email ? "error" : ""} // ✅ Apply error class
+              className={errors.email ? "error" : ""} 
             />
           </div>
           <div className="form-group">
@@ -87,7 +86,7 @@ export default function HiringManagerLogin() {
               placeholder="Password" 
               type="password" 
               required 
-              className={errors.password ? "error" : ""} // ✅ Apply error class
+              className={errors.password ? "error" : ""} 
             />
           </div>
           

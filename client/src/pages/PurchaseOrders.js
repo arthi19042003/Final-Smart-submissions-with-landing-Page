@@ -1,14 +1,12 @@
-// client/src/pages/PurchaseOrders.js
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
 import "./PurchaseOrders.css";
 
-// ✅ NEW: Initial state for the creation form
 const newPoInitialState = {
   poId: "",
   vendor: "",
   amount: "",
-  date: new Date().toISOString().split("T")[0], // Default to today
+  date: new Date().toISOString().split("T")[0], 
 };
 
 const PurchaseOrders = () => {
@@ -16,7 +14,6 @@ const PurchaseOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // ✅ NEW: State for the creation form
   const [showForm, setShowForm] = useState(false);
   const [newPo, setNewPo] = useState(newPoInitialState);
   const [formError, setFormError] = useState('');
@@ -41,7 +38,6 @@ const PurchaseOrders = () => {
   }, []);
 
   const updateOrderStatus = async (id, newStatus) => {
-    // ... (existing function, no changes)
     const originalOrders = [...orders];
     setOrders(
       orders.map((order) =>
@@ -58,7 +54,6 @@ const PurchaseOrders = () => {
     }
   };
 
-  // --- ✅ NEW: Handlers for the creation form ---
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setNewPo(prev => ({ ...prev, [name]: value }));
@@ -68,7 +63,6 @@ const PurchaseOrders = () => {
     e.preventDefault();
     setFormError('');
     
-    // Simple validation
     if (!newPo.poId || !newPo.vendor || !newPo.amount || !newPo.date) {
       setFormError('All fields are required.');
       return;
@@ -81,19 +75,16 @@ const PurchaseOrders = () => {
         amount: Number(newPo.amount),
       });
       
-      setOrders(prev => [response.data, ...prev]); // Add new PO to top of list
-      setNewPo(newPoInitialState); // Reset form
-      setShowForm(false); // Hide form
+      setOrders(prev => [response.data, ...prev]); 
+      setNewPo(newPoInitialState); 
+      setShowForm(false); 
     } catch (err) {
       console.error("Error creating PO:", err);
       setFormError(err.response?.data?.message || 'Failed to create PO.');
     }
   };
-  // --- End of new handlers ---
-
 
   const formatDate = (dateString) => {
-    // ... (existing function, no changes)
      if (!dateString) return 'N/A';
      try {
        const parts = dateString.split('-');

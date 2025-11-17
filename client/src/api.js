@@ -1,13 +1,12 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // ✅ Backend base URL
+  baseURL: "http://localhost:5000/api", 
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// ✅ Automatically attach JWT token to every request
 API.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
@@ -21,7 +20,6 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Handle expired or invalid token globally
 API.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -30,7 +28,6 @@ API.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
-      // Optional: only redirect if not already on login/register page
       const currentPath = window.location.pathname;
       if (!["/login", "/register", "/employer-register", "/hiring-manager-login"].includes(currentPath)) {
         window.location.href = "/login";

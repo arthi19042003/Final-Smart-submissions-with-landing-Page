@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
-import './HiringManagerDashboard.css'; // Import shared CSS
+import './HiringManagerDashboard.css'; 
 
 export default function CreatePurchaseOrder() {
   const navigate = useNavigate();
@@ -25,7 +25,6 @@ export default function CreatePurchaseOrder() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // ✅ Get token from localStorage
     const token = localStorage.getItem("token");
     if (!token) {
         toast.error("Please login first.");
@@ -38,7 +37,7 @@ export default function CreatePurchaseOrder() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ Send token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           candidateName: formData.candidateName,
@@ -66,7 +65,6 @@ export default function CreatePurchaseOrder() {
   };
 
   return (
-    // ✅ Wrapper for layout and style
     <div className="dashboard-wrapper">
       <Container className="py-4">
         <Toaster position="top-right" />

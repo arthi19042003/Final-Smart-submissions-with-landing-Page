@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/axios"; // axios instance that adds Authorization token
+import api from "../api/axios"; 
 import "./Inbox.css";
 
 const Inbox = () => {
@@ -7,19 +7,17 @@ const Inbox = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // === Fetch messages on mount ===
   useEffect(() => {
     const fetchMessages = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await api.get("/inbox"); // Auth-protected route
+        const response = await api.get("/inbox"); 
         setMessages(response.data || []);
       } catch (err) {
         console.error("Error fetching messages:", err);
         if (err.response && err.response.status === 401) {
           setError("Unauthorized: Please log in again.");
-          // Optionally redirect or clear localStorage token
         } else {
           setError("Failed to load messages. Please try again later.");
         }
@@ -32,15 +30,14 @@ const Inbox = () => {
     fetchMessages();
   }, []);
 
-  // === Toggle read/unread status locally (simulate backend update) ===
   const toggleReadStatus = async (id) => {
     const original = [...messages];
     const msg = messages.find((m) => m._id === id);
     if (!msg) return;
 
-    const newStatus = msg.status?.toLowerCase() === "read" ? "unread" : "read";
+    const currentStatus = msg.status?.toLowerCase() || "read";
+    const newStatus = currentStatus === "read" ? "unread" : "read";
 
-    // Optimistic update
     setMessages(
       messages.map((m) =>
         m._id === id ? { ...m, status: newStatus } : m
@@ -48,17 +45,14 @@ const Inbox = () => {
     );
 
     try {
-      // Optionally add backend update later:
-      // await api.put(`/inbox/${id}/status`, { status: newStatus });
-      console.log(`📩 Message ${id} status toggled to: ${newStatus}`);
+      await api.put(`/inbox/${id}/status`, { status: newStatus });
     } catch (err) {
       console.error("Error updating message status:", err);
-      setError("Failed to update message status.");
-      setMessages(original); // revert if error
+      setError("Failed to update message status on server.");
+      setMessages(original);
     }
   };
 
-  // === Helper to format date ===
   const formatDate = (dateString) => {
     if (!dateString) return "";
     try {
@@ -72,7 +66,6 @@ const Inbox = () => {
     }
   };
 
-  // === Render loading state ===
   if (loading) {
     return (
       <div className="inbox-container">
@@ -81,7 +74,6 @@ const Inbox = () => {
     );
   }
 
-  // === Render ===
   return (
     <div className="inbox-container">
       <h2>Inbox</h2>
