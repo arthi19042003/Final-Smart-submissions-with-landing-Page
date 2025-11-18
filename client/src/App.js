@@ -83,6 +83,14 @@ function App() {
             <Route path="/register/hiring-manager" element={<HiringManagerRegister />} />
             <Route path="/register/recruiter" element={<RecruiterRegister />} /> 
 
+            {/* ✅ FIX: Moved /candidate/jobs here and removed PrivateRoute */}
+            <Route
+              path="/candidate/jobs"
+              element={
+                <CandidateJobs />
+              }
+            />
+
             {/* ==================== Role-Based Dashboard ==================== */}
             <Route
               path="/dashboard"
@@ -110,15 +118,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            {/* ✅ ADD NEW ROUTE */}
-            <Route
-              path="/candidate/jobs"
-              element={
-                <PrivateRoute>
-                  <CandidateJobs />
-                </PrivateRoute>
-              }
-            />
+            {/* ✅ FIX: /candidate/jobs was moved to public routes */}
             <Route
               path="/interviews"
               element={

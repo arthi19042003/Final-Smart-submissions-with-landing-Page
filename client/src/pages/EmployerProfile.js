@@ -78,7 +78,9 @@ export default function EmployerProfile() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
-    if (mesage.type === "error") setMessage({ type: "", text: "" }); 
+    // ----- THIS IS THE FIX -----
+    if (message.type === "error") setMessage({ type: "", text: "" }); 
+    // -------------------------
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: null })); 
   };
 

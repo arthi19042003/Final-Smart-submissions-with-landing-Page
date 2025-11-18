@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { useAuth } from '../context/AuthContext';
+import NavDropdown from 'react-bootstrap/NavDropdown'; // Import NavDropdown
 import './Navbar.css';
 
 export default function Navbar() {
@@ -25,16 +26,28 @@ export default function Navbar() {
         <div className="navbar-menu">
           {!user ? (
             <>
-              {/* Logged-out links */}
+              {/* --- MODIFIED LOGGED-OUT LINKS --- */}
               <HashLink smooth to="/#top" className="navbar-link">Home</HashLink>
-              <HashLink smooth to="/#features" className="navbar-link">Features</HashLink>
-              <HashLink smooth to="/#pricing" className="navbar-link">Sign Up</HashLink>
-              <Link to="/login" className="navbar-link">Login</Link>
-              <Link to="/register/employer" className="navbar-btn">Post Job</Link>
+              
+              {/* NEW LOGIN DROPDOWN */}
+              <NavDropdown title="Login" id="login-dropdown" className="navbar-dropdown">
+                <NavDropdown.Item as={Link} to="/login">Candidate Login</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/login/recruiter">Recruiter Login</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/login/employer">Employer Login</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/login/hiring-manager">Hiring Manager Login</NavDropdown.Item>
+              </NavDropdown>
+
+              {/* NEW REGISTER DROPDOWN (styled as a button) */}
+              <NavDropdown title="Register" id="register-dropdown" className="navbar-register-btn">
+                <NavDropdown.Item as={Link} to="/register">Candidate Register</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/register/recruiter">Recruiter Register</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/register/employer">Employer Register</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/register/hiring-manager">Hiring Manager Register</NavDropdown.Item>
+              </NavDropdown>
             </>
           ) : (
             <>
-              {/* Role-based links */}
+              {/* Role-based links (Unchanged) */}
               {role === 'candidate' && (
                 <>
                   <Link to="/dashboard" className="navbar-link">Dashboard</Link>

@@ -58,10 +58,10 @@ app.use("/api/resume", require("./routes/resume"));
 app.use("/api/employer", require("./routes/employerRoutes"));
 
 app.use("/api/hiring-dashboard", protect, require("./routes/hiringDashboard"));
-app.use("/api/positions", protect, require("./routes/positions"));
+app.use("/api/positions", require("./routes/positions"));
 app.use("/api/purchase-orders", protect, require("./routes/purchaseOrders"));
 app.use("/api/applications", protect, require("./routes/applications"));
-app.use("/api/onboarding", protect, require("./routes/onboarding"));
+app.use("/api/onboarding", require("./routes/onboarding"));
 app.use("/api/agencies", protect, require("./routes/agencies"));
 
 app.use("/api/recruiter", protect, require("./routes/recruiter"));

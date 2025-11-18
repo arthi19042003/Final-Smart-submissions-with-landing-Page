@@ -1,186 +1,186 @@
-.landing-container {
+.search-page-container {
   width: 100%;
   padding-top: 110px;
   color: #333;
-  background-color: #fff;
-}
-
-.landing-section {
-  padding: 60px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.landing-section:last-of-type {
-  border-bottom: none;
-}
-
-.landing-section h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  color: #4c1d95;
-  margin-bottom: 40px;
-}
-
-.intro-section {
-  background-color: #faf5ff;
-  text-align: center;
-  padding: 80px 40px;
-}
-
-.intro-section h1 {
-  font-size: 3.5rem;
-  color: #5b21b6;
-}
-
-.intro-section p {
-  font-size: 1.25rem;
-  color: #6b7280;
-  margin-top: 15px;
-  margin-bottom: 30px;
-}
-
-.intro-buttons {
+  min-height: 100vh;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  align-items: center;
-  gap: 20px; 
-  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  background-image: url('../assets/bg-network.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  background-blend-mode: lighten;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
-.intro-buttons .btn {
-  padding: 15px 30px;
-  font-size: 1rem;
-  border-radius: 8px;
-  text-decoration: none;
-  width: auto !important; 
-  display: inline-block;
-}
-
-.intro-buttons .btn-primary {
-  background-color: #7c3aed;
-  color: #fff;
-  border: 1px solid #7c3aed;
-}
-.intro-buttons .btn-primary:hover {
-  background-color: #6d28d9;
-}
-.intro-buttons .btn-secondary {
-  background-color: #fff;
-  color: #7c3aed;
-  border: 1px solid #7c3aed;
-}
-.intro-buttons .btn-secondary:hover {
-  background-color: #f5f3ff;
-}
-
-.how-it-works-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-.step-card {
-  background: #f9f9f9;
-  padding: 30px;
-  border-radius: 12px;
+.search-hero-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto;
   text-align: center;
+  padding: 20px;
 }
 
-.step-card h3 {
-  color: #7c3aed;
-  font-size: 1.5rem;
+.search-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #333;
   margin-bottom: 10px;
 }
 
-.features-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 800px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.features-list li {
-  background: #faf5ff;
-  padding: 20px;
-  border-radius: 8px;
+.search-subtitle {
   font-size: 1.1rem;
-  font-weight: 500;
-  color: #4c1d95;
-  text-align: center;
+  color: #555;
+  margin-bottom: 30px;
 }
 
-.pricing-section {
-  background-color: #f5f3ff;
-}
-.pricing-grid {
+.search-box {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-.pricing-card {
-  background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.pricing-card h3 {
-  font-size: 1.8rem;
-  color: #6d28d9;
-}
-.pricing-card p {
-  margin: 15px 0 25px;
-  font-size: 1rem;
-  color: #6b7280;
-  min-height: 50px;
-}
-.pricing-card .btn-primary {
-  background-color: #7c3aed;
-  color: #fff;
-  text-decoration: none;
-  width: 100%;
-}
-
-.contact-form {
-  max-width: 700px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 1fr 1fr auto;
   gap: 15px;
+  background: #ffffffcc; 
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: 25px;
 }
-.contact-form input,
-.contact-form textarea {
-  padding: 15px;
+
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-group .search-icon {
+  position: absolute;
+  left: 15px;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.search-input-group input {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 8px;
+  background-color: #f9f9f9;
 }
-.contact-form .btn-primary {
+
+.search-input-group input:focus {
+  background-color: #fff;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  outline: none;
+}
+
+.search-button {
   background-color: #7c3aed;
   color: #fff;
-}
-
-.btn-primary {
-  padding: 12px 20px;
-  border-radius: 8px;
   border: none;
+  border-radius: 8px;
+  padding: 0 25px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  font-size: 1rem;
-}
-.btn-primary:hover {
-  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
 }
 
-.landing-footer {
-  text-align: center;
-  padding: 30px;
-  background-color: #333;
-  color: #fff;
+.search-button:hover {
+  background-color: #6d28d9;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  background: #ffffffdd; 
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.filter-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f7f8fc;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #555;
+}
+
+.filter-select {
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+}
+
+.job-alerts-btn {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border: 1px solid #e0cffc;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.job-alerts-btn:hover {
+  background: #e9d5ff;
+}
+
+@media (max-width: 900px) {
+  .search-box {
+    grid-template-columns: 1fr;
+  }
+  .search-button {
+    justify-content: center;
+    padding: 15px;
+  }
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-select-wrapper {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-page-container {
+    padding-top: 90px;
+  }
+  .search-hero-section {
+    margin-top: 20px;
+  }
+  .search-title {
+    font-size: 2.2rem;
+  }
+  .search-subtitle {
+    font-size: 1rem;
+  }
+  .search-box {
+    padding: 15px;
+  }
 }

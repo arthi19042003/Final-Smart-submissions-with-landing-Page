@@ -3,7 +3,8 @@ const router = express.Router();
 const Position = require("../models/Position");
 const protect = require("../middleware/auth"); 
 
-router.get("/open", protect, async (req, res) => {
+// ✅ THIS ROUTE IS NOW PUBLIC (no 'protect' middleware)
+router.get("/open", async (req, res) => {
   try {
     const positions = await Position.find({ status: 'Open' }).sort({ createdAt: -1 });
     res.json(positions);
@@ -13,6 +14,7 @@ router.get("/open", protect, async (req, res) => {
   }
 });
 
+// ✅ 'protect' ADDED HERE: This route should be private
 router.get("/", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -24,6 +26,7 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
+// ✅ 'protect' ADDED HERE: This route should be private
 router.post("/", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -42,6 +45,7 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
+// ✅ 'protect' ADDED HERE: This route should be private
 router.put("/:id", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -64,6 +68,7 @@ router.put("/:id", protect, async (req, res) => {
   }
 });
 
+// ✅ 'protect' ADDED HERE: This route should be private
 router.delete("/:id", protect, async (req, res) => {
   try {
     const userId = req.userId;
@@ -73,6 +78,22 @@ router.delete("/:id", protect, async (req, res) => {
     res.json({ message: "Position deleted" }); 
   } catch (err) {
     console.error("Error deleting position:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ✅ This route isn't in your file, but if you add it, it should be protected
+router.get("/:id", protect, async (req, res) => {
+  try {
+    const position = await Position.findOne({ _id: req.params.id, createdBy: req.userId });
+    if (!position) {
+      return res.status(404).json({ message: "Position not found" });
+    }
+    // You might want to fetch related submissions or invites here
+    // For now, just sending the position
+    res.json({ position });
+  } catch (err) {
+    console.error("Error fetching position details:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
