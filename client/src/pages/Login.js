@@ -90,6 +90,11 @@ const Login = () => {
             />
           </div>
 
+          {/* Added Forgot Password link */}
+          <div style={{ textAlign: "right", marginBottom: "10px" }}>
+            <Link to="/forgot-password" style={{ fontSize: "14px", color: "#6d28d9" }}>Forgot Password?</Link>
+          </div>
+
           {error && (
             <div className="error">
               {error}

@@ -37,13 +37,8 @@ export default function Navbar() {
                 <NavDropdown.Item as={Link} to="/login/hiring-manager">Hiring Manager Login</NavDropdown.Item>
               </NavDropdown>
 
-              {/* NEW REGISTER DROPDOWN (styled as a button) */}
-              <NavDropdown title="Register" id="register-dropdown" className="navbar-register-btn">
-                <NavDropdown.Item as={Link} to="/register">Candidate Register</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/register/recruiter">Recruiter Register</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/register/employer">Employer Register</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/register/hiring-manager">Hiring Manager Register</NavDropdown.Item>
-              </NavDropdown>
+              {/* REPLACED DROPDOWN WITH STANDARD BUTTON */}
+              <Link to="/register" className="navbar-btn" style={{ marginLeft: '15px' }}>Register</Link>
             </>
           ) : (
             <>

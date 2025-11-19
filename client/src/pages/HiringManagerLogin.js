@@ -90,6 +90,11 @@ export default function HiringManagerLogin() {
             />
           </div>
           
+          {/* Added Forgot Password link */}
+          <div style={{ textAlign: "right", marginBottom: "10px" }}>
+            <Link to="/forgot-password" style={{ fontSize: "14px", color: "#6d28d9" }}>Forgot Password?</Link>
+          </div>
+          
           {err && <div className="error">{err}</div>}
           
           <button type="submit" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>

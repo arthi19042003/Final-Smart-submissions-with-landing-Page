@@ -48,6 +48,9 @@ import ResumeDetailPage from "./pages/ResumeDetailPage";
 import PositionDetails from "./pages/PositionDetails";
 import CandidateHistory from "./pages/CandidateHistory";
 
+// Assuming these two pages were added manually for context
+// import ForgotPassword from "./pages/ForgotPassword";
+// import ResetPassword from "./pages/ResetPassword";
 
 function RoleBasedDashboard() {
   const { user } = useAuth();
@@ -83,7 +86,11 @@ function App() {
             <Route path="/register/hiring-manager" element={<HiringManagerRegister />} />
             <Route path="/register/recruiter" element={<RecruiterRegister />} /> 
 
-            {/* ✅ FIX: Moved /candidate/jobs here and removed PrivateRoute */}
+            {/* Forgot & Reset Password Routes (Keep Public) */}
+            {/* <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:resetToken" element={<ResetPassword />} /> */}
+            
+            {/* Candidate Jobs - Publicly Accessible */}
             <Route
               path="/candidate/jobs"
               element={
@@ -95,17 +102,17 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['candidate', 'employer', 'hiringmanager', 'recruiter']}>
                   <RoleBasedDashboard />
                 </PrivateRoute>
               }
             />
             
-            {/* ==================== Candidate Routes ==================== */}
+            {/* ==================== Candidate Routes (Role: 'candidate') ==================== */}
             <Route
               path="/profile"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['candidate']}>
                   <Profile />
                 </PrivateRoute>
               }
@@ -113,26 +120,25 @@ function App() {
             <Route
               path="/resume"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['candidate']}>
                   <ResumeUpload />
                 </PrivateRoute>
               }
             />
-            {/* ✅ FIX: /candidate/jobs was moved to public routes */}
             <Route
               path="/interviews"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['candidate']}>
                   <CandidateInterviewList />
                 </PrivateRoute>
               }
             />
 
-            {/* ==================== Employer Routes ==================== */}
+            {/* ==================== Employer Routes (Role: 'employer') ==================== */}
             <Route
               path="/employer/dashboard"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['employer']}>
                   <EmployerDashboard />
                 </PrivateRoute>
               }
@@ -140,33 +146,33 @@ function App() {
             <Route
               path="/employer/profile"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['employer']}>
                   <EmployerProfile />
                 </PrivateRoute>
               }
             />
-             <Route
+            <Route
               path="/positions/new"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['employer', 'hiringmanager']}>
                   <CreatePosition />
                 </PrivateRoute>
               }
             />
             
-            {/* ==================== Recruiter Routes ==================== */}
+            {/* ==================== Recruiter Routes (Role: 'recruiter') ==================== */}
             <Route
               path="/recruiter/dashboard"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <RecruiterDashboard />
                 </PrivateRoute>
               }
             />
-             <Route
+            <Route
               path="/recruiter/profile"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <RecruiterProfile />
                 </PrivateRoute>
               }
@@ -174,7 +180,7 @@ function App() {
             <Route
               path="/recruiter/profile/view"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <RecruiterProfileView />
                 </PrivateRoute>
               }
@@ -182,7 +188,7 @@ function App() {
             <Route
               path="/recruiter/profile/edit"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <RecruiterProfileEdit />
                 </PrivateRoute>
               }
@@ -190,7 +196,7 @@ function App() {
             <Route
               path="/recruiter/submit-resume"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <ResumeUploadRecruiter />
                 </PrivateRoute>
               }
@@ -198,17 +204,17 @@ function App() {
             <Route
               path="/recruiter/submission-status"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['recruiter']}>
                   <SubmissionStatus />
                 </PrivateRoute>
               }
             />
 
-            {/* ==================== Hiring Manager Routes (Updated) ==================== */}
+            {/* ==================== Hiring Manager Routes (Role: 'hiringmanager') ==================== */}
             <Route
               path="/hiring-manager/dashboard"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <HiringManagerDashboard />
                 </PrivateRoute>
               }
@@ -216,7 +222,7 @@ function App() {
             <Route
               path="/hiring-manager/inbox"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <Inbox />
                 </PrivateRoute>
               }
@@ -224,7 +230,7 @@ function App() {
             <Route
               path="/hiring-manager/open-positions"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <OpenPositions />
                 </PrivateRoute>
               }
@@ -232,24 +238,23 @@ function App() {
             <Route
               path="/hiring-manager/candidates"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <CandidateListPage />
                 </PrivateRoute>
               }
             />
-            {/* New Features */}
             <Route
               path="/hiring-manager/applications"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <ApplicationsDashboard />
                 </PrivateRoute>
               }
             />
-             <Route
+            <Route
               path="/hiring-manager/onboarding"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <OnboardingDashboard />
                 </PrivateRoute>
               }
@@ -257,7 +262,7 @@ function App() {
             <Route
               path="/hiring-manager/purchase-orders"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <ViewPurchaseOrders />
                 </PrivateRoute>
               }
@@ -265,7 +270,7 @@ function App() {
             <Route
               path="/hiring-manager/create-po"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <CreatePurchaseOrder />
                 </PrivateRoute>
               }
@@ -273,7 +278,7 @@ function App() {
             <Route
               path="/hiring-manager/agencies"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <AgencyInvites />
                 </PrivateRoute>
               }
@@ -281,7 +286,7 @@ function App() {
             <Route
               path="/hiring-manager/resume/:id"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <ResumeDetailPage />
                 </PrivateRoute>
               }
@@ -291,7 +296,7 @@ function App() {
             <Route
               path="/hiring-manager/candidate/:id"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <CandidateHistory />
                 </PrivateRoute>
               }
@@ -299,7 +304,7 @@ function App() {
             <Route
               path="/hiring-manager/position/:id"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <PositionDetails />
                 </PrivateRoute>
               }
@@ -307,7 +312,7 @@ function App() {
             <Route
               path="/hiring-manager/schedule"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['hiringmanager']}>
                   <InterviewManagementPage />
                 </PrivateRoute>
               }
