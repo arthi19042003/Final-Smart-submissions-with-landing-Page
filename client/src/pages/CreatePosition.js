@@ -9,9 +9,10 @@ const CreatePosition = () => {
     department: '',
     project: '',
     organization: '',
-    skills: '',
+    // FIX: Change client-side state key from 'skills' to 'requiredSkills'
+    requiredSkills: '',
     description: '',
-    status: 'Open', 
+    status: 'Open',
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -30,15 +31,31 @@ const CreatePosition = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const skillsArray = formData.skills 
-        ? formData.skills.split(',').map(s => s.trim()).filter(s => s) 
+      // Convert comma-separated string to array
+      const skillsArray = formData.requiredSkills
+        ? formData.requiredSkills.split(',').map(s => s.trim()).filter(s => s)
         : [];
-        
-      const postData = { ...formData, skills: skillsArray };
+
+      // FIX: Use the native requiredSkills key in the payload.
+      const postData = { ...formData, requiredSkills: skillsArray };
+      // Delete the temporary string key before sending the cleaned array
+      delete postData.requiredSkills;
 
       await api.post('/positions', postData);
-      
+
       setMessage({ type: 'success', text: 'Position created successfully!' });
+
+      // Reset formData after successful creation
+      setFormData({
+        title: '',
+        department: '',
+        project: '',
+        organization: '',
+        requiredSkills: '',
+        description: '',
+        status: 'Open',
+      });
+
       setTimeout(() => {
         navigate('/hiring-manager/open-positions');
       }, 1500);
@@ -74,19 +91,26 @@ const CreatePosition = () => {
             </div>
 
             <div className="form-row">
-                <div className="form-group">
-                    <label>Project</label>
-                    <input type="text" name="project" value={formData.project} onChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    <label>Organization</label>
-                    <input type="text" name="organization" value={formData.organization} onChange={handleChange} />
-                </div>
+              <div className="form-group">
+                <label>Project</label>
+                <input type="text" name="project" value={formData.project} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Organization</label>
+                <input type="text" name="organization" value={formData.organization} onChange={handleChange} />
+              </div>
             </div>
 
             <div className="form-group">
-              <label>Skills (comma-separated)</label>
-              <input type="text" name="skills" value={formData.skills} onChange={handleChange} placeholder="e.g., React, Node.js, MongoDB" />
+              {/* FIX: Update input name to requiredSkills */}
+              <label>Required Skills (comma-separated)</label>
+              <input
+                type="text"
+                name="requiredSkills"
+                value={formData.requiredSkills}
+                onChange={handleChange}
+                placeholder="e.g., React, Node.js, MongoDB"
+              />
             </div>
 
             <div className="form-group">

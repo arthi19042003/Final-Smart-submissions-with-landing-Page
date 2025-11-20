@@ -7,7 +7,7 @@ const PositionDetails = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(null); // data structure: { position, invitations, sows }
 
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
@@ -21,6 +21,7 @@ const PositionDetails = () => {
     setLoading(true);
     setError('');
     try {
+      // NOTE: Assuming /positions/:id returns { position, invitations, sows }
       const response = await api.get(`/positions/${id}`);
       setData(response.data);
     } catch (err) {
@@ -44,7 +45,11 @@ const PositionDetails = () => {
       return;
     }
     try {
-      await api.post(`/positions/${id}/invite`, { email: inviteEmail });
+      // This route might not exist yet, assuming it uses /agencies/invite with positionId
+      await api.post(`/agencies/invite`, { 
+        agencyEmail: inviteEmail,
+        positionId: id // Use the position ID
+      });
       setInviteSuccess(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
       fetchData(); 
@@ -66,6 +71,7 @@ const PositionDetails = () => {
     formData.append('sowFile', sowFile);
 
     try {
+      // NOTE: Assuming this endpoint is correct: /positions/:id/sow
       await api.post(`/positions/${id}/sow`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -84,9 +90,15 @@ const PositionDetails = () => {
   if (error) {
     return <div className="pos-details-container"><p className="error">{error}</p></div>;
   }
-  if (!data) return null;
+  
+  // FIX 1: Safely destructure data, providing empty defaults.
+  // We expect data to look like { position: {...}, invitations: [...], sows: [...] }
+  const position = data?.position || {};
+  const invitations = data?.invitations || [];
+  const sows = data?.sows || [];
 
-  const { position, invitations, sows } = data;
+  // If data is null or position is empty, return not found.
+  if (!data || !position.title) return <div className="pos-details-container"><p className="empty">Position not found.</p></div>;
 
   return (
     <div className="pos-details-container">
@@ -95,12 +107,14 @@ const PositionDetails = () => {
       </Link>
       
       <div className="pos-details-card">
-        <span className={`status-tag ${position.status}`}>{position.status}</span>
+        {/* FIX 2: Check for status before using it */}
+        {position.status && <span className={`status-tag ${position.status?.toLowerCase()}`}>{position.status}</span>}
         <h2>{position.title}</h2>
         <p className="subtitle">{position.department} {position.project ? ` / ${position.project}` : ''}</p>
         <p>{position.description}</p>
         <div className="skills-list">
-          {position.skills.map(skill => (
+          {/* FIX 3: Safely map over position.requiredSkills */}
+          {(position.requiredSkills || []).map(skill => (
             <span key={skill} className="skill-tag">{skill}</span>
           ))}
         </div>
@@ -125,6 +139,7 @@ const PositionDetails = () => {
             <button type="submit" className="btn-primary">Send Invitation</button>
           </form>
           
+          {/* FIX 4: Safely map over invitations */}
           <h4 className="list-title">Sent Invitations ({invitations.length})</h4>
           <ul className="item-list">
             {invitations.map(inv => (
@@ -151,6 +166,7 @@ const PositionDetails = () => {
             <button type="submit" className="btn-primary">Upload SOW</button>
           </form>
 
+          {/* FIX 5: Safely map over sows */}
           <h4 className="list-title">Uploaded SOWs ({sows.length})</h4>
           <ul className="item-list">
              {sows.map(sow => (

@@ -1,0 +1,69 @@
+/* Main Container - Handles Navbar Overlap */
+.open-positions-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  /* Pushes content down to clear fixed Navbar (adjust 80px if needed) */
+  padding-top: 80px; 
+}
+
+/* Search Box */
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  border: 1px solid #86b7fe;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  z-index: 10;
+  opacity: 0.6;
+}
+
+/* Table & Headers */
+.cursor-pointer {
+  cursor: pointer;
+  user-select: none;
+}
+
+.cursor-pointer:hover {
+  background-color: #e9ecef;
+}
+
+.small-icon {
+  font-size: 0.8rem;
+}
+
+/* Button Styles */
+.btn-purple {
+  background-color: #6f42c1 !important;
+  border-color: #6f42c1 !important;
+  color: white !important;
+  min-width: 60px;
+}
+
+.btn-purple:hover {
+  background-color: #59359a !important;
+}
+
+.btn-red {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: white !important;
+  min-width: 60px;
+}
+
+.btn-red:hover {
+  background-color: #bb2d3b !important;
+}

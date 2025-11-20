@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa"; 
-import { Container, Card, Table, Button, Badge, Spinner, Alert } from "react-bootstrap";
+import { Container, Card, Table, Button, Spinner, Alert } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
 import './HiringManagerDashboard.css';
 
@@ -75,7 +75,6 @@ export default function ViewPurchaseOrders() {
         <Card className="shadow-sm border-0">
           <Card.Body>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              {/* ✅ FIX: Added "text-purple" to the heading */}
               <h2 className="fw-bold mb-0 text-purple"> Purchase Orders</h2>
               <Button
                 onClick={() => navigate("/hiring-manager/create-po")}
@@ -116,9 +115,10 @@ export default function ViewPurchaseOrders() {
                           {po.startDate ? new Date(po.startDate).toLocaleDateString() : "-"}
                         </td>
                         <td className="p-3">
-                          <Badge bg={po.status === "Approved" ? "success" : "warning"} text={po.status === "Approved" ? "white" : "dark"}>
-                              {po.status}
-                          </Badge>
+                          {/* REMOVED Badge, added span with black color style */}
+                          <span style={{ color: "black", fontWeight: "500" }}>
+                            {po.status}
+                          </span>
                         </td>
                         <td className="p-3 text-center">
                           <div className="d-flex gap-2 justify-content-center">
@@ -128,7 +128,7 @@ export default function ViewPurchaseOrders() {
                                   variant="success"
                                   size="sm"
                               >
-                                  ✅ Approve
+                                   Approve
                               </Button>
                               )}
                           </div>

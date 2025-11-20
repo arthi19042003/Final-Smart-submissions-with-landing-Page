@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Table, Button, Form, Row, Col, Badge, Spinner } from "react-bootstrap";
+import { Container, Card, Table, Button, Form, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import './HiringManagerDashboard.css';
@@ -115,7 +115,6 @@ export default function AgencyInvites() {
         
         <Card className="shadow-sm border-0 mb-4">
           <Card.Body>
-            {/* ✅ FIX: Removed flex container, emoji, and Back button */}
             <div className="mb-4">
               <h2 className="fw-bold text-purple mb-0">Manage Agency Invites</h2>
             </div>
@@ -180,14 +179,11 @@ export default function AgencyInvites() {
                         <td className="p-3">
                             {invite.position ? invite.position.title : <span className="text-muted">Deleted Position</span>}
                         </td>
-                        <td className="p-3">
-                          <Badge bg={invite.status === 'accepted' ? 'success' : 'warning'} text="dark">
-                            {invite.status}
-                          </Badge>
+                        <td className="p-3" style={{ textTransform: 'capitalize' }}>
+                          {invite.status}
                         </td>
                         <td className="p-3">{new Date(invite.createdAt).toLocaleDateString()}</td>
                         <td className="p-3 text-end">
-                          {/* ✅ FIX: Changed variant to className and removed emoji */}
                           <Button
                             className="purple-btn"
                             size="sm"

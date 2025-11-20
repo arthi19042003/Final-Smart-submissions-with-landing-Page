@@ -5,7 +5,7 @@ import {
   Spinner,
   Modal,
   Table,
-  Badge,
+  // Badge removed from imports
 } from "react-bootstrap";
 import api from "../api/axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,7 +13,6 @@ import toast, { Toaster } from "react-hot-toast";
 export default function ApplicationsDashboard() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedApp, setSelectedApp] = useState(null);
   
   const [showScheduleModal, setShowScheduleModal] = useState(false); 
   const [showHistoryModal, setShowHistoryModal] = useState(false);
@@ -97,7 +96,8 @@ export default function ApplicationsDashboard() {
     );
 
   return (
-    <div className="container mt-4" style={{ paddingTop: "120px", minHeight: "100vh" }}>
+    // Reduced paddingTop to 100px to fix the spacing issue
+    <div className="container mt-4" style={{ paddingTop: "100px", minHeight: "100vh" }}>
       <Toaster position="top-right" />
       <h2 className="mb-4" style={{ color: "#5b21b6", fontWeight: "700" }}> Candidate Applications</h2>
 
@@ -123,21 +123,10 @@ export default function ApplicationsDashboard() {
                 </td>
                 <td>{app.position}</td>
                 <td>
-                  <Badge
-                    bg={
-                      app.status === "Hired"
-                        ? "success"
-                        : app.status === "Rejected"
-                        ? "danger"
-                        : app.status === "Interview"
-                        ? "info"
-                        : app.status === "Under Review" 
-                        ? "warning"
-                        : "secondary"
-                    }
-                  >
+                  {/* REPLACED BADGE WITH BLACK TEXT SPAN */}
+                  <span style={{ color: "black", fontWeight: "500" }}>
                     {app.status}
-                  </Badge>
+                  </span>
                 </td>
                 <td>
                   {app.interviewDate
@@ -145,7 +134,6 @@ export default function ApplicationsDashboard() {
                     : "-"}
                 </td>
                 <td>
-                  {/* Changed to flex-column for stacked buttons */}
                   <div className="d-flex flex-column">
                     <Button
                       size="sm"

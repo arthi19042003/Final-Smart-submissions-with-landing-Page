@@ -291,11 +291,11 @@ function InterviewDetails() {
               
               <span>{it.jobPosition || "N/A"}</span>
               
-              {/* Status Badge */}
-              <span><span className={`badge ${it.status?.toLowerCase()}`}>{it.status || "Pending"}</span></span>
+              {/* Status - Badges Removed */}
+              <span>{it.status || "Pending"}</span>
               
-              {/* Result Badge */}
-              <span><span className={`badge ${it.result?.toLowerCase()}`}>{it.result || "Pending"}</span></span>
+              {/* Result - Badges Removed */}
+              <span>{it.result || "Pending"}</span>
               
               <span>⭐ {Number(it.rating || 0)}</span>
 

@@ -7,7 +7,6 @@ import {
   Card,
   Button,
   Form,
-  Spinner,
 } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import './HiringManagerDashboard.css';
@@ -69,29 +68,29 @@ export default function HiringManagerDashboard() {
   return (
     <div className="hiring-dashboard">
       <Container fluid="lg">
-        {/* HEADER */}
-        <div className="d-flex justify-content-center align-items-center mb-4">
-          <h2 className="fw-bold" style={{ color: "#4c1d95" }}>Hiring Manager Dashboard</h2>
+        {/* HEADER - Reduced mb-4 to mb-3 */}
+        <div className="d-flex justify-content-center align-items-center mb-3 mt-2">
+          <h3 className="fw-bold" style={{ color: "#4c1d95" }}>Hiring Manager Dashboard</h3>
         </div>
 
-        {/* ❌ ROW 1 (Chart + Metrics) - REMOVED AS REQUESTED */}
-        
-        {/* ROW 2: Manage Positions */}
-        <Row className="mb-4">
+        {/* ROW 2: Manage Positions - Reduced mb-4 to mb-3 */}
+        <Row className="mb-3">
           <Col>
             <Card className="shadow-sm border-0">
-              <Card.Body>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <Card.Title className="text-purple fw-bold mb-0"> Manage Positions</Card.Title>
+              <Card.Body className="p-3"> {/* Added p-3 to control internal padding */}
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <Card.Title className="text-purple fw-bold mb-0">Manage Positions</Card.Title>
                   <Button className="purple-btn" size="sm" onClick={() => navigate("/hiring-manager/open-positions")}>
                     View All Positions →
                   </Button>
                 </div>
-                <Form onSubmit={addPosition} className="p-3 bg-light rounded">
-                  <Row className="g-3 align-items-end">
+                <Form onSubmit={addPosition} className="p-2 bg-light rounded">
+                  {/* Reduced g-3 to g-2 for tighter form field spacing */}
+                  <Row className="g-2 align-items-end">
                     <Col md={3}>
-                      <Form.Label>Title</Form.Label>
+                      <Form.Label className="mb-1 small fw-bold">Title</Form.Label>
                       <Form.Control
+                        size="sm" 
                         type="text"
                         placeholder="e.g. Senior Dev"
                         required
@@ -100,8 +99,9 @@ export default function HiringManagerDashboard() {
                       />
                     </Col>
                     <Col md={2}>
-                      <Form.Label>Dept</Form.Label>
+                      <Form.Label className="mb-1 small fw-bold">Dept</Form.Label>
                       <Form.Control
+                        size="sm"
                         type="text"
                         placeholder="Engineering"
                         value={newPosition.department}
@@ -109,8 +109,9 @@ export default function HiringManagerDashboard() {
                       />
                     </Col>
                     <Col md={2}>
-                      <Form.Label>Location</Form.Label>
+                      <Form.Label className="mb-1 small fw-bold">Location</Form.Label>
                       <Form.Control
+                        size="sm"
                         type="text"
                         placeholder="Remote / NY"
                         value={newPosition.location}
@@ -118,8 +119,9 @@ export default function HiringManagerDashboard() {
                       />
                     </Col>
                     <Col md={3}>
-                      <Form.Label>Skills</Form.Label>
+                      <Form.Label className="mb-1 small fw-bold">Skills</Form.Label>
                       <Form.Control
+                        size="sm"
                         type="text"
                         placeholder="React, Node..."
                         value={newPosition.requiredSkills}
@@ -127,8 +129,9 @@ export default function HiringManagerDashboard() {
                       />
                     </Col>
                     <Col md={1}>
-                      <Form.Label>Openings</Form.Label>
+                      <Form.Label className="mb-1 small fw-bold">Openings</Form.Label>
                       <Form.Control
+                        size="sm"
                         type="number"
                         min="1"
                         value={newPosition.openings}
@@ -136,7 +139,7 @@ export default function HiringManagerDashboard() {
                       />
                     </Col>
                     <Col md={1}>
-                      <Button type="submit" className="purple-btn w-100">
+                      <Button type="submit" className="purple-btn w-100" size="sm">
                         <FaPlus />
                       </Button>
                     </Col>
@@ -147,8 +150,8 @@ export default function HiringManagerDashboard() {
           </Col>
         </Row>
 
-        {/* ROW 3: Navigation Cards (The grid layout still works fine as a default) */}
-        <Row className="g-4">
+        {/* ROW 3: Navigation Cards - Reduced g-4 to g-3 */}
+        <Row className="g-3">
           {[
             { title: " Applications", text: "Review apps & schedule interviews.", path: "/hiring-manager/applications", btn: "View Apps" },
             { title: " Interviews", text: "Manage timeslots & feedback.", path: "/hiring-manager/schedule", btn: "Manage" },
@@ -159,10 +162,12 @@ export default function HiringManagerDashboard() {
           ].map((item, idx) => (
             <Col md={4} key={idx}>
               <Card className="shadow-sm h-100 border-0 nav-card">
-                <Card.Body className="text-center">
-                  <Card.Title className="text-purple fw-bold">{item.title}</Card.Title>
-                  <Card.Text className="text-muted mb-4">{item.text}</Card.Text>
+                <Card.Body className="text-center p-3">
+                  <Card.Title className="text-purple fw-bold fs-6">{item.title}</Card.Title>
+                  {/* Reduced mb-4 to mb-3 for text spacing */}
+                  <Card.Text className="text-muted mb-3 small">{item.text}</Card.Text>
                   <Button
+                    size="sm"
                     className="purple-btn w-100"
                     onClick={() => navigate(item.path)}
                   >

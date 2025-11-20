@@ -24,6 +24,30 @@ body,
   padding: 20px;
 }
 
+/* --- Table Header Styles for Sorting --- */
+.table thead th {
+  /* Ensure table headers look interactive */
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.table thead th:hover {
+  /* Lighten the background on hover to prompt clicking */
+  background-color: #e9ecef !important;
+}
+
+/* Style for the sort direction icons */
+.table thead th span {
+  display: inline-block;
+  width: 1em;
+  /* Ensures consistent alignment */
+  text-align: center;
+}
+
+/* -------------------------------------------------- */
+
+
 .btn {
   padding: 10px 20px;
   border: none;
@@ -40,6 +64,16 @@ body,
 
 .btn-primary:hover {
   background-color: #0056b3;
+}
+
+/* Custom variant used for 'Close' button */
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: #117a8b;
 }
 
 .btn-secondary {
@@ -72,7 +106,9 @@ body,
 
 .form-group input,
 .form-group textarea,
-.form-group select {
+.form-group select,
+/* Also target the Form.Control within InputGroup */
+.input-group .form-control {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -93,6 +129,12 @@ body,
   margin-bottom: 20px;
 }
 
+/* React Bootstrap Specific Overrides for small buttons */
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 15px;
@@ -101,6 +143,11 @@ body,
   .btn {
     padding: 8px 16px;
     font-size: 14px;
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 
   .card {
@@ -119,7 +166,7 @@ body,
     padding: 10px;
   }
 
-  .btn {
+  .btn:not(.btn-sm) {
     width: 100%;
     margin-bottom: 10px;
   }

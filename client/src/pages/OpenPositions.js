@@ -1,15 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { Container, Table, Button, Badge, Form, Spinner, Card, Row, Col } from "react-bootstrap";
+import React, { useEffect, useState, useMemo } from "react";
+import { 
+  Container, 
+  Table, 
+  Button, 
+  Form, 
+  Spinner, 
+  Card, 
+  Row, 
+  Col, 
+  Badge 
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
+import './OpenPositions.css';
+
+// Change this to 5 for normal use. Set to 2 if you want to test pagination with few items.
+const ITEMS_PER_PAGE = 5; 
 
 export default function OpenPositions() {
+  const navigate = useNavigate();
+  
+  // --- STATE ---
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Edit State
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({ title: "", location: "", openings: 1, requiredSkills: "" });
+  
+  // Filter State
+  const [filterText, setFilterText] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All'); 
+  const [currentPage, setCurrentPage] = useState(1); 
 
   const token = localStorage.getItem("token");
 
+  // --- FETCH DATA ---
   const fetchPositions = async () => {
     if (!token) {
       setLoading(false);
@@ -25,6 +52,7 @@ export default function OpenPositions() {
       setPositions(data);
     } catch (err) {
       console.error("Error fetching positions:", err);
+      toast.error("Could not load positions.");
     } finally {
       setLoading(false);
     }
@@ -32,8 +60,10 @@ export default function OpenPositions() {
 
   useEffect(() => {
     fetchPositions();
+    // eslint-disable-next-line
   }, [token]);
 
+  // --- HANDLERS ---
   const handleEdit = (position) => {
     setEditingId(position._id);
     setEditData({
@@ -49,17 +79,18 @@ export default function OpenPositions() {
   const handleSave = async (id) => {
     if (!token) return;
     try {
+      const skillsArray = editData.requiredSkills 
+        ? editData.requiredSkills.split(',').map(s => s.trim()).filter(s => s) 
+        : [];
+      const payload = { ...editData, requiredSkills: skillsArray };
+
       const res = await fetch(`/api/positions/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(editData),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Failed to update position");
-
       toast.success("Position updated successfully!");
       setEditingId(null);
       fetchPositions();
@@ -74,10 +105,7 @@ export default function OpenPositions() {
     try {
       const res = await fetch(`/api/positions/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status: "Closed" }),
       });
       if (!res.ok) throw new Error("Failed to close position");
@@ -105,43 +133,84 @@ export default function OpenPositions() {
       toast.error("Error deleting position");
     }
   };
+  
+  // --- FILTER LOGIC ---
+  const filteredPositions = useMemo(() => {
+    let items = [...positions];
+    const filterLower = filterText.toLowerCase();
+
+    items = items.filter(pos => {
+      if (statusFilter !== 'All' && pos.status !== statusFilter) return false;
+      if (filterLower) {
+        const title = (pos.title || '').toLowerCase();
+        const location = (pos.location || '').toLowerCase();
+        const skills = Array.isArray(pos.requiredSkills) 
+            ? pos.requiredSkills.join(", ").toLowerCase() 
+            : (pos.requiredSkills || '').toLowerCase();
+        return title.includes(filterLower) || location.includes(filterLower) || skills.includes(filterLower);
+      }
+      return true;
+    });
+
+    if (currentPage > Math.ceil(items.length / ITEMS_PER_PAGE) && items.length > 0) {
+      setCurrentPage(1);
+    } else if (items.length === 0 && currentPage !== 1) {
+       setCurrentPage(1);
+    }
+    return items;
+  }, [positions, filterText, statusFilter, currentPage]);
+
+  // --- PAGINATION ---
+  const totalItems = filteredPositions.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+  
+  const paginatedPositions = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredPositions.slice(startIndex, endIndex);
+  }, [filteredPositions, currentPage]);
+  
+  const handlePrev = () => { if (currentPage > 1) setCurrentPage(prev => prev - 1); };
+  const handleNext = () => { if (currentPage < totalPages) setCurrentPage(prev => prev + 1); };
+
+  // --- RENDER ---
 
   if (loading) return (
-    <div className="text-center mt-5" style={{ paddingTop: "100px" }}>
-      <Spinner animation="border" variant="primary" /> Loading positions...
-    </div>
-  );
-
-  if (positions.length === 0 && !loading) return (
-    <Container className="py-4" style={{ marginTop: "100px" }}>
-      <Card className="shadow-sm border-0">
-        <Card.Body>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold text-dark mb-0">Open Positions</h2>
-                <Badge bg="primary" className="fs-6">Total: 0</Badge>
-            </div>
-            <div className="text-center py-5 text-muted">
-                <h5>No positions found.</h5>
-                <p>Create a new position from your Dashboard to see it here.</p>
-            </div>
-        </Card.Body>
-      </Card>
-    </Container>
+    <Container fluid className="open-positions-container text-center"><div className="py-5"><Spinner animation="border" variant="primary" /><p className="mt-2 text-muted">Loading positions...</p></div></Container>
   );
 
   return (
-    <Container className="py-4" style={{ marginTop: "100px" }}>
+    <Container fluid className="open-positions-container p-4">
       <Toaster position="top-right" />
       
-      <Card className="shadow-sm border-0">
-        <Card.Body>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="fw-bold text-dark mb-0">Open Positions</h2>
-            <Badge bg="primary" className="fs-6">Total: {positions.length}</Badge>
-          </div>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold text-dark">Open Positions</h2>
+        {/* Total Badge Removed */}
+      </div>
 
+      <Row className="mb-4 g-3">
+        <Col md={8}>
+          <div className="search-box position-relative bg-white rounded shadow-sm p-2">
+             <FaSearch className="search-icon text-primary ms-2" />
+             <Form.Control type="text" placeholder="Filter by Title, Location, or Skills..." className="ps-5 border-0 search-input" value={filterText} onChange={(e) => { setFilterText(e.target.value); setCurrentPage(1); }} />
+          </div>
+        </Col>
+        <Col md={4}>
+           <div className="bg-white rounded shadow-sm p-2 d-flex align-items-center">
+             <FaFilter className="text-muted ms-2 me-2" />
+             <Form.Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="border-0 shadow-none fw-semibold" style={{ cursor: 'pointer' }}>
+               <option value="All">All Statuses</option>
+               <option value="Open">Open Positions</option>
+               <option value="Closed">Closed Positions</option>
+             </Form.Select>
+           </div>
+        </Col>
+      </Row>
+
+      <Card className="shadow-sm border-0 mb-5">
+        <Card.Body className="p-0">
           <div className="table-responsive">
-            <Table hover className="align-middle">
+            <Table hover className="align-middle open-positions-table mb-0">
               <thead className="bg-light table-light">
                 <tr>
                   <th className="p-3">Title</th>
@@ -153,126 +222,72 @@ export default function OpenPositions() {
                 </tr>
               </thead>
               <tbody>
-                {positions.map((pos) => (
-                  <tr key={pos._id}>
-                    {/* Title */}
-                    <td className="p-3">
-                      {editingId === pos._id ? (
-                        <Form.Control
-                          type="text"
-                          value={editData.title}
-                          onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                        />
-                      ) : (
-                        <span className="fw-semibold">{pos.title}</span>
-                      )}
-                    </td>
-
-                    {/* Location */}
-                    <td className="p-3">
-                      {editingId === pos._id ? (
-                        <Form.Control
-                          type="text"
-                          value={editData.location}
-                          onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                        />
-                      ) : (
-                        <span className="text-muted">{pos.location}</span>
-                      )}
-                    </td>
-
-                    {/* Skills */}
-                    <td className="p-3">
-                      {editingId === pos._id ? (
-                        <Form.Control
-                          type="text"
-                          value={editData.requiredSkills}
-                          onChange={(e) => setEditData({ ...editData, requiredSkills: e.target.value })}
-                        />
-                      ) : (
-                        <small className="text-muted">
-                          {Array.isArray(pos.requiredSkills) 
-                            ? pos.requiredSkills.join(", ") 
-                            : pos.requiredSkills}
-                        </small>
-                      )}
-                    </td>
-
-                    {/* Openings */}
-                    <td className="p-3">
-                      {editingId === pos._id ? (
-                        <Form.Control
-                          type="number"
-                          style={{ width: "80px" }}
-                          value={editData.openings}
-                          onChange={(e) => setEditData({ ...editData, openings: parseInt(e.target.value) })}
-                        />
-                      ) : (
-                        pos.openings
-                      )}
-                    </td>
-
-                    {/* Status */}
-                    <td className="p-3">
-                      <Badge bg={pos.status === 'Open' ? 'success' : 'secondary'}>
-                        {pos.status}
-                      </Badge>
-                    </td>
-
-                    {/* Actions */}
-                    <td className="p-3 text-end">
-                      <div className="d-flex gap-2 justify-content-end">
-                        {editingId === pos._id ? (
-                          <>
-                            <Button 
-                              size="sm" 
-                              onClick={() => handleSave(pos._id)}
-                              style={{ backgroundColor: '#5b21b6', borderColor: '#5b21b6', color: 'white', fontWeight: 'bold' }}
-                            >
-                              Save
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              onClick={() => setEditingId(null)}
-                              style={{ backgroundColor: '#6b7280', borderColor: '#6b7280', color: 'white', fontWeight: 'bold' }}
-                            >
-                              Cancel
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button 
-                              size="sm" 
-                              onClick={() => handleEdit(pos)}
-                              style={{ backgroundColor: '#5b21b6', borderColor: '#5b21b6', color: 'white', fontWeight: 'bold' }}
-                            >
-                              Edit
-                            </Button>
-                            {pos.status === "Open" && (
-                              <Button 
-                                size="sm" 
-                                onClick={() => handleClose(pos._id)}
-                                style={{ backgroundColor: '#7c3aed', borderColor: '#7c3aed', color: 'white', fontWeight: 'bold' }}
-                              >
-                                Close
-                              </Button>
-                            )}
-                            <Button 
-                              size="sm" 
-                              onClick={() => handleDelete(pos._id)}
-                              style={{ backgroundColor: '#dc3545', borderColor: '#dc3545', color: 'white', fontWeight: 'bold' }}
-                            >
-                              Delete
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {paginatedPositions.length === 0 ? (
+                  <tr><td colSpan="6" className="text-center py-5 text-muted"><h5>No positions found.</h5></td></tr>
+                ) : (
+                  paginatedPositions.map((pos) => (
+                    <tr key={pos._id}>
+                      <td className="p-3">{editingId === pos._id ? <Form.Control type="text" value={editData.title} onChange={(e) => setEditData({ ...editData, title: e.target.value })} size="sm" /> : <span className="fw-semibold text-dark">{pos.title}</span>}</td>
+                      <td className="p-3">{editingId === pos._id ? <Form.Control type="text" value={editData.location} onChange={(e) => setEditData({ ...editData, location: e.target.value })} size="sm" /> : <span className="text-secondary">{pos.location}</span>}</td>
+                      <td className="p-3">{editingId === pos._id ? <Form.Control type="text" value={editData.requiredSkills} onChange={(e) => setEditData({ ...editData, requiredSkills: e.target.value })} size="sm" /> : <small className="text-secondary">{Array.isArray(pos.requiredSkills) ? pos.requiredSkills.join(", ") : pos.requiredSkills || 'N/A'}</small>}</td>
+                      <td className="p-3">{editingId === pos._id ? <Form.Control type="number" style={{ width: "80px" }} value={editData.openings} onChange={(e) => setEditData({ ...editData, openings: parseInt(e.target.value) })} size="sm" /> : <span className="fw-bold">{pos.openings}</span>}</td>
+                      {/* ✅ Changed to explicit black color style */}
+                      <td className="p-3">
+                        <span className="fw-bold" style={{ color: "black" }}>
+                          {pos.status}
+                        </span>
+                      </td>
+                      <td className="p-3 text-end">
+                        <div className="d-flex gap-2 justify-content-end">
+                          {editingId === pos._id ? (
+                            <><Button size="sm" variant="success" onClick={() => handleSave(pos._id)}>Save</Button><Button size="sm" variant="secondary" onClick={() => setEditingId(null)}>Cancel</Button></>
+                          ) : (
+                            <><Button size="sm" className="btn-purple" onClick={() => handleEdit(pos)}>Edit</Button>{pos.status === "Open" && (<Button size="sm" className="btn-purple" onClick={() => handleClose(pos._id)}>Close</Button>)}<Button size="sm" className="btn-red" onClick={() => handleDelete(pos._id)}>Delete</Button></>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </Table>
           </div>
+
+          {/* --- FIXED PAGINATION SECTION --- */}
+          {totalItems > 0 && ( 
+            <div className="d-flex justify-content-center py-4 border-top bg-light rounded-bottom">
+                <div 
+                  className="d-flex align-items-center justify-content-between bg-white border rounded shadow-sm p-1" 
+                  style={{ minWidth: '250px' }}
+                >
+                    {/* Left Arrow */}
+                    <button 
+                        className="btn btn-light d-flex align-items-center justify-content-center border-0"
+                        onClick={handlePrev} 
+                        disabled={currentPage === 1}
+                        style={{ width: '32px', height: '32px', padding: 0, background: 'transparent' }}
+                    >
+                        <FaChevronLeft size={14} className={currentPage === 1 ? "text-muted" : "text-dark"} />
+                    </button>
+
+                    {/* Text */}
+                    <span className="fw-semibold text-secondary small mx-3" style={{ whiteSpace: 'nowrap' }}>
+                        Page {currentPage} of {totalPages}
+                    </span>
+
+                    {/* Right Arrow */}
+                    <button 
+                        className="btn btn-light d-flex align-items-center justify-content-center border-0"
+                        onClick={handleNext} 
+                        disabled={currentPage === totalPages}
+                        style={{ width: '32px', height: '32px', padding: 0, background: 'transparent' }}
+                    >
+                        <FaChevronRight size={14} className={currentPage === totalPages ? "text-muted" : "text-dark"} />
+                    </button>
+                </div>
+            </div>
+          )}
+
         </Card.Body>
       </Card>
     </Container>

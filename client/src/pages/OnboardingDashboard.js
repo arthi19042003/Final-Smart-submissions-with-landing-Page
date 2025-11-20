@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, Button, Table, Badge, Spinner } from "react-bootstrap";
+import { Container, Card, Button, Table, Spinner } from "react-bootstrap";
 import './HiringManagerDashboard.css'; 
 
 export default function OnboardingDashboard() {
@@ -84,24 +84,16 @@ export default function OnboardingDashboard() {
                       </td>
                       <td>{c.position}</td>
                       <td>{c.department || "-"}</td>
+                      
+                      {/* Badges removed here */}
                       <td>
-                        <Badge bg="success">{c.status}</Badge>
+                        {c.status}
                       </td>
                       <td>
-                        <Badge
-                          bg={
-                            c.onboardingStatus === "Completed"
-                              ? "success"
-                              : c.onboardingStatus === "In Progress"
-                              ? "warning"
-                              : "secondary"
-                          }
-                        >
-                          {c.onboardingStatus}
-                        </Badge>
+                        {c.onboardingStatus}
                       </td>
+                      
                       <td>
-                        {/* ✅ FIX: Changed button styling to solid purple */}
                         <div className="d-flex flex-wrap gap-2">
                           <Button
                             size="sm"

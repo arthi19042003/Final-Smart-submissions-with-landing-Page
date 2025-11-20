@@ -1,9 +1,10 @@
 .App {
   min-height: 100vh;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   background-attachment: fixed;
   font-family: "Segoe UI", sans-serif;
+  padding-top: 120px; 
 }
 
 .success,
