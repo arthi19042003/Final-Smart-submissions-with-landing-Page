@@ -1,163 +1,103 @@
-:root {
-  --color-primary-deep: #5b21b6;
-  --color-primary-text: #6d28d9;
-  --color-primary-action: #8b5cf6;
-  --color-primary-action-hover: #7c3aed;
-
-  --color-bg-soft: #faf5ff; 
-  --color-bg-light: #f3e8ff; 
-  --color-bg-button: #ede9fe; 
-  --color-bg-row-even: #faf5ff;
-  --color-bg-row-hover: #f5f3ff;
-  --color-bg-white: #ffffff;
-
-  --color-border: #c4b5fd;
-  --color-text-muted: #6b7280;
-
-  --font-family-main: "Inter", sans-serif;
-  --shadow-main: 0 4px 12px rgba(91, 33, 182, 0.08);
-}
-
-.candidates-container {
-  max-width: 1100px;
-  margin: 110px auto 60px auto; 
-  padding: 40px 50px;
-  font-family: var(--font-family-main);
-  background-color: var(--color-bg-soft);
+/* Main Container - Matches Open Positions layout */
+.candidates-page-container {
+  background-color: #f8f9fa;
   min-height: 100vh;
-  border-radius: 10px;
+  /* Pushes content down to clear fixed Navbar */
+  padding-top: 80px; 
 }
 
-.candidates-container h2 {
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--color-primary-deep);
-  text-align: center;
-  margin-bottom: 10px;
+/* Search Box Styling */
+.search-box {
+  position: relative;
 }
 
-.subtitle {
-  color: var(--color-text-muted);
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 16px;
+.search-input {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.candidates-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--color-bg-white);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-main);
+.search-input:focus {
+  box-shadow: none;
+  border: 1px solid #86b7fe;
 }
 
-.candidates-table th,
-.candidates-table td {
-  padding: 14px 18px;
-  text-align: left;
-  font-size: 0.95rem;
-}
-
-.candidates-table th {
-  background: var(--color-bg-light);
-  color: var(--color-primary-deep);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.candidates-table tr:nth-child(even) {
-  background-color: var(--color-bg-row-even);
-}
-
-.candidates-table tr:hover {
-  background-color: var(--color-bg-row-hover);
-}
-
-.actions-col {
-  text-align: center;
-}
-
-.candidates-table th.actions-col {
-  text-align: center;
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn {
-  border: none;
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn.shortlist {
-  background-color: var(--color-primary-action);
-  color: var(--color-bg-white);
-}
-
-.btn.reject {
-  background-color: var(--color-bg-button);
-  color: var(--color-primary-text);
-  border: 1px solid var(--color-border);
-}
-
-.btn.shortlist:hover {
-  background-color: var(--color-primary-action-hover);
-}
-
-.btn.reject:hover {
-  background-color: var(--color-bg-row-hover);
-}
-
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  background-color: var(--color-bg-white);
-  color: var(--color-primary-text);
-  box-shadow: 0 1px 2px rgba(109, 40, 217, 0.08);
-}
-
-.status-badge.applied,
-.status-badge.shortlisted,
-.status-badge.rejected {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-primary-text) !important;
-  border: none !important;
-}
-
-.empty {
-  text-align: center;
-  color: var(--color-primary-action-hover);
-  font-weight: 500;
-  padding: 40px;
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
   font-size: 1rem;
+  z-index: 10;
+  opacity: 0.6;
 }
 
-@media (max-width: 768px) {
-  .candidates-container {
-    padding: 20px;
-  }
+/* Table Styling */
+.candidates-table thead th {
+  background-color: #f8f9fa;
+  color: #4c1d95; /* Deep purple for headers */
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e9ecef;
+}
 
-  .candidates-table th,
-  .candidates-table td {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-  }
+.candidates-table tbody tr:hover {
+  background-color: #f9fafb;
+}
 
-  .actions {
-    flex-direction: column;
-    gap: 8px;
-  }
+/* Status Badges */
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  min-width: 90px;
+}
+
+.status-badge.submitted {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.status-badge.shortlisted {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.hired {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.status-badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Button Styles matching Open Positions */
+.btn-purple {
+  background-color: #6f42c1 !important;
+  border-color: #6f42c1 !important;
+  color: white !important;
+}
+
+.btn-purple:hover {
+  background-color: #59359a !important;
+}
+
+/* Link styling inside table */
+.candidate-link {
+  text-decoration: none;
+  color: #4c1d95;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.candidate-link:hover {
+  color: #6d28d9;
+  text-decoration: underline;
 }

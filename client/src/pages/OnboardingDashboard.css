@@ -1,0 +1,72 @@
+/* Main Container - Matches other dashboard layouts */
+.onboarding-dashboard-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 100px;
+  /* Wider container to accommodate horizontal buttons */
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Search Box */
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  border: 1px solid #86b7fe;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  z-index: 10;
+  opacity: 0.6;
+}
+
+/* Button Styling - Consistent Purple Theme */
+.purple-btn {
+  background-color: #6d28d9;
+  border-color: #6d28d9;
+  color: #fff;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.purple-btn:hover:not(:disabled) {
+  background-color: #5b21b6;
+  border-color: #5b21b6;
+}
+
+.purple-btn:disabled {
+  background-color: #a78bfa; /* Lighter purple for disabled state */
+  border-color: #a78bfa;
+  cursor: not-allowed;
+}
+
+/* Table Headers */
+.table thead th {
+  font-weight: 600;
+  color: #495057;
+}
+
+@media (max-width: 768px) {
+  .onboarding-dashboard-container {
+    padding: 20px;
+    padding-top: 120px;
+  }
+
+  /* On mobile, allow table to scroll but keep buttons usable */
+  .table-responsive {
+    overflow-x: auto;
+  }
+}

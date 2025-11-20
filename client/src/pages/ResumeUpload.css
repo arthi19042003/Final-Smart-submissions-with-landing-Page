@@ -59,19 +59,23 @@
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
 .btn-primary:hover {
   background: #5434e8;
 }
 
+/* Resume Item Container */
 .resume-item {
   background: #f3efff;
-  padding: 12px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
 
 .resume-item.active {
@@ -79,23 +83,91 @@
   background: #eae6ff;
 }
 
+/* Actions Container (for buttons) */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adds consistent spacing between buttons */
+}
+
 .btn-secondary {
   background: #5b3ff6;
   color: white;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   border: none;
-  margin-right: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-view {
+  background: #3b82f6;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-view:hover {
+  background: #2563eb;
 }
 
 .btn-danger {
   background: #d6362a;
   color: white;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   border: none;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .empty { text-align:center; color:#555; }
 .success { color: green; font-size: 14px; }
 .error { color: red; font-size: 14px; }
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+  .resume-container {
+    width: 92%;
+    padding: 20px;
+  }
+
+  .resume-header {
+    font-size: 24px;
+  }
+
+  .resume-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* Ensure the text info takes full width */
+  .resume-item > div:first-child {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  /* Make actions container full width and distribute buttons */
+  .actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* Make buttons larger and equal width on mobile for easier tapping */
+  .btn-secondary, 
+  .btn-view, 
+  .btn-danger {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    margin: 0; /* Remove any default margins */
+  }
+}

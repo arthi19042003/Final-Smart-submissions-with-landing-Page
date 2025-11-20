@@ -28,6 +28,13 @@ function InterviewDetails() {
   const [filterStatus, setFilterStatus] = useState("All");
   const stars = [1, 2, 3, 4, 5];
 
+  // Helper to get current local date-time in ISO format (YYYY-MM-DDTHH:MM)
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000; // Convert offset to milliseconds
+    return new Date(now.getTime() - offset).toISOString().slice(0, 16);
+  };
+
   const fetchInterviews = async () => {
     try {
       const { data } = await api.get("/interviews");
@@ -165,6 +172,7 @@ function InterviewDetails() {
                 name="date" 
                 value={form.date} 
                 onChange={handleChange} 
+                min={getCurrentDateTime()} // Restrict to present/future
                 required 
               />
             </div>

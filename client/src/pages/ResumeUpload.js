@@ -111,6 +111,18 @@ const ResumeUpload = () => {
     }
   };
 
+  const handleView = (resume) => {
+    if (!resume.filePath) {
+      setMessage({ type: 'error', text: 'File not found' });
+      return;
+    }
+    // Normalize path for URL (replace backslashes with forward slashes)
+    const normalizedPath = resume.filePath.replace(/\\/g, "/");
+    // Assuming server serves uploads statically from root
+    const fileUrl = `http://localhost:5000/${normalizedPath}`;
+    window.open(fileUrl, "_blank");
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this resume?")) return;
 
@@ -185,6 +197,12 @@ const ResumeUpload = () => {
                       Set Active
                     </button>
                   )}
+                  
+                  {/* View Button Added Here */}
+                  <button onClick={() => handleView(res)} className="btn-view">
+                    View
+                  </button>
+
                   <button onClick={() => handleDelete(res._id)} className="btn-danger">
                     Delete
                   </button>

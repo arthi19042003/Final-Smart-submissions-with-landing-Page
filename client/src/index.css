@@ -1,173 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* --- Color Palette --- */
+  --primary: #6d28d9;        /* Vivid Purple */
+  --primary-hover: #5b21b6;  /* Darker Purple */
+  --primary-light: #ede9fe;  /* Very light purple for backgrounds */
+  
+  --secondary: #64748b;      /* Slate Gray */
+  --success: #10b981;        /* Emerald */
+  --danger: #ef4444;         /* Red */
+  --warning: #f59e0b;        /* Amber */
+  
+  /* --- Backgrounds & Text --- */
+  --bg-body: #f8fafc;        /* Light Gray/Blueish tint */
+  --bg-surface: #ffffff;     /* Pure White */
+  --text-main: #1e293b;      /* Dark Slate */
+  --text-muted: #64748b;     /* Medium Gray */
+  --border-color: #e2e8f0;   /* Light Gray Border */
+
+  /* --- UI Properties --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  --transition: all 0.2s ease-in-out;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html, body, #root {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
-  background-color: #f0f2f5;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.75rem;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 24px;
 }
 
-/* --- Table Header Styles for Sorting --- */
-.table thead th {
-  /* Ensure table headers look interactive */
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s;
+/* --- Global Card Styling --- */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: var(--transition);
 }
 
-.table thead th:hover {
-  /* Lighten the background on hover to prompt clicking */
-  background-color: #e9ecef !important;
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-/* Style for the sort direction icons */
-.table thead th span {
-  display: inline-block;
-  width: 1em;
-  /* Ensures consistent alignment */
-  text-align: center;
-}
-
-/* -------------------------------------------------- */
-
-
-.btn {
+/* --- Global Buttons --- */
+.btn, button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
+  border: 1px solid transparent;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  gap: 8px;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
+.btn-primary, .purple-btn {
+  background-color: var(--primary) !important;
+  color: white !important;
+  border: 1px solid var(--primary) !important;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-/* Custom variant used for 'Close' button */
-.btn-info {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.btn-info:hover {
-  background-color: #117a8b;
+.btn-primary:hover, .purple-btn:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: white;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  background-color: var(--bg-body);
+  border-color: #cbd5e1;
 }
 
 .btn-danger {
-  background-color: #dc3545;
-  color: white;
+  background-color: #fee2e2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background-color: var(--danger);
+  color: white;
+  border-color: var(--danger);
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 5px;
-  display: block;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select,
-/* Also target the Form.Control within InputGroup */
-.input-group .form-control {
+/* --- Form Elements --- */
+input, select, textarea, .form-control {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: var(--transition);
 }
 
-.form-group textarea {
-  min-height: 100px;
-  resize: vertical;
+input:focus, select:focus, textarea:focus, .form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
 }
 
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  margin-bottom: 6px;
 }
 
-/* React Bootstrap Specific Overrides for small buttons */
-.btn-sm {
-  padding: 5px 10px;
-  font-size: 12px;
+/* --- Tables --- */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  .btn {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  .btn-sm {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
-  .card {
-    padding: 15px;
-  }
-
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    font-size: 16px;
-  }
+.table thead th {
+  background-color: #f1f5f9;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 10px;
-  }
+.table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  vertical-align: middle;
+}
 
-  .btn:not(.btn-sm) {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: #f8fafc;
 }

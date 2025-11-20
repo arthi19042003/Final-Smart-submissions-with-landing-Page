@@ -1,0 +1,46 @@
+/* Main Container - Pushes content down to clear fixed Navbar */
+.applications-dashboard-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 100px; /* Matches the inline style from the original file */
+  max-width: 1400px;  /* Increased width for single line buttons */
+  margin: 0 auto;
+}
+
+/* Search Box */
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  border: 1px solid #86b7fe;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  z-index: 10;
+  opacity: 0.6;
+}
+
+/* Table Styling */
+.table thead th {
+  font-weight: 600;
+  color: #495057;
+}
+
+@media (max-width: 768px) {
+  .applications-dashboard-container {
+    padding: 20px;
+    padding-top: 120px;
+  }
+}
