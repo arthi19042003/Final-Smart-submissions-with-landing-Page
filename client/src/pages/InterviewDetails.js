@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
+import { FaStar, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from "react-icons/fa"; 
+import { useNavigate, useParams } from "react-router-dom"; 
+import { Modal, Button } from "react-bootstrap"; 
 import api from "../api/axios";
 import "./InterviewDetails.css";
 
@@ -24,16 +26,24 @@ function InterviewDetails() {
   const [interviews, setInterviews] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  // Filter States
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const stars = [1, 2, 3, 4, 5];
 
-  // Helper to get current local date-time in ISO format (YYYY-MM-DDTHH:MM)
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000; // Convert offset to milliseconds
-    return new Date(now.getTime() - offset).toISOString().slice(0, 16);
-  };
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
+  // Delete Modal States
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  
+  const navigate = useNavigate();
+  const { id } = useParams(); 
+
+  const stars = [1, 2, 3, 4, 5];
 
   const fetchInterviews = async () => {
     try {
@@ -48,6 +58,35 @@ function InterviewDetails() {
   useEffect(() => {
     fetchInterviews();
   }, []);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      api.get("/interviews")
+        .then(res => {
+            const found = res.data.find(i => i._id === id);
+            if(found) populateForm(found);
+        })
+        .catch(err => console.error(err))
+        .finally(() => setLoading(false));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filterStatus]);
+
+  const populateForm = (item) => {
+    // Simplified: Just load the date string directly from the database
+    setForm({
+      ...item,
+      date: item.date || "", 
+      rating: Number(item.rating || 0),
+      notifyManager: item.notifyManager || false,
+    });
+    setEditingId(item._id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -64,6 +103,8 @@ function InterviewDetails() {
   const resetForm = () => {
     setForm(initialState);
     setEditingId(null);
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) fileInput.value = "";
   };
 
   const handleSubmit = async (e) => {
@@ -71,58 +112,55 @@ function InterviewDetails() {
     try {
       const payload = { ...form, rating: Number(form.rating) };
 
-      if (editingId) {
-        await api.put(`/interviews/${editingId}`, payload);
+      if (id) {
+        await api.put(`/interviews/${id}`, payload);
         setMessage("✅ Interview updated successfully");
       } else {
         await api.post("/interviews", payload);
         setMessage("✅ Interview added successfully");
       }
-
-      fetchInterviews();
+      
+      await fetchInterviews();
       resetForm();
+
+      setTimeout(() => {
+          navigate("/hiring-manager/schedule"); 
+          setMessage("");
+      }, 1500);
+
     } catch (err) {
       console.error(err);
       setMessage("❌ Error while saving. Try again.");
     }
-    setTimeout(() => setMessage(""), 2500);
   };
 
   const handleEdit = (item) => {
-    let formattedDate = "";
-    if (item.date) {
-      try {
-        const d = new Date(item.date);
-        const offset = d.getTimezoneOffset() * 60000; 
-        formattedDate = new Date(d.getTime() - offset).toISOString().slice(0, 16);
-      } catch (e) {
-        console.warn("Invalid date found for interview:", item._id);
-      }
-    }
-
-    setForm({
-      ...item,
-      date: formattedDate,
-      rating: Number(item.rating || 0),
-      notifyManager: item.notifyManager || false,
-    });
-    setEditingId(item._id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate(`/hiring-manager/schedule/${item._id}`);
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this interview?")) return;
+  const handleDeleteClick = (itemId) => {
+    setDeleteId(itemId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteId) return;
+    
     try {
-      await api.delete(`/interviews/${id}`);
+      await api.delete(`/interviews/${deleteId}`);
       setMessage("🗑️ Interview deleted");
-      fetchInterviews();
+      await fetchInterviews();
     } catch (err) {
       console.error(err);
       setMessage("❌ Error deleting record");
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteId(null);
+      setTimeout(() => setMessage(""), 2000);
     }
-    setTimeout(() => setMessage(""), 2000);
   };
 
+  // --- Filter Logic ---
   const filteredData = interviews.filter((it) => {
     const searchValue = search.trim().toLowerCase();
     
@@ -139,10 +177,26 @@ function InterviewDetails() {
     return found && statusMatch;
   });
 
+  // --- Pagination Logic ---
+  const totalItems = filteredData.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedData = filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+  };
+
+  if (loading) return <div className="page interviewer-bg"><p style={{textAlign:'center', paddingTop:'50px'}}>Loading...</p></div>;
+
   return (
     <div className="page interviewer-bg">
       <div className="card form-card">
-        <h2 className="form-title">{editingId ? "Update Interview" : "Schedule Interview"}</h2>
+        <h2 className="form-title">{id ? "Update Interview" : "Schedule Interview"}</h2>
 
         <form onSubmit={handleSubmit}>
           <h3 className="section-label">Candidate Information</h3>
@@ -165,14 +219,15 @@ function InterviewDetails() {
               <input name="interviewerName" value={form.interviewerName} onChange={handleChange} required />
             </div>
 
+            {/* ✅ Changed to text input for manual entry */}
             <div className="form-field">
               <label>Interview Date & Time <span>*</span></label>
               <input 
-                type="datetime-local" 
+                type="text" 
                 name="date" 
                 value={form.date} 
                 onChange={handleChange} 
-                min={getCurrentDateTime()} // Restrict to present/future
+                placeholder="e.g. 21-11-2025 10:30 AM"
                 required 
               />
             </div>
@@ -254,14 +309,15 @@ function InterviewDetails() {
             </label>
           </div>
 
-          {message && <div className="msg-box">{message}</div>}
+          {message && <div className="msg-box" style={{ padding: '10px', textAlign:'center', background: message.includes('Error') ? '#fee2e2' : '#dcfce7', color: message.includes('Error') ? 'red' : 'green', borderRadius: '8px', marginTop: '10px' }}>{message}</div>}
           
           <button type="submit" className="purple-btn full">
-            {editingId ? "Update Interview" : "Save Interview"}
+            {id ? "Update Interview" : "Save Interview"}
           </button>
         </form>
       </div>
 
+      {/* Records Section */}
       <div className="card records-card">
         <h3 className="section-label">Interview Records</h3>
 
@@ -286,35 +342,83 @@ function InterviewDetails() {
           <span>Actions</span>
         </div>
 
-        {filteredData.length === 0 ? (
-          <p className="no-records">No records found.</p>
+        {/* Display Paginated Data */}
+        {paginatedData.length === 0 ? (
+          <p className="no-records" style={{textAlign: "center", padding: "20px", color: "#666"}}>No records found.</p>
         ) : (
-          filteredData.map((it) => (
+          paginatedData.map((it) => (
             <div className="table-row" key={it._id}>
               <span>{it.candidateFirstName || ""} {it.candidateLastName || ""}</span>
               
-              <span>
-                {it.date ? new Date(it.date).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'}) : "N/A"}
-              </span>
+              {/* Render the date string exactly as stored */}
+              <span>{it.date || "N/A"}</span>
               
               <span>{it.jobPosition || "N/A"}</span>
               
-              {/* Status - Badges Removed */}
               <span>{it.status || "Pending"}</span>
               
-              {/* Result - Badges Removed */}
               <span>{it.result || "Pending"}</span>
               
               <span>⭐ {Number(it.rating || 0)}</span>
 
               <div className="row-actions">
                 <FaEdit className="icon" onClick={() => handleEdit(it)} />
-                <FaTrash className="icon delete" onClick={() => handleDelete(it._id)} />
+                <FaTrash className="icon delete" onClick={() => handleDeleteClick(it._id)} />
               </div>
             </div>
           ))
         )}
+
+        {/* Pagination Controls */}
+        {totalItems > 0 && ( 
+            <div className="d-flex justify-content-center py-4 border-top bg-light rounded-bottom" style={{ marginTop: '15px', paddingTop: '20px' }}>
+                <div 
+                  className="d-flex align-items-center justify-content-between bg-white border rounded shadow-sm p-1" 
+                  style={{ minWidth: '250px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'white', border: '1px solid #eee', borderRadius: '8px', padding: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}
+                >
+                    <button 
+                        className="btn btn-light d-flex align-items-center justify-content-center border-0"
+                        onClick={handlePrev} 
+                        disabled={currentPage === 1}
+                        style={{ width: '32px', height: '32px', padding: 0, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <FaChevronLeft size={14} color={currentPage === 1 ? "#ccc" : "#333"} />
+                    </button>
+
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#666', margin: '0 15px', whiteSpace: 'nowrap' }}>
+                        Page {currentPage} of {totalPages}
+                    </span>
+
+                    <button 
+                        className="btn btn-light d-flex align-items-center justify-content-center border-0"
+                        onClick={handleNext} 
+                        disabled={currentPage === totalPages}
+                        style={{ width: '32px', height: '32px', padding: 0, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <FaChevronRight size={14} color={currentPage === totalPages ? "#ccc" : "#333"} />
+                    </button>
+                </div>
+            </div>
+        )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this interview record? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

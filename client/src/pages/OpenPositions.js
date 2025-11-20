@@ -7,15 +7,14 @@ import {
   Spinner, 
   Card, 
   Row, 
-  Col, 
-  Badge 
+  Col,
+  Modal // Import Modal
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast"; 
 import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
 import './OpenPositions.css';
 
-// Change this to 5 for normal use. Set to 2 if you want to test pagination with few items.
 const ITEMS_PER_PAGE = 5; 
 
 export default function OpenPositions() {
@@ -28,6 +27,10 @@ export default function OpenPositions() {
   // Edit State
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({ title: "", location: "", openings: 1, requiredSkills: "" });
+  
+  // Delete Modal State
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [positionToDelete, setPositionToDelete] = useState(null);
   
   // Filter State
   const [filterText, setFilterText] = useState('');
@@ -91,6 +94,7 @@ export default function OpenPositions() {
       });
 
       if (!res.ok) throw new Error("Failed to update position");
+      
       toast.success("Position updated successfully!");
       setEditingId(null);
       fetchPositions();
@@ -100,7 +104,7 @@ export default function OpenPositions() {
     }
   };
 
-  const handleClose = async (id) => {
+  const handleClosePosition = async (id) => {
     if (!token) return;
     try {
       const res = await fetch(`/api/positions/${id}`, {
@@ -109,6 +113,7 @@ export default function OpenPositions() {
         body: JSON.stringify({ status: "Closed" }),
       });
       if (!res.ok) throw new Error("Failed to close position");
+      
       toast.success("Position closed!");
       fetchPositions();
     } catch (err) {
@@ -117,20 +122,31 @@ export default function OpenPositions() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!token) return;
-    if (!window.confirm("Are you sure you want to delete this position?")) return;
+  // 1. Trigger the Modal instead of window.confirm
+  const initiateDelete = (id) => {
+    setPositionToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  // 2. Perform the actual delete (Called by Modal "Delete" button)
+  const confirmDelete = async () => {
+    if (!token || !positionToDelete) return;
+    
     try {
-      const res = await fetch(`/api/positions/${id}`, {
+      const res = await fetch(`/api/positions/${positionToDelete}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete position");
-      toast.success("Position deleted");
+      
+      toast.success("Position deleted successfully"); // Indicator
       fetchPositions();
     } catch (err) {
       console.error(err);
       toast.error("Error deleting position");
+    } finally {
+      setShowDeleteModal(false);
+      setPositionToDelete(null);
     }
   };
   
@@ -181,11 +197,10 @@ export default function OpenPositions() {
 
   return (
     <Container fluid className="open-positions-container p-4">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" reverseOrder={false} />
       
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold text-dark">Open Positions</h2>
-        {/* Total Badge Removed */}
       </div>
 
       <Row className="mb-4 g-3">
@@ -231,7 +246,6 @@ export default function OpenPositions() {
                       <td className="p-3">{editingId === pos._id ? <Form.Control type="text" value={editData.location} onChange={(e) => setEditData({ ...editData, location: e.target.value })} size="sm" /> : <span className="text-secondary">{pos.location}</span>}</td>
                       <td className="p-3">{editingId === pos._id ? <Form.Control type="text" value={editData.requiredSkills} onChange={(e) => setEditData({ ...editData, requiredSkills: e.target.value })} size="sm" /> : <small className="text-secondary">{Array.isArray(pos.requiredSkills) ? pos.requiredSkills.join(", ") : pos.requiredSkills || 'N/A'}</small>}</td>
                       <td className="p-3">{editingId === pos._id ? <Form.Control type="number" style={{ width: "80px" }} value={editData.openings} onChange={(e) => setEditData({ ...editData, openings: parseInt(e.target.value) })} size="sm" /> : <span className="fw-bold">{pos.openings}</span>}</td>
-                      {/* ✅ Changed to explicit black color style */}
                       <td className="p-3">
                         <span className="fw-bold" style={{ color: "black" }}>
                           {pos.status}
@@ -242,7 +256,12 @@ export default function OpenPositions() {
                           {editingId === pos._id ? (
                             <><Button size="sm" variant="success" onClick={() => handleSave(pos._id)}>Save</Button><Button size="sm" variant="secondary" onClick={() => setEditingId(null)}>Cancel</Button></>
                           ) : (
-                            <><Button size="sm" className="btn-purple" onClick={() => handleEdit(pos)}>Edit</Button>{pos.status === "Open" && (<Button size="sm" className="btn-purple" onClick={() => handleClose(pos._id)}>Close</Button>)}<Button size="sm" className="btn-red" onClick={() => handleDelete(pos._id)}>Delete</Button></>
+                            <>
+                              <Button size="sm" className="btn-purple" onClick={() => handleEdit(pos)}>Edit</Button>
+                              {pos.status === "Open" && (<Button size="sm" className="btn-purple" onClick={() => handleClosePosition(pos._id)}>Close</Button>)}
+                              {/* Updated to trigger Modal */}
+                              <Button size="sm" className="btn-red" onClick={() => initiateDelete(pos._id)}>Delete</Button>
+                            </>
                           )}
                         </div>
                       </td>
@@ -253,14 +272,13 @@ export default function OpenPositions() {
             </Table>
           </div>
 
-          {/* --- FIXED PAGINATION SECTION --- */}
+          {/* --- PAGINATION --- */}
           {totalItems > 0 && ( 
             <div className="d-flex justify-content-center py-4 border-top bg-light rounded-bottom">
                 <div 
                   className="d-flex align-items-center justify-content-between bg-white border rounded shadow-sm p-1" 
                   style={{ minWidth: '250px' }}
                 >
-                    {/* Left Arrow */}
                     <button 
                         className="btn btn-light d-flex align-items-center justify-content-center border-0"
                         onClick={handlePrev} 
@@ -270,12 +288,10 @@ export default function OpenPositions() {
                         <FaChevronLeft size={14} className={currentPage === 1 ? "text-muted" : "text-dark"} />
                     </button>
 
-                    {/* Text */}
                     <span className="fw-semibold text-secondary small mx-3" style={{ whiteSpace: 'nowrap' }}>
                         Page {currentPage} of {totalPages}
                     </span>
 
-                    {/* Right Arrow */}
                     <button 
                         className="btn btn-light d-flex align-items-center justify-content-center border-0"
                         onClick={handleNext} 
@@ -290,6 +306,25 @@ export default function OpenPositions() {
 
         </Card.Body>
       </Card>
+
+      {/* --- DELETE CONFIRMATION MODAL --- */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-danger">Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this position? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete Position
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </Container>
   );
 }

@@ -70,7 +70,8 @@ export default function ViewPurchaseOrders() {
   return (
     <div className="dashboard-wrapper">
       <Container className="py-4">
-        <Toaster position="top-right" />
+        {/* CHANGED: Position set to top-center for consistency */}
+        <Toaster position="top-center" reverseOrder={false} />
         
         <Card className="shadow-sm border-0">
           <Card.Body>
@@ -115,7 +116,6 @@ export default function ViewPurchaseOrders() {
                           {po.startDate ? new Date(po.startDate).toLocaleDateString() : "-"}
                         </td>
                         <td className="p-3">
-                          {/* REMOVED Badge, added span with black color style */}
                           <span style={{ color: "black", fontWeight: "500" }}>
                             {po.status}
                           </span>

@@ -38,7 +38,10 @@ import HiringManagerDashboard from "./pages/HiringManagerDashboard";
 import Inbox from "./pages/Inbox";
 import OpenPositions from "./pages/OpenPositions"; 
 import CandidateListPage from "./pages/CandidateList";
-import InterviewManagementPage from "./pages/InterviewDetails"; 
+
+// ✅ Correctly importing InterviewDetails (No InterviewList)
+import InterviewDetails from "./pages/InterviewDetails";
+
 import ApplicationsDashboard from "./pages/ApplicationsDashboard";
 import OnboardingDashboard from "./pages/OnboardingDashboard";
 import ViewPurchaseOrders from "./pages/ViewPurchaseOrders";
@@ -48,9 +51,8 @@ import ResumeDetailPage from "./pages/ResumeDetailPage";
 import PositionDetails from "./pages/PositionDetails";
 import CandidateHistory from "./pages/CandidateHistory";
 
-// Assuming these two pages were added manually for context
-// import ForgotPassword from "./pages/ForgotPassword";
-// import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function RoleBasedDashboard() {
   const { user } = useAuth();
@@ -86,9 +88,9 @@ function App() {
             <Route path="/register/hiring-manager" element={<HiringManagerRegister />} />
             <Route path="/register/recruiter" element={<RecruiterRegister />} /> 
 
-            {/* Forgot & Reset Password Routes (Keep Public) */}
-            {/* <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:resetToken" element={<ResetPassword />} /> */}
+            {/* Forgot & Reset Password Routes */}
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
             
             {/* Candidate Jobs - Publicly Accessible */}
             <Route
@@ -309,11 +311,31 @@ function App() {
                 </PrivateRoute>
               }
             />
+            
+            {/* Interview Routes - Using InterviewDetails for all */}
             <Route
               path="/hiring-manager/schedule"
               element={
                 <PrivateRoute allowedRoles={['hiringmanager']}>
-                  <InterviewManagementPage />
+                  <InterviewDetails />
+                </PrivateRoute>
+              }
+            />
+            
+            <Route
+              path="/hiring-manager/schedule/new"
+              element={
+                <PrivateRoute allowedRoles={['hiringmanager']}>
+                  <InterviewDetails />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/hiring-manager/schedule/:id"
+              element={
+                <PrivateRoute allowedRoles={['hiringmanager']}>
+                  <InterviewDetails />
                 </PrivateRoute>
               }
             />

@@ -9,6 +9,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
+import toast, { Toaster } from "react-hot-toast";
 import './HiringManagerDashboard.css';
 
 export default function HiringManagerDashboard() {
@@ -58,26 +59,28 @@ export default function HiringManagerDashboard() {
         status: "Open",
       });
 
-      alert("✅ Position added successfully!");
+      toast.success("Position added successfully!"); 
     } catch (err) {
       console.error("Error adding position:", err);
-      alert("❌ Failed to add position");
+      toast.error("Failed to add position"); 
     }
   };
 
   return (
     <div className="hiring-dashboard">
       <Container fluid="lg">
-        {/* HEADER - Reduced mb-4 to mb-3 */}
+        <Toaster position="top-center" reverseOrder={false} />
+
+        {/* HEADER */}
         <div className="d-flex justify-content-center align-items-center mb-3 mt-2">
           <h3 className="fw-bold" style={{ color: "#4c1d95" }}>Hiring Manager Dashboard</h3>
         </div>
 
-        {/* ROW 2: Manage Positions - Reduced mb-4 to mb-3 */}
+        {/* ROW 2: Manage Positions */}
         <Row className="mb-3">
           <Col>
             <Card className="shadow-sm border-0">
-              <Card.Body className="p-3"> {/* Added p-3 to control internal padding */}
+              <Card.Body className="p-3">
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <Card.Title className="text-purple fw-bold mb-0">Manage Positions</Card.Title>
                   <Button className="purple-btn" size="sm" onClick={() => navigate("/hiring-manager/open-positions")}>
@@ -85,7 +88,6 @@ export default function HiringManagerDashboard() {
                   </Button>
                 </div>
                 <Form onSubmit={addPosition} className="p-2 bg-light rounded">
-                  {/* Reduced g-3 to g-2 for tighter form field spacing */}
                   <Row className="g-2 align-items-end">
                     <Col md={3}>
                       <Form.Label className="mb-1 small fw-bold">Title</Form.Label>
@@ -150,21 +152,50 @@ export default function HiringManagerDashboard() {
           </Col>
         </Row>
 
-        {/* ROW 3: Navigation Cards - Reduced g-4 to g-3 */}
+        {/* ROW 3: Navigation Cards */}
         <Row className="g-3">
           {[
-            { title: " Applications", text: "Review apps & schedule interviews.", path: "/hiring-manager/applications", btn: "View Apps" },
-            { title: " Interviews", text: "Manage timeslots & feedback.", path: "/hiring-manager/schedule", btn: "Manage" },
-            { title: " POs", text: "Track purchase orders.", path: "/hiring-manager/purchase-orders", btn: "View POs" },
-            { title: " Inbox", text: "Messages from candidates.", path: "/hiring-manager/inbox", btn: "Open Inbox" },
-            { title: " Onboarding", text: "Track hired candidate progress.", path: "/hiring-manager/onboarding", btn: "Track" },
-            { title: " Agencies", text: "Invite recruiters.", path: "/hiring-manager/agencies", btn: "Invite" },
+            { 
+              title: " Applications", 
+              text: "Review apps & schedule interviews.", 
+              path: "/hiring-manager/applications", 
+              btn: "View Apps" 
+            },
+            { 
+              title: " Interviews", 
+              text: "Manage timeslots & feedback.", 
+              path: "/hiring-manager/schedule", // Points to the new Interview List page
+              btn: "Manage" 
+            },
+            { 
+              title: " POs", 
+              text: "Track purchase orders.", 
+              path: "/hiring-manager/purchase-orders", 
+              btn: "View POs" 
+            },
+            { 
+              title: " Inbox", 
+              text: "Messages from candidates.", 
+              path: "/hiring-manager/inbox", 
+              btn: "Open Inbox" 
+            },
+            { 
+              title: " Onboarding", 
+              text: "Track hired candidate progress.", 
+              path: "/hiring-manager/onboarding", 
+              btn: "Track" 
+            },
+            { 
+              title: " Agencies", 
+              text: "Invite recruiters.", 
+              path: "/hiring-manager/agencies", 
+              btn: "Invite" 
+            },
           ].map((item, idx) => (
             <Col md={4} key={idx}>
               <Card className="shadow-sm h-100 border-0 nav-card">
                 <Card.Body className="text-center p-3">
                   <Card.Title className="text-purple fw-bold fs-6">{item.title}</Card.Title>
-                  {/* Reduced mb-4 to mb-3 for text spacing */}
                   <Card.Text className="text-muted mb-3 small">{item.text}</Card.Text>
                   <Button
                     size="sm"

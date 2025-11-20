@@ -17,10 +17,10 @@ export default function OnboardingDashboard() {
 
   const fetchOnboarding = async () => {
     try {
-      setLoading(true);
       const res = await fetch("/api/onboarding", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Cache-Control": "no-cache",
         },
       });
       const data = await res.json();
@@ -39,6 +39,13 @@ export default function OnboardingDashboard() {
 
   const updateStatus = async (id, onboardingStatus) => {
     try {
+      // Optimistic Update
+      setCandidates(prevCandidates => 
+        prevCandidates.map(c => 
+          c._id === id ? { ...c, onboardingStatus } : c
+        )
+      );
+
       const res = await fetch(`/api/onboarding/${id}/status`, {
         method: "PUT",
         headers: {
@@ -47,15 +54,17 @@ export default function OnboardingDashboard() {
         },
         body: JSON.stringify({ onboardingStatus }),
       });
+
       if (res.ok) {
         toast.success(`Status updated to ${onboardingStatus}`);
-        fetchOnboarding();
+        // Do not re-fetch to preserve the optimistic update
       } else {
-          throw new Error("Failed to update");
+        throw new Error("Failed to update");
       }
     } catch (err) {
       console.error("Error updating onboarding status:", err);
       toast.error("Failed to update status");
+      fetchOnboarding(); // Revert on error
     }
   };
 
@@ -65,10 +74,8 @@ export default function OnboardingDashboard() {
     const filterLower = filterText.toLowerCase();
 
     items = items.filter(c => {
-      // Status Filter
       if (statusFilter !== 'All' && c.onboardingStatus !== statusFilter) return false;
 
-      // Search Filter
       if (filterLower) {
         const name = (c.candidateName || '').toLowerCase();
         const email = (c.email || '').toLowerCase();
@@ -78,7 +85,6 @@ export default function OnboardingDashboard() {
       return true;
     });
 
-    // Reset pagination if filter changes
     if (currentPage > Math.ceil(items.length / ITEMS_PER_PAGE) && items.length > 0) {
         setCurrentPage(1);
     } else if (items.length === 0 && currentPage !== 1) {
@@ -100,7 +106,6 @@ export default function OnboardingDashboard() {
   const handlePrev = () => { if (currentPage > 1) setCurrentPage(prev => prev - 1); };
   const handleNext = () => { if (currentPage < totalPages) setCurrentPage(prev => prev + 1); };
 
-
   if (loading)
     return (
       <Container fluid className="onboarding-dashboard-container text-center">
@@ -113,7 +118,7 @@ export default function OnboardingDashboard() {
 
   return (
     <Container fluid className="onboarding-dashboard-container p-4">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" reverseOrder={false} />
 
       <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold" style={{ color: "#5b21b6" }}>Onboarding Dashboard</h2>
@@ -162,7 +167,6 @@ export default function OnboardingDashboard() {
                     <th className="p-3">Department</th>
                     <th className="p-3">Hiring Status</th>
                     <th className="p-3">Onboarding Progress</th>
-                    {/* Increased width for horizontal buttons */}
                     <th className="p-3 text-center" style={{ minWidth: "300px" }}>Actions</th>
                   </tr>
                 </thead>
@@ -196,15 +200,19 @@ export default function OnboardingDashboard() {
 
                         <td className="p-3 text-center">
                             <div className="d-flex flex-row gap-2 justify-content-center align-items-center">
+                            {/* Pending Button */}
                             <Button
                                 size="sm"
                                 className="purple-btn"
                                 style={{ whiteSpace: "nowrap" }}
                                 onClick={() => updateStatus(c._id, "Pending")}
-                                disabled={c.onboardingStatus === "Pending"}
+                                // DISABLED if status is "Pending" OR "Completed"
+                                disabled={c.onboardingStatus === "Pending" || c.onboardingStatus === "Completed"}
                             >
                                 Pending
                             </Button>
+
+                            {/* In Progress Button */}
                             <Button
                                 size="sm"
                                 className="purple-btn"
@@ -214,6 +222,8 @@ export default function OnboardingDashboard() {
                             >
                                 In Progress
                             </Button>
+
+                            {/* Completed Button */}
                             <Button
                                 size="sm"
                                 className="purple-btn"

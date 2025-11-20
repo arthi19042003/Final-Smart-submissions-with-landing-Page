@@ -31,6 +31,10 @@ export default function ApplicationsDashboard() {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [interviewDate, setInterviewDate] = useState("");
   const [history, setHistory] = useState([]);
+
+  // --- Confirmation Modal State ---
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState({ id: null, type: '' });
   
   const token = localStorage.getItem("token"); 
 
@@ -40,7 +44,7 @@ export default function ApplicationsDashboard() {
     borderColor: "#6d28d9",
     color: "#fff", 
     fontWeight: "500",
-    whiteSpace: "nowrap" // Prevent text wrapping
+    whiteSpace: "nowrap" 
   };
 
   const fetchApplications = async () => {
@@ -79,6 +83,21 @@ export default function ApplicationsDashboard() {
     }
   };
 
+  // --- New Handler for opening confirmation modal ---
+  const initiateAction = (id, type) => {
+    setPendingAction({ id, type });
+    setShowConfirmModal(true);
+  };
+
+  // --- Handler for confirming the action in modal ---
+  const confirmAction = () => {
+    if (pendingAction.id && pendingAction.type) {
+      updateStatus(pendingAction.id, pendingAction.type);
+    }
+    setShowConfirmModal(false);
+    setPendingAction({ id: null, type: '' });
+  };
+
   const handleViewHistory = async (email) => {
     if (!token) return;
     try {
@@ -107,10 +126,7 @@ export default function ApplicationsDashboard() {
     const filterLower = filterText.toLowerCase();
 
     items = items.filter(app => {
-      // Filter by Status
       if (statusFilter !== 'All' && app.status !== statusFilter) return false;
-      
-      // Filter by Search Text (Name, Email, Position)
       if (filterLower) {
         const name = (app.candidateName || '').toLowerCase();
         const email = (app.email || '').toLowerCase();
@@ -120,7 +136,6 @@ export default function ApplicationsDashboard() {
       return true;
     });
 
-    // Reset to page 1 if search changes
     if (currentPage > Math.ceil(items.length / ITEMS_PER_PAGE) && items.length > 0) {
       setCurrentPage(1);
     } else if (items.length === 0 && currentPage !== 1) {
@@ -142,8 +157,6 @@ export default function ApplicationsDashboard() {
   const handleNext = () => { if (currentPage < totalPages) setCurrentPage(prev => prev + 1); };
 
 
-  // --- RENDER ---
-
   if (loading)
     return (
       <Container fluid className="applications-dashboard-container text-center">
@@ -156,13 +169,12 @@ export default function ApplicationsDashboard() {
 
   return (
     <Container fluid className="applications-dashboard-container p-4">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" reverseOrder={false} />
       
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold" style={{ color: "#5b21b6" }}>Candidate Applications</h2>
       </div>
 
-      {/* --- FILTERS SECTION --- */}
       <Row className="mb-4 g-3">
         <Col md={8}>
           <div className="search-box position-relative bg-white rounded shadow-sm p-2">
@@ -196,7 +208,6 @@ export default function ApplicationsDashboard() {
         </Col>
       </Row>
 
-      {/* --- TABLE CARD --- */}
       <Card className="shadow-sm border-0 mb-5">
         <Card.Body className="p-0">
           <div className="table-responsive">
@@ -207,7 +218,6 @@ export default function ApplicationsDashboard() {
                   <th className="p-3">Position</th>
                   <th className="p-3">Status</th>
                   <th className="p-3">Interview</th>
-                  {/* Increased width for single line buttons */}
                   <th className="p-3 text-center" style={{ minWidth: "380px" }}>Actions</th>
                 </tr>
               </thead>
@@ -237,7 +247,6 @@ export default function ApplicationsDashboard() {
                           : "-"}
                       </td>
                       <td className="p-3 text-center">
-                        {/* Changed to flex-row for single line */}
                         <div className="d-flex flex-row gap-2 justify-content-center align-items-center">
                           <Button
                             size="sm"
@@ -257,15 +266,12 @@ export default function ApplicationsDashboard() {
                             </Button>
                           )}
                           
+                          {/* Updated Reject Button */}
                           {app.status !== "Rejected" && app.status !== "Hired" && (
                              <Button
                               size="sm"
                               style={{...purpleBtnStyle, backgroundColor: "#7c3aed", borderColor: "#7c3aed"}} 
-                              onClick={() => {
-                                if (window.confirm("Are you sure you want to reject this candidate?")) {
-                                  updateStatus(app._id, "reject");
-                                }
-                              }}
+                              onClick={() => initiateAction(app._id, "reject")}
                             >
                               Reject
                             </Button>
@@ -289,14 +295,11 @@ export default function ApplicationsDashboard() {
                               Hired ({app.onboardingStatus})
                             </Button>
                           ) : (
+                            /* Updated Hire Button */
                             <Button
                               size="sm"
                               style={purpleBtnStyle}
-                              onClick={() => {
-                                 if (window.confirm("Are you sure you want to hire this candidate?")) {
-                                  updateStatus(app._id, "hire");
-                                 }
-                              }}
+                              onClick={() => initiateAction(app._id, "hire")}
                             >
                               Hire
                             </Button>
@@ -345,7 +348,28 @@ export default function ApplicationsDashboard() {
         </Card.Body>
       </Card>
 
-      {/* --- MODALS (Unchanged) --- */}
+      {/* --- Action Confirmation Modal --- */}
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Action</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to {pendingAction.type === 'hire' ? <strong className="text-success">hire</strong> : <strong className="text-danger">reject</strong>} this candidate?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant={pendingAction.type === 'hire' ? "success" : "danger"} 
+            onClick={confirmAction}
+          >
+            {pendingAction.type === 'hire' ? "Yes, Hire" : "Yes, Reject"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* --- Existing Schedule & History Modals --- */}
       <Modal show={showScheduleModal} onHide={() => setShowScheduleModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Schedule Interview</Modal.Title>
