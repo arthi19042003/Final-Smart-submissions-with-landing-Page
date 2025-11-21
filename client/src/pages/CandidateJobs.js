@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useLocation, Link } from "react-router-dom"; // ✅ Import Link
-import { useAuth } from "../context/AuthContext"; // ✅ Import useAuth
+import { useLocation, Link } from "react-router-dom"; 
+import { useAuth } from "../context/AuthContext"; 
 import "./CandidateJobs.css";
 
 const CandidateJobs = () => {
-  const [jobs, setJobs] = useState([]); // All jobs from API
-  const [filteredJobs, setFilteredJobs] = useState([]); // Jobs to display
+  const [jobs, setJobs] = useState([]); 
+  const [filteredJobs, setFilteredJobs] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [resume, setResume] = useState(null);
   const [applyingId, setApplyingId] = useState(null);
   const [appliedJobIds, setAppliedJobIds] = useState(new Set());
 
-  const { user } = useAuth(); // ✅ Get the user from context
+  const { user } = useAuth(); 
   const location = useLocation();
 
   useEffect(() => {
@@ -21,18 +21,18 @@ const CandidateJobs = () => {
       try {
         setLoading(true);
         
-        // 1. Always fetch public jobs
+        // 1. Get Jobs
         const jobsPromise = api.get("/positions/open").catch(err => {
           console.error("Failed to fetch jobs:", err);
           toast.error("Failed to load available jobs.");
           return { data: [] }; 
         });
 
-        // 2. ✅ Conditionally fetch user-specific data
+        // 2. Get User Info (if logged in)
         let resumePromise = Promise.resolve({ data: null });
         let submissionsPromise = Promise.resolve({ data: [] });
 
-        if (user) { // Only fetch if user is logged in
+        if (user) { 
           resumePromise = api.get("/resume/active").catch(() => ({ data: null }));
           submissionsPromise = api.get("/submissions/my-submissions").catch(err => {
             console.error("Failed to fetch submissions:", err);
@@ -40,7 +40,6 @@ const CandidateJobs = () => {
           });
         }
 
-        // 3. Await all promises
         const [jobsRes, resumeRes, submissionsRes] = await Promise.all([
           jobsPromise,
           resumePromise,
@@ -55,16 +54,14 @@ const CandidateJobs = () => {
 
       } catch (err) {
         console.error("Error loading page data:", err);
-        toast.error("An unexpected error occurred.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [user]); // ✅ Add 'user' as a dependency
+  }, [user]);
 
-  // This useEffect (for filtering) is correct from the previous step
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const query = (params.get('q') || '').toLowerCase();
@@ -83,7 +80,7 @@ const CandidateJobs = () => {
     const filtered = jobs.filter(job => {
       const title = (job.title || '').toLowerCase();
       const description = (job.description || '').toLowerCase();
-      const skills = (job.requiredSkills || []).join(' ').toLowerCase();
+      const skills = Array.isArray(job.requiredSkills) ? job.requiredSkills.join(' ').toLowerCase() : '';
       const jobLocation = (job.location || '').toLowerCase();
 
       const queryMatch = !query || 
@@ -101,8 +98,6 @@ const CandidateJobs = () => {
   }, [jobs, location.search]);
 
   const handleApply = async (job) => {
-    // This function will only be called if the user is logged in
-    // because the button will be disabled, but we double-check.
     if (!user || !resume) {
       toast.error("Please log in and upload an active resume to apply.");
       return;
@@ -128,59 +123,79 @@ const CandidateJobs = () => {
     }
   };
 
-  if (loading) return <div className="jobs-container"><p className="loading">Loading jobs...</p></div>;
+  if (loading) return <div className="jobs-container"><p style={{textAlign:'center', fontSize:'1.2rem', color:'#666'}}>Loading available positions...</p></div>;
 
   return (
     <div className="jobs-container">
       <Toaster position="top-right" />
-      <h2>Available Positions</h2>
-      <p className="subtitle">Browse and apply for open roles</p>
+      
+      <div className="jobs-header-section">
+        <h2>Available Positions</h2>
+        <p className="subtitle">Explore opportunities and find your next career move.</p>
+      </div>
 
-      {/* ✅ Show resume warning only if logged in and no resume */}
       {user && !resume && (
         <div className="alert-warning">
-          ⚠️ You need an active resume to apply. <Link to="/resume">Upload one here</Link>.
+          <span>⚠️ No active resume found.</span> 
+          <Link to="/resume">Upload Resume</Link>
         </div>
       )}
       
-      {/* ✅ Show login prompt if not logged in */}
       {!user && (
-         <div className="alert-warning">
-          <Link to="/login">Log in</Link> or <Link to="/register">register</Link> to apply for jobs.
+         <div className="alert-info">
+          <span>Join us to apply!</span>
+          <div style={{display:'inline-block', marginLeft:'10px'}}>
+            <Link to="/login">Log in</Link> or <Link to="/register">Register</Link>
+          </div>
         </div>
       )}
 
       <div className="jobs-grid">
         {filteredJobs.length === 0 ? (
-          <p className="empty">No positions found matching your search.</p>
+          <div className="empty-state">
+            <p>No positions found matching your search.</p>
+            <button onClick={() => window.location.reload()} className="btn-reset">Show All Jobs</button>
+          </div>
         ) : (
           filteredJobs.map((job) => (
             <div key={job._id} className="job-card">
-              <div className="job-header">
-                <h3>{job.title}</h3>
-                <span className="dept-tag">{job.department || "General"}</span>
-              </div>
-              
-              <div className="job-details">
-                <p><strong>Location:</strong> {job.location || "Remote"}</p>
-                <p><strong>Skills:</strong> {job.requiredSkills?.join(", ") || "N/A"}</p>
-                {job.description && <p className="job-desc">{job.description}</p>}
+              <div className="card-content">
+                <div className="card-top">
+                  <span className="dept-badge">{job.department || "Engineering"}</span>
+                  <h3>{job.title}</h3>
+                </div>
+                
+                <div className="card-details">
+                  <div className="detail-row">
+                    <span className="label">Location:</span>
+                    <span className="value">{job.location || "Remote"}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="label">Skills:</span>
+                    <span className="value">
+                      {Array.isArray(job.requiredSkills) 
+                        ? job.requiredSkills.join(", ") 
+                        : "General"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <button 
-                className="btn-apply" 
-                onClick={() => handleApply(job)}
-                // ✅ FIX: Disable button if user is not logged in OR has no resume
-                disabled={!user || !resume || applyingId === job._id || appliedJobIds.has(job._id)}
-              >
-                {applyingId === job._id 
-                  ? "Applying..." 
-                  : appliedJobIds.has(job._id) 
-                  ? "✓ Applied"
-                  : !user
-                  ? "Log in to Apply" // ✅ New text for logged-out users
-                  : "Apply Now"}
-              </button>
+              <div className="card-actions">
+                <button 
+                  className={`btn-apply ${appliedJobIds.has(job._id) ? 'applied' : ''}`}
+                  onClick={() => handleApply(job)}
+                  disabled={!user || !resume || applyingId === job._id || appliedJobIds.has(job._id)}
+                >
+                  {applyingId === job._id 
+                    ? "Sending..." 
+                    : appliedJobIds.has(job._id) 
+                    ? "✓ Applied"
+                    : !user
+                    ? "Log in to Apply" 
+                    : "Apply Now"}
+                </button>
+              </div>
             </div>
           ))
         )}

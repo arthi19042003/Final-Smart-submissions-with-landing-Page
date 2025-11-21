@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import api from "../api/axios";
+import { 
+  FaSearch, 
+  FaFilter, 
+  FaSort, 
+  FaSortUp, 
+  FaSortDown, 
+  FaChevronLeft, 
+  FaChevronRight 
+} from "react-icons/fa";
 import "./PurchaseOrders.css";
 
 const newPoInitialState = {
@@ -9,6 +18,8 @@ const newPoInitialState = {
   date: new Date().toISOString().split("T")[0], 
 };
 
+const ITEMS_PER_PAGE = 5;
+
 const PurchaseOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +28,12 @@ const PurchaseOrders = () => {
   const [showForm, setShowForm] = useState(false);
   const [newPo, setNewPo] = useState(newPoInitialState);
   const [formError, setFormError] = useState('');
+
+  // --- New State for Sort, Filter, Pagination ---
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -36,6 +53,11 @@ const PurchaseOrders = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  // Reset to page 1 when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
 
   const updateOrderStatus = async (id, newStatus) => {
     const originalOrders = [...orders];
@@ -94,19 +116,84 @@ const PurchaseOrders = () => {
               year: 'numeric', month: 'short', day: 'numeric'
            });
        }
-       return dateString;
+       // Fallback for ISO strings if format changes
+       return new Date(dateString).toLocaleDateString("en-US", {
+          year: 'numeric', month: 'short', day: 'numeric'
+       });
      } catch (e) {
        return 'Invalid Date';
      }
   };
 
+  // --- Sort Handler ---
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // --- Process Data (Filter -> Sort) ---
+  const processedData = useMemo(() => {
+    let data = [...orders];
+
+    // 1. Filter
+    if (statusFilter !== "All") {
+      data = data.filter(item => item.status === statusFilter);
+    }
+
+    if (searchTerm) {
+      const lowerTerm = searchTerm.toLowerCase();
+      data = data.filter(item => 
+        (item.vendor && item.vendor.toLowerCase().includes(lowerTerm)) ||
+        (item.poId && item.poId.toString().includes(lowerTerm))
+      );
+    }
+
+    // 2. Sort
+    if (sortConfig.key) {
+      data.sort((a, b) => {
+        let aValue = a[sortConfig.key];
+        let bValue = b[sortConfig.key];
+
+        // Handle number comparison
+        if (sortConfig.key === 'amount' || sortConfig.key === 'poId') {
+             aValue = Number(aValue);
+             bValue = Number(bValue);
+        } else {
+             // String comparison
+             aValue = (aValue || '').toString().toLowerCase();
+             bValue = (bValue || '').toString().toLowerCase();
+        }
+
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return data;
+  }, [orders, searchTerm, statusFilter, sortConfig]);
+
+  // --- Pagination Logic ---
+  const totalItems = processedData.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+  const paginatedData = processedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const getSortIcon = (key) => {
+    if (sortConfig.key !== key) return <FaSort className="sort-icon faded" />;
+    return sortConfig.direction === 'asc' ? <FaSortUp className="sort-icon" /> : <FaSortDown className="sort-icon" />;
+  };
 
   return (
     <div className="po-container">
       <h2>Purchase Orders</h2>
       {error && !loading && <p className="error">{error}</p>}
 
-      {/* --- ✅ NEW: Create PO Form Section --- */}
       <div className="po-form-toggle">
         <button 
           className="btn-create-po"
@@ -143,65 +230,123 @@ const PurchaseOrders = () => {
           </form>
         </div>
       )}
-      {/* --- End of Create PO Form --- */}
 
+      {/* --- Filters & Search Bar --- */}
+      <div className="filters-container">
+        <div className="search-box">
+          <FaSearch className="search-icon" />
+          <input 
+            type="text" 
+            placeholder="Search Vendor or PO ID..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
+        <div className="filter-box">
+          <FaFilter className="filter-icon" />
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="All">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+      </div>
 
       <div className="po-card">
         <h3>Existing Orders</h3>
         {loading ? (
            <p className="loading">Loading purchase orders...</p>
         ) : (
-          <table className="po-table">
-            <thead>
-              <tr>
-                <th>PO ID</th>
-                <th>Vendor</th>
-                <th>Amount ($)</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length === 0 && !loading && !error ? (
-                  <tr><td colSpan="6" className="empty">No purchase orders found.</td></tr>
-              ) : (
-                  orders.map((order) => (
-                  <tr key={order._id}>
-                      <td>{order.poId}</td>
-                      <td>{order.vendor || 'N/A'}</td>
-                      <td>{order.amount != null ? order.amount.toLocaleString() : 'N/A'}</td>
-                      <td>{formatDate(order.date)}</td>
-                      <td>
-                      <span className={`status ${order.status?.toLowerCase() || 'pending'}`}>
-                          {order.status || 'Pending'}
-                      </span>
-                      </td>
-                      <td>
-                      {order.status === "Pending" ? (
-                          <>
-                          <button
-                              className="approve-btn"
-                              onClick={() => updateOrderStatus(order._id, "Approved")}
-                          >
-                              Approve
-                          </button>
-                          <button
-                              className="reject-btn"
-                              onClick={() => updateOrderStatus(order._id, "Rejected")}
-                          >
-                              Reject
-                          </button>
-                          </>
-                      ) : (
-                          <span className="no-action">—</span>
-                      )}
-                      </td>
+          <>
+            <div className="table-responsive">
+              <table className="po-table">
+                <thead>
+                  <tr>
+                    <th onClick={() => handleSort('poId')} className="clickable">
+                      PO ID {getSortIcon('poId')}
+                    </th>
+                    <th onClick={() => handleSort('vendor')} className="clickable">
+                      Vendor {getSortIcon('vendor')}
+                    </th>
+                    <th onClick={() => handleSort('amount')} className="clickable">
+                      Amount ($) {getSortIcon('amount')}
+                    </th>
+                    <th onClick={() => handleSort('date')} className="clickable">
+                      Date {getSortIcon('date')}
+                    </th>
+                    <th onClick={() => handleSort('status')} className="clickable">
+                      Status {getSortIcon('status')}
+                    </th>
+                    <th>Action</th>
                   </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {paginatedData.length === 0 ? (
+                      <tr><td colSpan="6" className="empty">No purchase orders found.</td></tr>
+                  ) : (
+                      paginatedData.map((order) => (
+                      <tr key={order._id}>
+                          <td>{order.poId}</td>
+                          <td>{order.vendor || 'N/A'}</td>
+                          <td>{order.amount != null ? order.amount.toLocaleString() : 'N/A'}</td>
+                          <td>{formatDate(order.date)}</td>
+                          <td>
+                          <span className={`status ${order.status?.toLowerCase() || 'pending'}`}>
+                              {order.status || 'Pending'}
+                          </span>
+                          </td>
+                          <td>
+                          {order.status === "Pending" ? (
+                              <>
+                              <button
+                                  className="approve-btn"
+                                  onClick={() => updateOrderStatus(order._id, "Approved")}
+                              >
+                                  Approve
+                              </button>
+                              <button
+                                  className="reject-btn"
+                                  onClick={() => updateOrderStatus(order._id, "Rejected")}
+                              >
+                                  Reject
+                              </button>
+                              </>
+                          ) : (
+                              <span className="no-action">—</span>
+                          )}
+                          </td>
+                      </tr>
+                      ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* --- Pagination Controls --- */}
+            {totalItems > 0 && (
+              <div className="pagination">
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="pagination-btn"
+                >
+                  <FaChevronLeft />
+                </button>
+                <span className="page-info">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="pagination-btn"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
