@@ -6,7 +6,8 @@ import {
   FiBriefcase,
   FiDollarSign,
   FiBarChart2,
-  FiBell
+  FiBell,
+  FiChevronDown // Import the arrow icon
 } from 'react-icons/fi';
 import './LandingPage.css';
 
@@ -59,7 +60,7 @@ const LandingPage = () => {
         {/* Filter Bar */}
         <div className="filter-bar">
           <div className="filter-select-wrapper">
-            <FiBriefcase />
+            <FiBriefcase className="filter-icon-left" />
             <select className="filter-select">
               <option value="">Job Type</option>
               <option value="full-time">Full-time</option>
@@ -67,26 +68,29 @@ const LandingPage = () => {
               <option value="contract">Contract</option>
               <option value="remote">Remote</option>
             </select>
+            <FiChevronDown className="filter-arrow" />
           </div>
 
           <div className="filter-select-wrapper">
-            <FiBarChart2 />
+            <FiBarChart2 className="filter-icon-left" />
             <select className="filter-select">
               <option value="">Experience Level</option>
               <option value="entry">Entry Level</option>
               <option value="mid">Mid Level</option>
               <option value="senior">Senior Level</option>
             </select>
+            <FiChevronDown className="filter-arrow" />
           </div>
 
           <div className="filter-select-wrapper">
-            <FiDollarSign />
+            <FiDollarSign className="filter-icon-left" />
             <select className="filter-select">
               <option value="">Salary Range</option>
               <option value="50k">50k - 80k</option>
               <option value="80k">80k - 120k</option>
               <option value="120k">120k+</option>
             </select>
+            <FiChevronDown className="filter-arrow" />
           </div>
 
           <button className="job-alerts-btn">

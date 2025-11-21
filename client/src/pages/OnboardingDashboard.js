@@ -188,12 +188,14 @@ export default function OnboardingDashboard() {
                         <td className="p-3 text-secondary">{c.department || "-"}</td>
 
                         <td className="p-3">
-                            <span style={{ fontWeight: "500", color: "#15803d" }}>
+                            {/* UPDATED: Changed color to black */}
+                            <span style={{ fontWeight: "500", color: "black" }}>
                                 {c.status}
                             </span>
                         </td>
                         <td className="p-3">
-                             <span className="fw-bold" style={{ color: "black" }}>
+                             {/* UPDATED: Removed fw-bold, set fontWeight to 500 */}
+                             <span style={{ color: "black", fontWeight: "500" }}>
                                 {c.onboardingStatus}
                             </span>
                         </td>

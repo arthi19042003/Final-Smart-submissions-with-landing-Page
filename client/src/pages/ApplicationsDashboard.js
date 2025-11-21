@@ -10,7 +10,7 @@ import {
   Col,
   Card
 } from "react-bootstrap";
-import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import api from "../api/axios";
 import toast, { Toaster } from "react-hot-toast";
 import "./ApplicationsDashboard.css";
@@ -176,7 +176,7 @@ export default function ApplicationsDashboard() {
       </div>
 
       <Row className="mb-4 g-3">
-        <Col md={8}>
+        <Col md={9}>
           <div className="search-box position-relative bg-white rounded shadow-sm p-2">
              <FaSearch className="search-icon text-primary ms-2" />
              <Form.Control 
@@ -188,14 +188,16 @@ export default function ApplicationsDashboard() {
              />
           </div>
         </Col>
-        <Col md={4}>
-           <div className="bg-white rounded shadow-sm p-2 d-flex align-items-center">
-             <FaFilter className="text-muted ms-2 me-2" />
+        <Col md={3}>
+           <div className="filter-wrapper bg-white rounded shadow-sm p-2">
+             
+             {/* Filter Icon at the Start (Left) */}
+             <FaFilter className="filter-icon-left" />
+             
              <Form.Select 
                value={statusFilter} 
                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }} 
-               className="border-0 shadow-none fw-semibold" 
-               style={{ cursor: 'pointer' }}
+               className="filter-select border-0 shadow-none"
              >
                <option value="All">All Statuses</option>
                <option value="Applied">Applied</option>
@@ -204,6 +206,10 @@ export default function ApplicationsDashboard() {
                <option value="Hired">Hired</option>
                <option value="Rejected">Rejected</option>
              </Form.Select>
+             
+             {/* Chevron Arrow at the End (Right) */}
+             <FaChevronDown className="filter-icon-right" />
+             
            </div>
         </Col>
       </Row>
@@ -266,7 +272,6 @@ export default function ApplicationsDashboard() {
                             </Button>
                           )}
                           
-                          {/* Updated Reject Button */}
                           {app.status !== "Rejected" && app.status !== "Hired" && (
                              <Button
                               size="sm"
@@ -295,7 +300,6 @@ export default function ApplicationsDashboard() {
                               Hired ({app.onboardingStatus})
                             </Button>
                           ) : (
-                            /* Updated Hire Button */
                             <Button
                               size="sm"
                               style={purpleBtnStyle}

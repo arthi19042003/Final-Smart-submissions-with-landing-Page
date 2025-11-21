@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaStar, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from "react-icons/fa"; 
+import { FaStar, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaSearch, FaFilter } from "react-icons/fa"; 
 import { useNavigate, useParams } from "react-router-dom"; 
 import { Modal, Button } from "react-bootstrap"; 
 import api from "../api/axios";
@@ -77,7 +77,6 @@ function InterviewDetails() {
   }, [search, filterStatus]);
 
   const populateForm = (item) => {
-    // Simplified: Just load the date string directly from the database
     setForm({
       ...item,
       date: item.date || "", 
@@ -219,7 +218,6 @@ function InterviewDetails() {
               <input name="interviewerName" value={form.interviewerName} onChange={handleChange} required />
             </div>
 
-            {/* ✅ Changed to text input for manual entry */}
             <div className="form-field">
               <label>Interview Date & Time <span>*</span></label>
               <input 
@@ -322,14 +320,25 @@ function InterviewDetails() {
         <h3 className="section-label">Interview Records</h3>
 
         <div className="search-row">
-          <input placeholder="Search Candidate / Position" value={search} onChange={(e) => setSearch(e.target.value)} />
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-            <option value="All">All Statuses</option>
-            <option>Pending</option>
-            <option>Scheduled</option>
-            <option>Completed</option>
-            <option>Cancelled</option>
-          </select>
+          <div className="search-wrapper">
+            <FaSearch className="search-icon" />
+            <input 
+              placeholder="Search Candidate / Position" 
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)} 
+            />
+          </div>
+
+          <div className="filter-wrapper">
+            <FaFilter className="filter-icon" />
+            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+              <option value="All">All Statuses</option>
+              <option>Pending</option>
+              <option>Scheduled</option>
+              <option>Completed</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
         </div>
 
         <div className="table-header">
@@ -342,21 +351,19 @@ function InterviewDetails() {
           <span>Actions</span>
         </div>
 
-        {/* Display Paginated Data */}
         {paginatedData.length === 0 ? (
           <p className="no-records" style={{textAlign: "center", padding: "20px", color: "#666"}}>No records found.</p>
         ) : (
           paginatedData.map((it) => (
             <div className="table-row" key={it._id}>
               <span>{it.candidateFirstName || ""} {it.candidateLastName || ""}</span>
-              
-              {/* Render the date string exactly as stored */}
               <span>{it.date || "N/A"}</span>
-              
               <span>{it.jobPosition || "N/A"}</span>
               
+              {/* ✅ Updated: Plain text status, no badges */}
               <span>{it.status || "Pending"}</span>
               
+              {/* ✅ Updated: Plain text result, no badges */}
               <span>{it.result || "Pending"}</span>
               
               <span>⭐ {Number(it.rating || 0)}</span>
@@ -369,7 +376,6 @@ function InterviewDetails() {
           ))
         )}
 
-        {/* Pagination Controls */}
         {totalItems > 0 && ( 
             <div className="d-flex justify-content-center py-4 border-top bg-light rounded-bottom" style={{ marginTop: '15px', paddingTop: '20px' }}>
                 <div 
@@ -402,7 +408,6 @@ function InterviewDetails() {
         )}
       </div>
 
-      {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>

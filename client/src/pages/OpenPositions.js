@@ -8,11 +8,11 @@ import {
   Card, 
   Row, 
   Col,
-  Modal // Import Modal
+  Modal 
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast"; 
-import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
+import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaChevronDown } from 'react-icons/fa'; 
 import './OpenPositions.css';
 
 const ITEMS_PER_PAGE = 5; 
@@ -122,13 +122,11 @@ export default function OpenPositions() {
     }
   };
 
-  // 1. Trigger the Modal instead of window.confirm
   const initiateDelete = (id) => {
     setPositionToDelete(id);
     setShowDeleteModal(true);
   };
 
-  // 2. Perform the actual delete (Called by Modal "Delete" button)
   const confirmDelete = async () => {
     if (!token || !positionToDelete) return;
     
@@ -139,7 +137,7 @@ export default function OpenPositions() {
       });
       if (!res.ok) throw new Error("Failed to delete position");
       
-      toast.success("Position deleted successfully"); // Indicator
+      toast.success("Position deleted successfully"); 
       fetchPositions();
     } catch (err) {
       console.error(err);
@@ -205,19 +203,30 @@ export default function OpenPositions() {
 
       <Row className="mb-4 g-3">
         <Col md={8}>
-          <div className="search-box position-relative bg-white rounded shadow-sm p-2">
-             <FaSearch className="search-icon text-primary ms-2" />
-             <Form.Control type="text" placeholder="Filter by Title, Location, or Skills..." className="ps-5 border-0 search-input" value={filterText} onChange={(e) => { setFilterText(e.target.value); setCurrentPage(1); }} />
+          <div className="search-wrapper">
+             <FaSearch className="search-icon" />
+             <Form.Control 
+               type="text" 
+               placeholder="Filter by Title, Location, or Skills..." 
+               className="search-input" 
+               value={filterText} 
+               onChange={(e) => { setFilterText(e.target.value); setCurrentPage(1); }} 
+             />
           </div>
         </Col>
         <Col md={4}>
-           <div className="bg-white rounded shadow-sm p-2 d-flex align-items-center">
-             <FaFilter className="text-muted ms-2 me-2" />
-             <Form.Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="border-0 shadow-none fw-semibold" style={{ cursor: 'pointer' }}>
+           <div className="filter-wrapper">
+             <FaFilter className="filter-icon" />
+             <Form.Select 
+               value={statusFilter} 
+               onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }} 
+               className="filter-select"
+             >
                <option value="All">All Statuses</option>
                <option value="Open">Open Positions</option>
                <option value="Closed">Closed Positions</option>
              </Form.Select>
+             <FaChevronDown className="filter-chevron" />
            </div>
         </Col>
       </Row>
@@ -259,7 +268,6 @@ export default function OpenPositions() {
                             <>
                               <Button size="sm" className="btn-purple" onClick={() => handleEdit(pos)}>Edit</Button>
                               {pos.status === "Open" && (<Button size="sm" className="btn-purple" onClick={() => handleClosePosition(pos._id)}>Close</Button>)}
-                              {/* Updated to trigger Modal */}
                               <Button size="sm" className="btn-red" onClick={() => initiateDelete(pos._id)}>Delete</Button>
                             </>
                           )}

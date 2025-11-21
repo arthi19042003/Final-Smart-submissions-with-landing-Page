@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaSearch, FaFilter, FaChevronLeft, FaChevronRight } from "react-icons/fa"; 
+import { 
+  FaPlus, 
+  FaSearch, 
+  FaFilter, 
+  FaChevronLeft, 
+  FaChevronRight,
+  FaChevronDown 
+} from "react-icons/fa"; 
 import { Container, Card, Table, Button, Spinner, Alert, Row, Col, Form } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
 import './HiringManagerDashboard.css'; 
@@ -69,22 +76,22 @@ export default function ViewPurchaseOrders() {
     }
   };
 
-  // --- Filter Logic Only (Sorting Removed) ---
+  // --- Process Data (Filter Only) ---
   const processedData = useMemo(() => {
     let data = [...purchaseOrders];
 
-    // 1. Status Filter
+    // 1. Filter
     if (statusFilter !== "All") {
-      data = data.filter(po => po.status === statusFilter);
+      data = data.filter(item => item.status === statusFilter);
     }
 
     // 2. Search Filter
     if (searchTerm) {
       const lowerTerm = searchTerm.toLowerCase();
-      data = data.filter(po => 
-        (po.poNumber && po.poNumber.toLowerCase().includes(lowerTerm)) ||
-        (po.candidateName && po.candidateName.toLowerCase().includes(lowerTerm)) ||
-        (po.positionTitle && po.positionTitle.toLowerCase().includes(lowerTerm))
+      data = data.filter(item => 
+        (item.poNumber && item.poNumber.toLowerCase().includes(lowerTerm)) ||
+        (item.candidateName && item.candidateName.toLowerCase().includes(lowerTerm)) ||
+        (item.positionTitle && item.positionTitle.toLowerCase().includes(lowerTerm))
       );
     }
 
@@ -161,6 +168,7 @@ export default function ViewPurchaseOrders() {
                     <option value="Approved">Approved</option>
                     <option value="Rejected">Rejected</option>
                   </Form.Select>
+                  <FaChevronDown className="filter-chevron" />
                 </div>
               </Col>
             </Row>
@@ -197,7 +205,6 @@ export default function ViewPurchaseOrders() {
                         <td className="p-3">
                           {po.startDate ? new Date(po.startDate).toLocaleDateString() : "-"}
                         </td>
-                        {/* Plain black text for status */}
                         <td className="p-3">
                           <span style={{ color: "#000", fontWeight: "500" }}>
                             {po.status}

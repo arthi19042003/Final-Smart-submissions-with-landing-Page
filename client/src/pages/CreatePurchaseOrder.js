@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
 import './HiringManagerDashboard.css'; 
+import './CreatePurchaseOrder.css'; // Import custom CSS
 
 export default function CreatePurchaseOrder() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function CreatePurchaseOrder() {
     setFormData({ ...formData, [name]: value });
   };
 
+  // FIX: Corrected 'constZS' to 'const handleSubmit'
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -69,22 +71,26 @@ export default function CreatePurchaseOrder() {
       <Container className="py-4">
         <Toaster position="top-right" />
         <Card className="shadow-sm border-0" style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <Card.Body className="p-4">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h2 className="fw-bold text-dark mb-0">🧾 Create Purchase Order</h2>
-              <Button variant="light" onClick={() => navigate(-1)} className="border">← Back</Button>
+          <Card.Body className="p-5"> {/* Increased padding */}
+            
+            {/* Title Header - Centered, Purple, No Back Button */}
+            <div className="text-center mb-4">
+              <h2 className="create-po-title">
+                  Create Purchase Order
+              </h2>
             </div>
+
             <Form onSubmit={handleSubmit}>
               <Row className="g-3">
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label>Candidate Name *</Form.Label>
+                    <Form.Label>Candidate Name <span className="text-danger">*</span></Form.Label>
                     <Form.Control type="text" name="candidateName" value={formData.candidateName} onChange={handleChange} required />
                   </Form.Group>
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label>Position Title *</Form.Label>
+                    <Form.Label>Position Title <span className="text-danger">*</span></Form.Label>
                     <Form.Control type="text" name="positionTitle" value={formData.positionTitle} onChange={handleChange} required />
                   </Form.Group>
                 </Col>
@@ -102,12 +108,12 @@ export default function CreatePurchaseOrder() {
                 </Col>
                 <Col md={12}>
                   <Form.Group>
-                    <Form.Label>Start Date *</Form.Label>
+                    <Form.Label>Start Date <span className="text-danger">*</span></Form.Label>
                     <Form.Control type="date" name="startDate" value={formData.startDate} onChange={handleChange} required />
                   </Form.Group>
                 </Col>
                 <Col md={12} className="mt-4">
-                  <Button type="submit" variant="primary" size="lg" className="w-100" disabled={submitting}>
+                  <Button type="submit" className="purple-btn w-100" disabled={submitting}>
                     {submitting ? <Spinner animation="border" size="sm" /> : "Generate PO"}
                   </Button>
                 </Col>

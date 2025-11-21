@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, Button } from 'react-bootstrap'; // Import Modal components
 import api from '../api/axios'; 
 import './ResumeUpload.css';
 
@@ -8,6 +9,10 @@ const ResumeUpload = () => {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  // --- State for Delete Modal ---
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [resumeToDelete, setResumeToDelete] = useState(null);
 
   useEffect(() => {
     fetchResumes();
@@ -116,26 +121,39 @@ const ResumeUpload = () => {
       setMessage({ type: 'error', text: 'File not found' });
       return;
     }
-    // Normalize path for URL (replace backslashes with forward slashes)
     const normalizedPath = resume.filePath.replace(/\\/g, "/");
-    // Assuming server serves uploads statically from root
     const fileUrl = `http://localhost:5000/${normalizedPath}`;
     window.open(fileUrl, "_blank");
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this resume?")) return;
+  // --- New Modal Handlers ---
+  
+  const initiateDelete = (id) => {
+    setResumeToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!resumeToDelete) return;
 
     try {
       const token = localStorage.getItem('token');
-      await api.delete(`/resume/${id}`, {
+      await api.delete(`/resume/${resumeToDelete}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage({ type: 'success', text: 'Deleted ✅' });
       fetchResumes();
     } catch {
       setMessage({ type: 'error', text: 'Delete failed' });
+    } finally {
+      setShowDeleteModal(false);
+      setResumeToDelete(null);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowDeleteModal(false);
+    setResumeToDelete(null);
   };
 
   const formatSize = (b) => (b / 1024 / 1024).toFixed(2) + " MB";
@@ -198,12 +216,12 @@ const ResumeUpload = () => {
                     </button>
                   )}
                   
-                  {/* View Button Added Here */}
                   <button onClick={() => handleView(res)} className="btn-view">
                     View
                   </button>
 
-                  <button onClick={() => handleDelete(res._id)} className="btn-danger">
+                  {/* Updated to use modal trigger */}
+                  <button onClick={() => initiateDelete(res._id)} className="btn-danger">
                     Delete
                   </button>
                 </div>
@@ -211,6 +229,24 @@ const ResumeUpload = () => {
             ))
           )}
         </div>
+
+        {/* --- Delete Confirmation Modal --- */}
+        <Modal show={showDeleteModal} onHide={handleCloseModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete this resume? This action cannot be undone.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
       </div>
     </div>

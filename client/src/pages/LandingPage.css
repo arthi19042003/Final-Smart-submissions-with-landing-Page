@@ -98,14 +98,16 @@
   background-color: #6d28d9;
 }
 
+/* --- UPDATED FILTER STYLES --- */
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 20px; /* Increased gap prevents overlapping */
   justify-content: center;
   align-items: center;
   background: #ffffffdd; 
-  padding: 15px;
+  padding: 20px;
   border-radius: 12px;
   backdrop-filter: blur(4px); 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -113,37 +115,70 @@
 }
 
 .filter-select-wrapper {
+  position: relative; /* Necessary for arrow positioning */
   display: flex;
   align-items: center;
-  gap: 8px;
   background: #f7f8fc;
-  padding: 10px 15px;
+  height: 50px; /* Taller container */
   border-radius: 8px;
   color: #555;
+  border: 1px solid #e5e7eb;
+  min-width: 220px; /* Bigger minimum width */
+  flex: 1; /* Allow flexible growth */
+}
+
+.filter-icon-left {
+  font-size: 1.2rem;
+  color: #888;
+  margin-right: 12px;
+  pointer-events: none;
 }
 
 .filter-select {
   border: none;
   background: transparent;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #333;
   outline: none;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
+  
+  /* Hide default arrow */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  
+  /* Add padding-right so text doesn't go under the new arrow */
+  padding-right: 40px; 
+}
+
+.filter-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: #000;
+  stroke-width: 3;
+  pointer-events: none; /* Clicks pass through to the select */
 }
 
 .job-alerts-btn {
   background: #f3e8ff;
   color: #7c3aed;
   border: 1px solid #e0cffc;
-  padding: 10px 15px;
+  padding: 0 25px;
+  height: 50px; /* Match height of filters */
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   transition: background-color 0.2s;
+  white-space: nowrap;
 }
 
 .job-alerts-btn:hover {

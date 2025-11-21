@@ -124,10 +124,37 @@ textarea {
   margin-top: 40px;
 }
  
+/* --- Updated Search Row Styles --- */
 .search-row {
   display: flex;
   gap: 12px;
   margin-bottom: 15px;
+}
+
+.search-wrapper,
+.filter-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon,
+.filter-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6a5cff; 
+  pointer-events: none;
+  z-index: 1;
+  font-size: 1rem;
+}
+
+/* Ensure the input has padding so text doesn't overlap icon */
+.search-wrapper input,
+.filter-wrapper select {
+  padding-left: 35px;
+  width: 100%;
+  box-sizing: border-box;
 }
  
 .table-header,
@@ -186,47 +213,6 @@ textarea {
  
 .icon.delete {
   color: #ff4c72;
-}
- 
-.badge {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: capitalize;
-  display: inline-block;
-  min-width: 90px;
-  text-align: center;
-}
- 
-.badge.pending {
-  background: #ffeb9b;
-  color: #5c4b00;
-}
- 
-.badge.scheduled {
-  background: #b6dcff;
-  color: #003e79;
-}
- 
-.badge.completed {
-  background: #c5ffd2;
-  color: #00581c;
-}
- 
-.badge.cancelled {
-  background: #ffc2c2;
-  color: #8b0000;
-}
- 
-.badge.pass {
-  background: #caffc8;
-  color: #056b00;
-}
- 
-.badge.fail {
-  background: #ffd3d3;
-  color: #9e0000;
 }
  
 @keyframes fadeUp {
