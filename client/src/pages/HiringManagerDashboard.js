@@ -81,15 +81,22 @@ export default function HiringManagerDashboard() {
           <Col>
             <Card className="shadow-sm border-0">
               <Card.Body className="p-3">
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <Card.Title className="text-purple fw-bold mb-0">Manage Positions</Card.Title>
-                  <Button className="purple-btn" size="sm" onClick={() => navigate("/hiring-manager/open-positions")}>
+                {/* FIX: Added 'flex-wrap' and 'gap-2' to prevent overlapping on mobile */}
+                <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                  <Card.Title className="text-purple fw-bold mb-0 text-nowrap">Manage Positions</Card.Title>
+                  <Button 
+                    className="purple-btn" 
+                    size="sm" 
+                    onClick={() => navigate("/hiring-manager/open-positions")}
+                    style={{ whiteSpace: "nowrap" }}
+                  >
                     View All Positions →
                   </Button>
                 </div>
+
                 <Form onSubmit={addPosition} className="p-2 bg-light rounded">
                   <Row className="g-2 align-items-end">
-                    <Col md={3}>
+                    <Col md={3} xs={12}>
                       <Form.Label className="mb-1 small fw-bold">Title</Form.Label>
                       <Form.Control
                         size="sm" 
@@ -100,7 +107,7 @@ export default function HiringManagerDashboard() {
                         onChange={(e) => setNewPosition({ ...newPosition, title: e.target.value })}
                       />
                     </Col>
-                    <Col md={2}>
+                    <Col md={2} xs={6}>
                       <Form.Label className="mb-1 small fw-bold">Dept</Form.Label>
                       <Form.Control
                         size="sm"
@@ -110,7 +117,7 @@ export default function HiringManagerDashboard() {
                         onChange={(e) => setNewPosition({ ...newPosition, department: e.target.value })}
                       />
                     </Col>
-                    <Col md={2}>
+                    <Col md={2} xs={6}>
                       <Form.Label className="mb-1 small fw-bold">Location</Form.Label>
                       <Form.Control
                         size="sm"
@@ -120,7 +127,7 @@ export default function HiringManagerDashboard() {
                         onChange={(e) => setNewPosition({ ...newPosition, location: e.target.value })}
                       />
                     </Col>
-                    <Col md={3}>
+                    <Col md={3} xs={12}>
                       <Form.Label className="mb-1 small fw-bold">Skills</Form.Label>
                       <Form.Control
                         size="sm"
@@ -130,7 +137,7 @@ export default function HiringManagerDashboard() {
                         onChange={(e) => setNewPosition({ ...newPosition, requiredSkills: e.target.value })}
                       />
                     </Col>
-                    <Col md={1}>
+                    <Col md={1} xs={6}>
                       <Form.Label className="mb-1 small fw-bold">Openings</Form.Label>
                       <Form.Control
                         size="sm"
@@ -140,7 +147,7 @@ export default function HiringManagerDashboard() {
                         onChange={(e) => setNewPosition({ ...newPosition, openings: parseInt(e.target.value) })}
                       />
                     </Col>
-                    <Col md={1}>
+                    <Col md={1} xs={6}>
                       <Button type="submit" className="purple-btn w-100" size="sm">
                         <FaPlus />
                       </Button>
@@ -164,7 +171,7 @@ export default function HiringManagerDashboard() {
             { 
               title: " Interviews", 
               text: "Manage timeslots & feedback.", 
-              path: "/hiring-manager/schedule", // Points to the new Interview List page
+              path: "/hiring-manager/schedule", 
               btn: "Manage" 
             },
             { 
@@ -192,7 +199,7 @@ export default function HiringManagerDashboard() {
               btn: "Invite" 
             },
           ].map((item, idx) => (
-            <Col md={4} key={idx}>
+            <Col md={4} sm={6} xs={12} key={idx}>
               <Card className="shadow-sm h-100 border-0 nav-card">
                 <Card.Body className="text-center p-3">
                   <Card.Title className="text-purple fw-bold fs-6">{item.title}</Card.Title>

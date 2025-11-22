@@ -174,11 +174,7 @@ const SubmissionStatus = () => {
                       <div style={{fontSize: '0.8rem', color: '#888'}}>{s.candidate?.hiringManager}</div>
                     </td>
                     <td>
-                      <span
-                        className={`status-badge ${
-                          s.status?.toLowerCase() || "submitted"
-                        }`}
-                      >
+                      <span style={{ color: "black", fontWeight: "500" }}>
                         {s.status || "submitted"}
                       </span>
                     </td>

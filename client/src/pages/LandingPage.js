@@ -1,102 +1,96 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  FiSearch,
-  FiMapPin,
-  FiBriefcase,
-  FiDollarSign,
-  FiBarChart2,
-  FiBell,
-  FiChevronDown // Import the arrow icon
-} from 'react-icons/fi';
-import './LandingPage.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import "./LandingPage.css";
+
+import bgPattern from "../assets/bg-network.jpg";
 
 const LandingPage = () => {
-  const [jobTitle, setJobTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [jobTitle, setJobTitle] = useState("");
+  const [location, setLocation] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
+
+    if (!jobTitle.trim() && !location.trim()) {
+      toast.error("Please enter a job title or location to search.");
+      return;
+    }
+
     navigate(
-      `/candidate/jobs?q=${encodeURIComponent(jobTitle)}&loc=${encodeURIComponent(location)}`
+      `/candidate/jobs?q=${encodeURIComponent(jobTitle)}&loc=${encodeURIComponent(
+        location
+      )}`
     );
   };
 
   return (
-    <div className="search-page-container" id="top">
-      <section className="search-hero-section">
-        <h1 className="search-title">Find Your Dream Job</h1>
-        <p className="search-subtitle">Search thousands of opportunities with quick apply</p>
+    <div
+      className="landing-container"
+      style={{
+        backgroundImage: `url(${bgPattern})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <Toaster position="top-center" />
+
+      <section className="hero-section">
+        <h1 className="hero-title">Find Your Dream Job</h1>
+        <p className="hero-subtitle">
+          Search thousands of opportunities with quick apply
+        </p>
 
         {/* Search Bar */}
         <form className="search-box" onSubmit={handleSearch}>
-          <div className="search-input-group">
-            <FiBriefcase className="search-icon" />
-            <input
-              type="text"
-              placeholder="Job title, keywords, or company"
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Job Title"
+            className="search-input"
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+          />
 
-          <div className="search-input-group">
-            <FiMapPin className="search-icon" />
-            <input
-              type="text"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Location"
+            className="search-input"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
 
-          <button type="submit" className="search-button">
-            <FiSearch />
-            <span>Search</span>
+          <button type="submit" className="purple-btn">
+            Search
           </button>
         </form>
 
-        {/* Filter Bar */}
-        <div className="filter-bar">
-          <div className="filter-select-wrapper">
-            <FiBriefcase className="filter-icon-left" />
-            <select className="filter-select">
-              <option value="">Job Type</option>
-              <option value="full-time">Full-time</option>
-              <option value="part-time">Part-time</option>
-              <option value="contract">Contract</option>
-              <option value="remote">Remote</option>
-            </select>
-            <FiChevronDown className="filter-arrow" />
-          </div>
+        {/* Filters */}
+        <div className="filters-box">
+          <select className="filter-input">
+            <option value="">Job Type</option>
+            <option value="full-time">Full-time</option>
+            <option value="part-time">Part-time</option>
+            <option value="contract">Contract</option>
+            <option value="remote">Remote</option>
+          </select>
 
-          <div className="filter-select-wrapper">
-            <FiBarChart2 className="filter-icon-left" />
-            <select className="filter-select">
-              <option value="">Experience Level</option>
-              <option value="entry">Entry Level</option>
-              <option value="mid">Mid Level</option>
-              <option value="senior">Senior Level</option>
-            </select>
-            <FiChevronDown className="filter-arrow" />
-          </div>
+          <select className="filter-input">
+            <option value="">Experience Level</option>
+            <option value="entry">Entry Level</option>
+            <option value="mid">Mid Level</option>
+            <option value="senior">Senior Level</option>
+          </select>
 
-          <div className="filter-select-wrapper">
-            <FiDollarSign className="filter-icon-left" />
-            <select className="filter-select">
-              <option value="">Salary Range</option>
-              <option value="50k">50k - 80k</option>
-              <option value="80k">80k - 120k</option>
-              <option value="120k">120k+</option>
-            </select>
-            <FiChevronDown className="filter-arrow" />
-          </div>
+          <select className="filter-input">
+            <option value="">Salary Range</option>
+            <option value="50k">50k - 80k</option>
+            <option value="80k">80k - 120k</option>
+            <option value="120k">120k+</option>
+          </select>
 
-          <button className="job-alerts-btn">
-            <FiBell />
-            Job Alerts
-          </button>
+          <button className="alert-btn">Job Alerts</button>
         </div>
       </section>
     </div>
