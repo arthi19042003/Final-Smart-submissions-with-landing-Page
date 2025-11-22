@@ -156,15 +156,28 @@ textarea {
   width: 100%;
   box-sizing: border-box;
 }
+
+/* --- FIX: Responsive Table Wrapper --- */
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
  
+/* --- FIX: Grid Layout Updates --- */
 .table-header,
 .table-row {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1fr 0.6fr 1fr;
+  /* Defined columns for specific content */
+  grid-template-columns: 1.5fr 1.2fr 1.2fr 1fr 1fr 0.6fr 0.8fr;
   padding: 11px 8px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
   align-items: center;
+  /* Force minimum width so columns don't squash */
+  min-width: 800px; 
 }
  
 .table-header {
@@ -186,6 +199,8 @@ textarea {
     align-items: center;
     height: 100%;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
  
 .table-header > span:first-child,
@@ -236,8 +251,9 @@ textarea {
     padding: 22px;
   }
  
+  /* Table font size slightly smaller on mobile, but layout handled by scroll */
   .table-header,
   .table-row {
-    font-size: 12px;
+    font-size: 13px;
   }
 }

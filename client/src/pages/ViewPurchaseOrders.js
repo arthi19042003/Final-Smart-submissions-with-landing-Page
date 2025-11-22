@@ -25,9 +25,8 @@ export default function ViewPurchaseOrders() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const token = localStorage.getItem("token"); 
-
   const fetchPOs = async () => {
+    const token = localStorage.getItem("token");
     if (!token) {
       setLoading(false);
       return;
@@ -49,7 +48,7 @@ export default function ViewPurchaseOrders() {
 
   useEffect(() => {
     fetchPOs();
-  }, [token]);
+  }, []);
 
   // Reset page when filters change
   useEffect(() => {
@@ -57,6 +56,7 @@ export default function ViewPurchaseOrders() {
   }, [searchTerm, statusFilter]);
 
   const updateStatus = async (id, newStatus) => {
+    const token = localStorage.getItem("token");
     if (!token) return;
     try {
       const res = await fetch(`/api/purchase-orders/${id}`, {
@@ -117,8 +117,8 @@ export default function ViewPurchaseOrders() {
   if (loading)
     return (
       <div className="dashboard-wrapper">
-        <div className="text-center mt-5" style={{ color: "white" }}>
-          <Spinner animation="border" variant="light" /> Loading purchase orders...
+        <div className="text-center mt-5" style={{ color: "#666" }}>
+          <Spinner animation="border" variant="primary" /> Loading purchase orders...
         </div>
       </div>
     );
@@ -130,12 +130,13 @@ export default function ViewPurchaseOrders() {
         
         <Card className="shadow-sm border-0">
           <Card.Body>
-            {/* Header */}
-            <div className="d-flex justify-content-between align-items-center mb-4 header-row">
-              <h2 className="fw-bold mb-0 text-purple">Purchase Orders</h2>
+            {/* Header - FIXED OVERLAP */}
+            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 header-row">
+              <h2 className="fw-bold mb-0 text-purple text-nowrap">Purchase Orders</h2>
               <Button
                 onClick={() => navigate("/hiring-manager/create-po")}
                 className="purple-btn create-btn" 
+                style={{ whiteSpace: 'nowrap' }}
               >
                 <FaPlus /> Create New PO
               </Button>
@@ -181,7 +182,8 @@ export default function ViewPurchaseOrders() {
             ) : (
               <>
               <div className="table-responsive">
-                <Table hover className="align-middle">
+                {/* FIX: Added minWidth to prevent column squashing */}
+                <Table hover className="align-middle" style={{ minWidth: '950px' }}>
                   <thead className="bg-light table-light">
                     <tr>
                       <th className="p-3">PO Number</th>

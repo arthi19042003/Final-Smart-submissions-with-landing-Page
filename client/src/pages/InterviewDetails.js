@@ -341,40 +341,41 @@ function InterviewDetails() {
           </div>
         </div>
 
-        <div className="table-header">
-          <span>Candidate</span>
-          <span>Date & Time</span>
-          <span>Position</span>
-          <span>Status</span>
-          <span>Result</span>
-          <span>Rating</span>
-          <span>Actions</span>
-        </div>
-
-        {paginatedData.length === 0 ? (
-          <p className="no-records" style={{textAlign: "center", padding: "20px", color: "#666"}}>No records found.</p>
-        ) : (
-          paginatedData.map((it) => (
-            <div className="table-row" key={it._id}>
-              <span>{it.candidateFirstName || ""} {it.candidateLastName || ""}</span>
-              <span>{it.date || "N/A"}</span>
-              <span>{it.jobPosition || "N/A"}</span>
-              
-              {/* ✅ Updated: Plain text status, no badges */}
-              <span>{it.status || "Pending"}</span>
-              
-              {/* ✅ Updated: Plain text result, no badges */}
-              <span>{it.result || "Pending"}</span>
-              
-              <span>⭐ {Number(it.rating || 0)}</span>
-
-              <div className="row-actions">
-                <FaEdit className="icon" onClick={() => handleEdit(it)} />
-                <FaTrash className="icon delete" onClick={() => handleDeleteClick(it._id)} />
-              </div>
+        {/* ✅ FIX: Added wrapper for horizontal scrolling on mobile */}
+        <div className="table-responsive-wrapper">
+            <div className="table-header">
+              <span>Candidate</span>
+              <span>Date & Time</span>
+              <span>Position</span>
+              <span>Status</span>
+              <span>Result</span>
+              <span>Rating</span>
+              <span>Actions</span>
             </div>
-          ))
-        )}
+
+            {paginatedData.length === 0 ? (
+              <p className="no-records" style={{textAlign: "center", padding: "20px", color: "#666"}}>No records found.</p>
+            ) : (
+              paginatedData.map((it) => (
+                <div className="table-row" key={it._id}>
+                  <span>{it.candidateFirstName || ""} {it.candidateLastName || ""}</span>
+                  <span>{it.date || "N/A"}</span>
+                  <span>{it.jobPosition || "N/A"}</span>
+                  
+                  <span>{it.status || "Pending"}</span>
+                  
+                  <span>{it.result || "Pending"}</span>
+                  
+                  <span>⭐ {Number(it.rating || 0)}</span>
+
+                  <div className="row-actions">
+                    <FaEdit className="icon" onClick={() => handleEdit(it)} />
+                    <FaTrash className="icon delete" onClick={() => handleDeleteClick(it._id)} />
+                  </div>
+                </div>
+              ))
+            )}
+        </div>
 
         {totalItems > 0 && ( 
             <div className="d-flex justify-content-center py-4 border-top bg-light rounded-bottom" style={{ marginTop: '15px', paddingTop: '20px' }}>
