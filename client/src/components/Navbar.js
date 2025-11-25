@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { useAuth } from '../context/AuthContext';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { FiMenu, FiX } from 'react-icons/fi'; // Import Icons
+import { FiMenu, FiX } from 'react-icons/fi'; 
 import './Navbar.css';
 
 export default function Navbar() {
@@ -27,14 +27,12 @@ export default function Navbar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Helper to render links based on role
   const renderLinks = (isMobile = false) => {
     if (!user) {
       return (
         <>
           <HashLink smooth to="/#top" className="navbar-link" onClick={closeSidebar}>Home</HashLink>
           
-          {/* For mobile, we expand the login options instead of a dropdown for better UX */}
           {isMobile ? (
             <div className="mobile-login-group">
               <span className="mobile-group-title">Login As:</span>
@@ -42,6 +40,8 @@ export default function Navbar() {
               <Link to="/login/recruiter" className="navbar-link" onClick={closeSidebar}>Recruiter</Link>
               <Link to="/login/employer" className="navbar-link" onClick={closeSidebar}>Employer</Link>
               <Link to="/login/hiring-manager" className="navbar-link" onClick={closeSidebar}>Hiring Manager</Link>
+              {/* Added Admin Link for Mobile */}
+              <Link to="/login/admin" className="navbar-link" style={{color: '#dc2626'}} onClick={closeSidebar}>Admin</Link>
             </div>
           ) : (
             <NavDropdown title="Login" id="login-dropdown" className="navbar-dropdown">
@@ -49,6 +49,9 @@ export default function Navbar() {
               <NavDropdown.Item as={Link} to="/login/recruiter">Recruiter Login</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/login/employer">Employer Login</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/login/hiring-manager">Hiring Manager Login</NavDropdown.Item>
+              <NavDropdown.Divider />
+              {/* Added Admin Link for Desktop */}
+              <NavDropdown.Item as={Link} to="/login/admin" style={{ color: '#dc2626', fontWeight: '600' }}>Admin Login</NavDropdown.Item>
             </NavDropdown>
           )}
 
@@ -96,6 +99,11 @@ export default function Navbar() {
           </>
         )}
 
+        {/* Admin Role Links */}
+        {role === 'admin' && (
+           <Link to="/admin/dashboard" className="navbar-link" onClick={closeSidebar}>Admin Dashboard</Link>
+        )}
+
         <button onClick={handleLogout} className={isMobile ? "navbar-link logout-link" : "navbar-btn"}>
           Logout
         </button>
@@ -110,20 +118,16 @@ export default function Navbar() {
           Smart Submissions
         </HashLink>
 
-        {/* Desktop Menu */}
         <div className="navbar-menu desktop-only">
           {renderLinks(false)}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="mobile-menu-icon" onClick={toggleSidebar}>
           <FiMenu size={28} />
         </div>
 
-        {/* Sidebar Overlay (Backdrop) */}
         <div className={`sidebar-backdrop ${isSidebarOpen ? 'active' : ''}`} onClick={closeSidebar}></div>
 
-        {/* Sidebar Panel */}
         <div className={`sidebar-panel ${isSidebarOpen ? 'active' : ''}`}>
           <div className="sidebar-header">
             <span className="sidebar-logo">Menu</span>

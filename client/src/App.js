@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import EmployerLogin from "./pages/EmployerLogin";
 import HiringManagerLogin from "./pages/HiringManagerLogin";
 import RecruiterLogin from "./pages/RecruiterLogin";
+// Added Admin Login
+import AdminLogin from "./pages/AdminLogin";
 
 import Register from "./pages/Register";
 import EmployerRegister from "./pages/EmployerRegister";
@@ -39,7 +41,6 @@ import Inbox from "./pages/Inbox";
 import OpenPositions from "./pages/OpenPositions"; 
 import CandidateListPage from "./pages/CandidateList";
 
-// ✅ Correctly importing InterviewDetails (No InterviewList)
 import InterviewDetails from "./pages/InterviewDetails";
 
 import ApplicationsDashboard from "./pages/ApplicationsDashboard";
@@ -53,6 +54,8 @@ import CandidateHistory from "./pages/CandidateHistory";
 
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+// Added Admin Dashboard
+import AdminDashboard from "./pages/AdminDashboard";
 
 function RoleBasedDashboard() {
   const { user } = useAuth();
@@ -63,6 +66,7 @@ function RoleBasedDashboard() {
   if (role === "employer") return <Navigate to="/employer/dashboard" />;
   if (role === "recruiter") return <Navigate to="/recruiter/dashboard" />;
   if (role === "hiringmanager") return <Navigate to="/hiring-manager/dashboard" />;
+  if (role === "admin") return <Navigate to="/admin/dashboard" />;
   
   return <Dashboard />; 
 }
@@ -82,17 +86,17 @@ function App() {
             <Route path="/login/employer" element={<EmployerLogin />} />
             <Route path="/login/hiring-manager" element={<HiringManagerLogin />} />
             <Route path="/login/recruiter" element={<RecruiterLogin />} />
+            {/* New Admin Route */}
+            <Route path="/login/admin" element={<AdminLogin />} />
 
             <Route path="/register" element={<Register />} />
             <Route path="/register/employer" element={<EmployerRegister />} />
             <Route path="/register/hiring-manager" element={<HiringManagerRegister />} />
             <Route path="/register/recruiter" element={<RecruiterRegister />} /> 
 
-            {/* Forgot & Reset Password Routes */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
             
-            {/* Candidate Jobs - Publicly Accessible */}
             <Route
               path="/candidate/jobs"
               element={
@@ -104,12 +108,22 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <PrivateRoute allowedRoles={['candidate', 'employer', 'hiringmanager', 'recruiter']}>
+                <PrivateRoute allowedRoles={['candidate', 'employer', 'hiringmanager', 'recruiter', 'admin']}>
                   <RoleBasedDashboard />
                 </PrivateRoute>
               }
             />
             
+            {/* ==================== Admin Routes ==================== */}
+            <Route 
+              path="/admin/dashboard" 
+              element={
+                <PrivateRoute allowedRoles={['admin']}>
+                  <AdminDashboard />
+                </PrivateRoute>
+              } 
+            />
+
             {/* ==================== Candidate Routes (Role: 'candidate') ==================== */}
             <Route
               path="/profile"
@@ -312,7 +326,7 @@ function App() {
               }
             />
             
-            {/* Interview Routes - Using InterviewDetails for all */}
+            {/* Interview Routes */}
             <Route
               path="/hiring-manager/schedule"
               element={

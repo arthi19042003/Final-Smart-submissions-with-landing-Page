@@ -50,6 +50,9 @@ connectDB()
 const protect = require("./middleware/auth");
 
 app.use("/api/auth", require("./routes/auth"));
+// ✅ ADDED: Admin Routes
+app.use("/api/admin", require("./routes/adminRoutes"));
+
 app.use("/api/contact", require("./routes/contact"));
 
 app.use("/api/profile", require("./routes/profile"));

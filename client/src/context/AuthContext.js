@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data.user);
         return { success: true };
       }
-      return { success: false, error: "Invalid response from server" };
+      return { success: false, error: "Waiting for Access" };
     } catch (err) {
       return { success: false, error: err.response?.data?.message || "Registration failed" };
     }
