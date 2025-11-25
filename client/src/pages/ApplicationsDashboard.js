@@ -74,12 +74,12 @@ export default function ApplicationsDashboard() {
     try {
       const res = await api.put(`/applications/${id}/${action}`, payload);
       if (res.status === 200) {
-        toast.success(`Application ${action} successful`);
+        toast.success(`Application updated successfully`);
         fetchApplications(); 
       }
     } catch (err) {
       console.error(`Error performing ${action}:`, err);
-      toast.error(`Failed to ${action} application`);
+      toast.error(`Failed to update application`);
     }
   };
 
@@ -191,7 +191,6 @@ export default function ApplicationsDashboard() {
         <Col md={3}>
            <div className="filter-wrapper bg-white rounded shadow-sm p-2">
              
-             {/* Filter Icon at the Start (Left) */}
              <FaFilter className="filter-icon-left" />
              
              <Form.Select 
@@ -201,13 +200,13 @@ export default function ApplicationsDashboard() {
              >
                <option value="All">All Statuses</option>
                <option value="Applied">Applied</option>
+               <option value="Submitted">Submitted</option>
                <option value="Under Review">Under Review</option>
                <option value="Interview">Interview</option>
                <option value="Hired">Hired</option>
                <option value="Rejected">Rejected</option>
              </Form.Select>
              
-             {/* Chevron Arrow at the End (Right) */}
              <FaChevronDown className="filter-icon-right" />
              
            </div>
@@ -262,7 +261,8 @@ export default function ApplicationsDashboard() {
                             Resume
                           </Button>
                           
-                          {app.status === "Applied" && (
+                          {/* ✅ FIX: Expanded condition to catch "Applied", "Submitted" and "submitted" */}
+                          {["Applied", "Submitted", "submitted"].includes(app.status) && (
                             <Button
                               size="sm"
                               style={purpleBtnStyle}

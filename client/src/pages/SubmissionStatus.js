@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./SubmissionStatus.css";
 import api from "../api/axios";
+import { Modal, Button } from "react-bootstrap"; // Import Modal components
 
 const filterFields = {
   candidateName: "Candidate Name",
@@ -20,6 +21,10 @@ const SubmissionStatus = () => {
   const [filters, setFilters] = useState(initialFilters);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // --- Modal State ---
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [submissionToDelete, setSubmissionToDelete] = useState(null);
 
   const fetchSubmissions = async () => {
     try {
@@ -98,17 +103,32 @@ const SubmissionStatus = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this submission?")) return;
+  // --- New: Open Modal Logic ---
+  const initiateDelete = (id) => {
+    setSubmissionToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  // --- New: Confirm Delete Logic ---
+  const confirmDelete = async () => {
+    if (!submissionToDelete) return;
 
     try {
-      await api.delete(`/submissions/${id}`);
-      setSubmissions((prev) => prev.filter((s) => s._id !== id));
+      await api.delete(`/submissions/${submissionToDelete}`);
+      setSubmissions((prev) => prev.filter((s) => s._id !== submissionToDelete));
       setMessage(""); 
     } catch (err) {
       console.error("Delete error:", err);
       alert("Failed to delete submission.");
+    } finally {
+      setShowDeleteModal(false);
+      setSubmissionToDelete(null);
     }
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSubmissionToDelete(null);
   };
 
   return (
@@ -151,7 +171,6 @@ const SubmissionStatus = () => {
               <thead>
                 <tr>
                   <th>Candidate</th>
-                  {/* ✅ Changed columns to show Position */}
                   <th>Position</th>
                   <th>Company / HM</th>
                   <th>Status</th>
@@ -162,14 +181,11 @@ const SubmissionStatus = () => {
                 {submissions.map((s) => (
                   <tr key={s._id}>
                     <td>
-                      {/* ✅ Added candidate name/email */}
                       <div style={{fontWeight: 'bold'}}>{s.candidate?.firstName} {s.candidate?.lastName}</div>
                       <div style={{fontSize: '0.85rem', color: '#666'}}>{s.candidate?.email}</div>
                     </td>
-                    {/* ✅ Display position title */}
                     <td>{s.position?.title || "N/A"}</td> 
                     <td>
-                      {/* ✅ Display company/hm from candidate */}
                       <div>{s.candidate?.company}</div>
                       <div style={{fontSize: '0.8rem', color: '#888'}}>{s.candidate?.hiringManager}</div>
                     </td>
@@ -191,9 +207,10 @@ const SubmissionStatus = () => {
                       >
                         Download
                       </button>
+                      {/* Updated Delete Button to use Modal */}
                       <button
                         className="submission-status-delete"
-                        onClick={() => handleDelete(s._id)}
+                        onClick={() => initiateDelete(s._id)}
                       >
                         Delete
                       </button>
@@ -205,6 +222,24 @@ const SubmissionStatus = () => {
           </div>
         )}
       </div>
+
+      {/* --- Delete Confirmation Modal --- */}
+      <Modal show={showDeleteModal} onHide={closeDeleteModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this submission? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeDeleteModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
