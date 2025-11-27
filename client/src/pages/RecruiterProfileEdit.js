@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./RecruiterProfile.css";
+import "./RecruiterProfileEdit.css";
+
+// Standard Country Codes
+const countryCodes = [
+  { code: "+91", label: "India (+91)" },
+  { code: "+1", label: "USA (+1)" },
+  { code: "+44", label: "UK (+44)" },
+  { code: "+61", label: "Australia (+61)" },
+  { code: "+81", label: "Japan (+81)" },
+  { code: "+49", label: "Germany (+49)" },
+  { code: "+33", label: "France (+33)" },
+  { code: "+86", label: "China (+86)" },
+  { code: "+971", label: "UAE (+971)" },
+];
 
 const RecruiterProfileEdit = () => {
   const { recruiter, getRecruiterProfile, recruiterProfile } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [phoneCode, setPhoneCode] = useState("+91");
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -42,8 +57,20 @@ const RecruiterProfileEdit = () => {
         }
 
         if (res && res.success && res.recruiter) {
+          // Parse existing phone number to split Code and Number
+          let phone = res.recruiter.companyphone || "";
+          let code = "+91";
+          const foundCode = countryCodes.find((c) => phone.startsWith(c.code));
+          
+          if (foundCode) {
+            code = foundCode.code;
+            phone = phone.replace(foundCode.code, "");
+          }
+          setPhoneCode(code);
+
           setProfile({
             ...res.recruiter,
+            companyphone: phone, // Store only the number part in state
             ratecards:
               res.recruiter.ratecards?.length > 0
                 ? res.recruiter.ratecards
@@ -66,7 +93,14 @@ const RecruiterProfileEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prev) => ({ ...prev, [name]: value }));
+    
+    // Standard phone validation (numbers only, max 10)
+    if (name === 'companyphone') {
+      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      setProfile((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setProfile((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleCheckboxChange = (value) => {
@@ -101,6 +135,12 @@ const RecruiterProfileEdit = () => {
     e.preventDefault();
     if (!profile) return;
 
+    // Validate phone length
+    if (profile.companyphone && profile.companyphone.length !== 10) {
+      setError("Company Phone must be exactly 10 digits.");
+      return;
+    }
+
     setSaving(true);
     setMessage("");
     setError("");
@@ -128,6 +168,9 @@ const RecruiterProfileEdit = () => {
           return obj;
         }, {});
 
+      // Combine Code and Number before sending
+      filtered.companyphone = `${phoneCode}${profile.companyphone}`;
+
       const res = await recruiterProfile(filtered);
 
       if (res?.success) {
@@ -149,11 +192,11 @@ const RecruiterProfileEdit = () => {
   if (!profile) return null;
 
   return (
-    <div className="recruiter-profile-page">
-      <div className="recruiter-profile-card">
-        <h2 className="recruiter-profile-title">Edit Recruiter Profile</h2>
+    <div className="recruiter-profile-edit-page">
+      <div className="recruiter-profile-edit-container">
+        <h2>Edit Recruiter Profile</h2>
 
-        <form onSubmit={handleSave} className="recruiter-profile-form">
+        <form onSubmit={handleSave} className="recruiter-profile-edit-form">
           {/* Address */}
           <div className="form-group">
             <label htmlFor="address">Address*</label>
@@ -186,12 +229,50 @@ const RecruiterProfileEdit = () => {
             </div>
           </div>
 
-          {/* Other input fields */}
+          {/* Other text fields */}
           {[
             { id: "resumeskills", label: "Resume Skills" },
             { id: "partnerships", label: "Partnerships" },
             { id: "companywebsite", label: "Company Website" },
-            { id: "companyphone", label: "Company Phone" },
+          ].map((field) => (
+            <div className="form-group" key={field.id}>
+              <label htmlFor={field.id}>{field.label}</label>
+              <input
+                type="text"
+                id={field.id}
+                name={field.id}
+                value={profile[field.id] || ""}
+                onChange={handleChange}
+              />
+            </div>
+          ))}
+
+          {/* Company Phone with Dropdown */}
+          <div className="form-group">
+            <label htmlFor="companyphone">Company Phone*</label>
+            <div className="phone-group">
+              <select 
+                className="phone-prefix-select"
+                value={phoneCode}
+                onChange={(e) => setPhoneCode(e.target.value)}
+              >
+                {countryCodes.map((c) => (
+                  <option key={c.code} value={c.code}>{c.label}</option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                id="companyphone"
+                name="companyphone"
+                value={profile.companyphone || ""}
+                onChange={handleChange}
+                placeholder="10-digit number"
+                maxLength="10"
+              />
+            </div>
+          </div>
+
+          {[
             { id: "companyAddress", label: "Company Address" },
             { id: "location", label: "Location" },
             { id: "companycertifications", label: "Company Certifications" },
@@ -212,56 +293,64 @@ const RecruiterProfileEdit = () => {
 
           {/* Ratecards Section */}
           <div className="form-group">
-            <label>Ratecards with Skills*</label>
+            <label>Ratecards with Skills</label>
             {profile.ratecards.map((ratecard, index) => (
-              <div className="ratecard-entry" key={index}>
-                <div className="ratecard-row">
-                  <select
-                    value={ratecard.role}
-                    onChange={(e) => handleRatecardChange(index, "role", e.target.value)}
+              <div className="recruiter-rate-card-row" key={index}>
+                <select
+                  value={ratecard.role}
+                  onChange={(e) => handleRatecardChange(index, "role", e.target.value)}
+                >
+                  <option value="">Select Role</option>
+                  {roleOptions.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  placeholder="LPA"
+                  value={ratecard.lpa || ""}
+                  onChange={(e) => handleRatecardChange(index, "lpa", e.target.value)}
+                />
+                {profile.ratecards.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeRatecard(index)}
+                    className="ratecard-entry remove-btn"
                   >
-                    <option value="">Select Role</option>
-                    {roleOptions.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    placeholder="LPA"
-                    value={ratecard.lpa || ""}
-                    onChange={(e) => handleRatecardChange(index, "lpa", e.target.value)}
-                  />
-                  {profile.ratecards.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeRatecard(index)}
-                      className="ratecard-entry remove-btn"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
-
-            <button type="button" onClick={addRatecard} className="recruiter-profile-btn save">
+            <button
+              type="button"
+              onClick={addRatecard}
+              className="recruiter-profile-edit-btn save"
+              style={{ width: "fit-content", marginTop: "0" }}
+            >
               + Add Ratecard
             </button>
           </div>
 
-          {message && <p className="success-text">{message}</p>}
-          {error && <p className="error-text">{error}</p>}
+          {message && <p className="success-message">{message}</p>}
+          {error && <p className="error-text" style={{textAlign: 'center'}}>{error}</p>}
 
-          <div className="button-group">
-            <button type="submit" disabled={saving} className="recruiter-profile-btn save">
+          <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+            <button
+              type="submit"
+              disabled={saving}
+              className="recruiter-profile-edit-btn save"
+              style={{ flex: 1 }}
+            >
               {saving ? "Saving..." : "Save Changes"}
             </button>
             <button
               type="button"
               onClick={() => navigate("/recruiter/profile/view")}
-              className="recruiter-profile-btn cancel"
+              className="recruiter-profile-edit-btn cancel"
+              style={{ flex: 1 }}
             >
               Cancel
             </button>

@@ -19,8 +19,22 @@ export default function EmployerLogin() {
   
   const validate = () => {
     const newErrors = {};
-    if (!email) newErrors.email = "Email is required";
-    if (!password) newErrors.password = "Password is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Password Regex: Min 6 chars, at least 1 number, at least 1 special char
+    const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (!passwordRegex.test(password)) {
+      newErrors.password = "Password must be 6+ chars with 1 number & 1 special char";
+    }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,7 +75,6 @@ export default function EmployerLogin() {
           </div>
         )}
 
-        {/* --- THIS IS THE FIX --- */}
         <form onSubmit={handleLogin} noValidate>
           <div className="form-group">
             <label>Email<span className="mandatory">*</span></label>
@@ -76,6 +89,7 @@ export default function EmployerLogin() {
               required 
               className={errors.email ? "error" : ""} 
             />
+            {errors.email && <span style={{color: 'red', fontSize: '12px', marginTop:'4px'}}>{errors.email}</span>}
           </div>
           <div className="form-group">
             <label>Password<span className="mandatory">*</span></label>
@@ -90,9 +104,9 @@ export default function EmployerLogin() {
               required 
               className={errors.password ? "error" : ""} 
             />
+            {errors.password && <span style={{color: 'red', fontSize: '12px', marginTop:'4px'}}>{errors.password}</span>}
           </div>
           
-          {/* Added Forgot Password link */}
           <div style={{ textAlign: "right", marginBottom: "10px" }}>
             <Link to="/forgot-password" style={{ fontSize: "14px", color: "#6d28d9" }}>Forgot Password?</Link>
           </div>

@@ -3,6 +3,19 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import "./Profile.css";
 
+// Standard Country Codes
+const countryCodes = [
+  { code: "+91", label: "India (+91)" },
+  { code: "+1", label: "USA (+1)" },
+  { code: "+44", label: "UK (+44)" },
+  { code: "+61", label: "Australia (+61)" },
+  { code: "+81", label: "Japan (+81)" },
+  { code: "+49", label: "Germany (+49)" },
+  { code: "+33", label: "France (+33)" },
+  { code: "+86", label: "China (+86)" },
+  { code: "+971", label: "UAE (+971)" },
+];
+
 const ProfileItem = ({ item, onRemove, onUpdate, type }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(item);
@@ -84,6 +97,10 @@ const Profile = () => {
     bio: "",
     skills: [],
   });
+
+  // State for Country Code (Defaults to India)
+  const [phoneCode, setPhoneCode] = useState("+91");
+
   const [skillInput, setSkillInput] = useState("");
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
@@ -95,10 +112,22 @@ const Profile = () => {
 
   useEffect(() => {
     if (user?.profile) {
+      // Logic to split saved phone number into Code and Number
+      let initialPhone = user.profile.phone || "";
+      let initialCode = "+91";
+
+      const foundCode = countryCodes.find(c => initialPhone.startsWith(c.code));
+      if (foundCode) {
+        initialCode = foundCode.code;
+        initialPhone = initialPhone.replace(foundCode.code, "");
+      }
+
+      setPhoneCode(initialCode);
+
       setFormData({
         firstName: user.profile.firstName || "",
         lastName: user.profile.lastName || "",
-        phone: user.profile.phone || "",
+        phone: initialPhone,
         address: user.profile.address || "",
         city: user.profile.city || "",
         state: user.profile.state || "",
@@ -112,11 +141,19 @@ const Profile = () => {
   }, [user]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type, checked } = e.target;
+    
+    if (name === 'phone') {
+      // Only allow numeric input for phone
+      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      setFormData(prev => ({ ...prev, [name]: numericValue }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
+    }
+
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: null }));
     }
@@ -143,7 +180,13 @@ const Profile = () => {
     const newErrors = {};
     if (!formData.firstName) newErrors.firstName = "First Name is required.";
     if (!formData.lastName) newErrors.lastName = "Last Name is required.";
-    if (!formData.phone) newErrors.phone = "Phone is required.";
+    
+    if (!formData.phone) {
+      newErrors.phone = "Phone is required.";
+    } else if (formData.phone.length !== 10) {
+      newErrors.phone = "Phone number must be 10 digits.";
+    }
+
     if (!formData.city) newErrors.city = "City is required.";
     if (!formData.state) newErrors.state = "State is required.";
     setErrors(newErrors);
@@ -172,13 +215,19 @@ const Profile = () => {
     setMessage({ type: "", text: "" });
 
     if (!validateForm()) {
-      setMessage({ type: "error", text: "Please fill all mandatory fields." });
+      setMessage({ type: "error", text: "Please fill all mandatory fields correctly." });
       return;
     }
 
     setLoading(true);
     try {
-      const response = await api.put("/profile", formData);
+      // Combine Country Code and Phone Number for saving
+      const payload = {
+        ...formData,
+        phone: `${phoneCode}${formData.phone}`
+      };
+
+      const response = await api.put("/profile", payload);
       updateUser(response.data.user);
       setMessage({ type: "success", text: "Profile updated successfully!" });
     } catch (error) {
@@ -273,10 +322,33 @@ const Profile = () => {
                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} className={errors.lastName ? "error" : ""} />
               </div>
             </div>
+            
+            {/* Updated Phone Input Section */}
             <div className="form-group">
               <label>Phone<span className="mandatory">*</span></label>
-              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={errors.phone ? "error" : ""} />
+              <div className="phone-group">
+                <select 
+                  className="phone-prefix-select"
+                  value={phoneCode}
+                  onChange={(e) => setPhoneCode(e.target.value)}
+                >
+                  {countryCodes.map((c) => (
+                    <option key={c.code} value={c.code}>{c.label}</option>
+                  ))}
+                </select>
+                <input 
+                  type="tel" 
+                  name="phone" 
+                  value={formData.phone} 
+                  onChange={handleChange} 
+                  placeholder="10-digit number"
+                  maxLength="10"
+                  className={errors.phone ? "error" : ""} 
+                />
+              </div>
+              {errors.phone && <span className="error-text">{errors.phone}</span>}
             </div>
+
             <div className="form-group">
               <label>Address</label>
               <input type="text" name="address" value={formData.address} onChange={handleChange} />

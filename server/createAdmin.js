@@ -9,7 +9,7 @@ const createAdmin = async () => {
     await connectDB();
 
     const email = "admin@smartsubmissions.com";
-    const password = "admin123"; 
+    const password = "admin@123"; 
 
     // 2. CLEANUP: Delete existing admin if present (fixes the double-hash issue)
     await User.findOneAndDelete({ email });

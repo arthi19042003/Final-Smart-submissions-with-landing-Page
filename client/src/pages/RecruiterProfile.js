@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "./RecruiterProfile.css";
 
+// Standard Country Codes
+const countryCodes = [
+  { code: "+91", label: "India (+91)" },
+  { code: "+1", label: "USA (+1)" },
+  { code: "+44", label: "UK (+44)" },
+  { code: "+61", label: "Australia (+61)" },
+  { code: "+81", label: "Japan (+81)" },
+  { code: "+49", label: "Germany (+49)" },
+  { code: "+33", label: "France (+33)" },
+  { code: "+86", label: "China (+86)" },
+  { code: "+971", label: "UAE (+971)" },
+];
+
 const RecruiterProfile = () => {
   const { recruiterProfile } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -21,6 +34,9 @@ const RecruiterProfile = () => {
     ratecards: [{ role: "", lpa: "" }],
   });
 
+  // Phone Country Code State
+  const [phoneCode, setPhoneCode] = useState("+91");
+
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,7 +53,15 @@ const RecruiterProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
+    
+    // Validate numeric input for companyphone
+    if (name === "companyphone") {
+      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      setData((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setData((prev) => ({ ...prev, [name]: value }));
+    }
+
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -85,6 +109,11 @@ const RecruiterProfile = () => {
       }
     });
 
+    // Phone Validation
+    if (data.companyphone.length !== 10) {
+      newErrors.companyphone = "Phone number must be 10 digits.";
+    }
+
     data.ratecards.forEach((rc, idx) => {
       if (!rc.role || !rc.lpa) {
         newErrors[`ratecard_${idx}`] = "Both Role and LPA are required.";
@@ -107,7 +136,13 @@ const RecruiterProfile = () => {
 
     setLoading(true);
     try {
-      const response = await recruiterProfile(data);
+      // Combine Code and Number
+      const payload = {
+        ...data,
+        companyphone: `${phoneCode}${data.companyphone}`
+      };
+
+      const response = await recruiterProfile(payload);
       if (response?.success) {
         setSuccessMessage("Profile Created Successfully");
       } else {
@@ -178,19 +213,62 @@ const RecruiterProfile = () => {
             )}
           </div>
 
-          {/* Other input fields */}
+          {/* Resume Skills, Partnerships, Website */}
           {[
             { id: "resumeskills", label: "Resume Skills*", placeholder: "List key resume skills" },
             { id: "partnerships", label: "Partnerships*", placeholder: "Enter company partnerships" },
             { id: "companywebsite", label: "Company Website*", placeholder: "https://example.com" },
-            { id: "companyphone", label: "Company Phone*", placeholder: "+1 415 555 2671" },
+          ].map((field) => (
+            <div className="form-group" key={field.id}>
+              <label htmlFor={field.id}>{field.label.replace('*', '')}<span className="mandatory">*</span></label>
+              <input
+                type="text"
+                id={field.id}
+                name={field.id}
+                value={data[field.id]}
+                onChange={handleChange}
+                placeholder={field.placeholder}
+                className={errors[field.id] ? "error" : ""}
+              />
+              {errors[field.id] && <span className="error-text">{errors[field.id]}</span>}
+            </div>
+          ))}
+
+          {/* Company Phone with Dropdown */}
+          <div className="form-group">
+            <label htmlFor="companyphone">Company Phone<span className="mandatory">*</span></label>
+            <div className="phone-group">
+              <select 
+                className="phone-prefix-select"
+                value={phoneCode}
+                onChange={(e) => setPhoneCode(e.target.value)}
+              >
+                {countryCodes.map((c) => (
+                  <option key={c.code} value={c.code}>{c.label}</option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                id="companyphone"
+                name="companyphone"
+                value={data.companyphone}
+                onChange={handleChange}
+                placeholder="10-digit number"
+                maxLength="10"
+                className={errors.companyphone ? "error" : ""}
+              />
+            </div>
+            {errors.companyphone && <span className="error-text">{errors.companyphone}</span>}
+          </div>
+
+          {/* Other inputs */}
+          {[
             { id: "companyAddress", label: "Company Address*", placeholder: "Corporate HQ address" },
             { id: "location", label: "Location*", placeholder: "City, State, Country" },
             { id: "companycertifications", label: "Company Certifications*", placeholder: "e.g., ISO 9001" },
             { id: "numberofemployees", label: "Number of Employees*", placeholder: "e.g., 250" },
           ].map((field) => (
             <div className="form-group" key={field.id}>
-              {/* --- MODIFIED --- */}
               <label htmlFor={field.id}>{field.label.replace('*', '')}<span className="mandatory">*</span></label>
               <input
                 type="text"
@@ -217,7 +295,6 @@ const RecruiterProfile = () => {
                 placeholder="Enter DUNS Number"
               />
             </div>
-
 
           {/* Ratecards Section */}
           <div className="form-group">

@@ -3,6 +3,19 @@ import "./ResumeUploadRecruiter.css";
 import api from "../api/axios";
 import { useNavigate } from 'react-router-dom';
 
+// Standard Country Codes
+const countryCodes = [
+  { code: "+91", label: "India (+91)" },
+  { code: "+1", label: "USA (+1)" },
+  { code: "+44", label: "UK (+44)" },
+  { code: "+61", label: "Australia (+61)" },
+  { code: "+81", label: "Japan (+81)" },
+  { code: "+49", label: "Germany (+49)" },
+  { code: "+33", label: "France (+33)" },
+  { code: "+86", label: "China (+86)" },
+  { code: "+971", label: "UAE (+971)" },
+];
+
 const ResumeUploadRecruiter = () => {
   const [form, setForm] = useState({
     firstName: "",
@@ -20,6 +33,9 @@ const ResumeUploadRecruiter = () => {
     company: "",
     hiringManager: "",
   });
+
+  // State for Phone Country Code
+  const [phoneCode, setPhoneCode] = useState("+91");
 
   const [positions, setPositions] = useState([]);
   const [managers, setManagers] = useState([]);
@@ -48,7 +64,15 @@ const ResumeUploadRecruiter = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    
+    // Restrict phone input to numbers only, max 10 chars
+    if (name === 'phone') {
+      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      setForm((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -62,7 +86,14 @@ const ResumeUploadRecruiter = () => {
     if (!form.firstName) newErrors.firstName = "First name is required";
     if (!form.lastName) newErrors.lastName = "Last name is required";
     if (!form.email) newErrors.email = "Email is required";
-    if (!form.phone) newErrors.phone = "Phone is required";
+    
+    // Phone Validation
+    if (!form.phone) {
+        newErrors.phone = "Phone is required";
+    } else if (form.phone.length !== 10) {
+        newErrors.phone = "Phone number must be 10 digits";
+    }
+
     if (!form.rate) newErrors.rate = "Rate is required";
     if (!form.currentLocation) newErrors.currentLocation = "Location is required";
     if (!form.availability) newErrors.availability = "Availability is required";
@@ -86,7 +117,15 @@ const ResumeUploadRecruiter = () => {
     setLoading(true);
     try {
       const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      // Append fields
+      Object.entries(form).forEach(([k, v]) => {
+         // Combine code and phone before sending
+         if (k === 'phone') {
+             fd.append(k, `${phoneCode}${v}`);
+         } else {
+             fd.append(k, v);
+         }
+      });
       fd.append("resume", file);
 
       await api.post("/recruiter/submit", fd, {
@@ -94,7 +133,11 @@ const ResumeUploadRecruiter = () => {
       });
 
       setMessage("✅ Resume submitted successfully!");
-      setForm(form); 
+      
+      // Reset form
+      setForm({
+        firstName: "", lastName: "", email: "", phone: "", rate: "", currentLocation: "", availability: "", skypeId: "", githubProfile: "", linkedinProfile: "", positionId: "", hiringManagerId: "", company: "", hiringManager: ""
+      });
       setFile(null);
       document.getElementById("resume").value = null;
       
@@ -133,10 +176,31 @@ const ResumeUploadRecruiter = () => {
             {errors.email && <span className="error-text">{errors.email}</span>}
           </div>
 
+          {/* Updated Phone Input with Dropdown */}
           <div className="form-group">
             <label htmlFor="phone">Phone<span className="mandatory">*</span></label>
-            <input id="phone" type="tel" name="phone" placeholder="Enter phone number" value={form.phone} onChange={handleChange} className={errors.phone ? "error" : ""} />
-            {errors.phone && <span className="error-text">{errors.phone}</span>}
+            <div className="phone-group">
+              <select 
+                className="phone-prefix-select"
+                value={phoneCode}
+                onChange={(e) => setPhoneCode(e.target.value)}
+              >
+                {countryCodes.map((c) => (
+                  <option key={c.code} value={c.code}>{c.label}</option>
+                ))}
+              </select>
+              <input 
+                id="phone" 
+                type="tel" 
+                name="phone" 
+                placeholder="10-digit number" 
+                value={form.phone} 
+                onChange={handleChange} 
+                maxLength="10"
+                className={errors.phone ? "error" : ""} 
+              />
+            </div>
+            {errors.phone && <span className="error-text" style={{marginTop: '4px', display: 'block'}}>{errors.phone}</span>}
           </div>
 
           <div className="form-group">
